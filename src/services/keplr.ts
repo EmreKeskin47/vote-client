@@ -1,8 +1,10 @@
+import { keplrConfig } from "../config/keplr";
 import { useEffect, useState } from "react";
 import { OfflineSigner } from "@cosmjs/proto-signing";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Decimal } from "@cosmjs/math";
-import { getConfig, keplrConfig, AppConfig } from "../config";
+import { getConfig } from "../config/network";
+import { AppConfig } from "../config/app";
 import { useWallet } from "../contexts/wallet";
 import toast from "react-hot-toast";
 
