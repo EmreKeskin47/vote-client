@@ -40,7 +40,10 @@ const QueryBox = (props: {
     const queryVoteBox = () => {
         if (Number(id) < 1) {
             alert("Ids start from 1");
-        } else {
+        } else if (isNaN(Number(id))) {
+            alert("Please enter a number that is bigger than 0")
+        }
+        else {
             props.function((Number(id) - 1).toString());
         }
     };

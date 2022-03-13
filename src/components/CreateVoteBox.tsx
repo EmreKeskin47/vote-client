@@ -14,7 +14,14 @@ const CreateVoteBox = (props: { function: (arg0: number) => void }) => {
     };
 
     const createVoteBox = () => {
-        props.function(Number(height));
+        if (Number(height) < 1) {
+            alert("Deadline height starts from 1");
+        } else if (isNaN(Number(height))) {
+            alert("Please enter a number that is bigger than 0")
+        }
+        else {
+            props.function(Number(height));
+        }
     };
 
     return (

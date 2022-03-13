@@ -1,0 +1,6 @@
+{
+    "short_name": "Vote dApp",
+    "name": "Vote dApp - A decentralized voting application",
+    "start_url": ".",
+    "display": "standalone"
+}
