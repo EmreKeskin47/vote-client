@@ -3,12 +3,14 @@ import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { GasPrice } from "@cosmjs/stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import React, { useState } from "react";
+import { useWallet } from '../../contexts/wallet'
 import { Grid } from "@mui/material";
 import CreateVoteBox from "../../components/CreateVoteBox";
 import QueryBox from "../../components/QueryBox";
 import Voting from "../../components/Voting";
 import ListResponseItem from "../../components/ListResponseItem";
 import Typography from "@mui/material/Typography";
+import toast from 'react-hot-toast'
 
 ////////////////////////Wallet//////////////////////////////////
 const walletOptions = {
@@ -26,6 +28,8 @@ export const getSigner = async (mnemonic: string) => {
 ////////////////////////Wallet//////////////////////////////////
 
 const Vote = () => {
+    const wallet = useWallet()
+    
     const IS_TESTNET = !process.argv.includes("--mainnet");
 
     const JUNO_MAINNET_RPC = "https://rpc.juno-1.deuslabs.fi";
@@ -49,29 +53,33 @@ const Vote = () => {
     // }
 
     const createVB = async (height: Number) => {
+        try{
         setFlag(true);
-        signer = await getSigner(MNEMONIC);
+        // signer = await getSigner(MNEMONIC);
 
-        client = await SigningCosmWasmClient.connectWithSigner(
-            IS_TESTNET ? JUNO_TESTNET_RPC : JUNO_MAINNET_RPC,
-            signer,
-            {
-                prefix: "juno",
-                gasPrice: GasPrice.fromString("0.0025ujunox"),
-            }
-        );
+        // client = await SigningCosmWasmClient.connectWithSigner(
+        //     IS_TESTNET ? JUNO_TESTNET_RPC : JUNO_MAINNET_RPC,
+        //     signer,
+        //     {
+        //         prefix: "juno",
+        //         gasPrice: GasPrice.fromString("0.0025ujunox"),
+        //     }
+        // );
 
-        const account = (await signer.getAccounts())[0];
+        client = wallet.getClient()
+        
+        const account = wallet.address
+        // const account = (await signer.getAccounts())[0];
         console.log("account: ");
         console.log(account);
 
         const executeResponse = await client.execute(
-            account.address,
+            wallet.address,
             CONTRACT_ADDRESS,
             {
                 create_vote_box: {
                     deadline: { at_height: height },
-                    owner: account.address,
+                    owner: wallet.address,
                 },
             },
             "auto"
@@ -83,6 +91,10 @@ const Vote = () => {
             alert("Your txhash : " + executeResponse.transactionHash);
         }
         setFlag(false);
+    }
+    catch(error: any) {
+        toast.error(error.message, { style: { maxWidth: 'none' } })
+      }
     };
 
     const vote = async (
@@ -90,24 +102,26 @@ const Vote = () => {
         voteFlag: boolean,
         decision: string
     ) => {
+        try{
+
         setFlag2(true);
-        signer = await getSigner(MNEMONIC);
+        // signer = await getSigner(MNEMONIC);
 
-        client = await SigningCosmWasmClient.connectWithSigner(
-            IS_TESTNET ? JUNO_TESTNET_RPC : JUNO_MAINNET_RPC,
-            signer,
-            {
-                prefix: "juno",
-                gasPrice: GasPrice.fromString("0.0025ujunox"),
-            }
-        );
-
-        const account = (await signer.getAccounts())[0];
+        // client = await SigningCosmWasmClient.connectWithSigner(
+        //     IS_TESTNET ? JUNO_TESTNET_RPC : JUNO_MAINNET_RPC,
+        //     signer,
+        //     {
+        //         prefix: "juno",
+        //         gasPrice: GasPrice.fromString("0.0025ujunox"),
+        //     }
+        // );
+        client = wallet.getClient()
+        const account = wallet.address//(await signer.getAccounts())[0];
         console.log("account: ");
         console.log(account);
 
         const executeResponse = await client.execute(
-            account.address,
+            wallet.address,
             CONTRACT_ADDRESS,
             {
                 vote: {
@@ -124,23 +138,29 @@ const Vote = () => {
             alert("You have voted " + decision);
         }
         setFlag2(false);
+    }
+    catch(error: any) {
+        toast.error(error.message, { style: { maxWidth: 'none' } })
+      }
     };
 
     const query = async (boxId: string) => {
+        try{
         setFlag3(true);
 
-        signer = await getSigner(MNEMONIC);
+        // signer = await getSigner(MNEMONIC);
 
-        client = await SigningCosmWasmClient.connectWithSigner(
-            IS_TESTNET ? JUNO_TESTNET_RPC : JUNO_MAINNET_RPC,
-            signer,
-            {
-                prefix: "juno",
-                gasPrice: GasPrice.fromString("0.0025ujunox"),
-            }
-        );
+        // client = await SigningCosmWasmClient.connectWithSigner(
+        //     IS_TESTNET ? JUNO_TESTNET_RPC : JUNO_MAINNET_RPC,
+        //     signer,
+        //     {
+        //         prefix: "juno",
+        //         gasPrice: GasPrice.fromString("0.0025ujunox"),
+        //     }
+        // );
+        client = wallet.getClient()
 
-        const account = (await signer.getAccounts())[0];
+        const account = wallet.address//(await signer.getAccounts())[0];
         console.log("account: ");
         console.log(account);
 
@@ -166,23 +186,29 @@ const Vote = () => {
                 queryResponse.deadline.at_height
         );
         setFlag3(false);
+        }
+        catch(error: any) {
+            toast.error(error.message, { style: { maxWidth: 'none' } })
+          }
     };
 
     const queryList = async (boxId: string) => {
+        try{
         setFlag4(true);
 
-        signer = await getSigner(MNEMONIC);
+        // signer = await getSigner(MNEMONIC);
 
-        client = await SigningCosmWasmClient.connectWithSigner(
-            IS_TESTNET ? JUNO_TESTNET_RPC : JUNO_MAINNET_RPC,
-            signer,
-            {
-                prefix: "juno",
-                gasPrice: GasPrice.fromString("0.0025ujunox"),
-            }
-        );
+        // client = await SigningCosmWasmClient.connectWithSigner(
+        //     IS_TESTNET ? JUNO_TESTNET_RPC : JUNO_MAINNET_RPC,
+        //     signer,
+        //     {
+        //         prefix: "juno",
+        //         gasPrice: GasPrice.fromString("0.0025ujunox"),
+        //     }
+        // );
 
-        const account = (await signer.getAccounts())[0];
+        client = wallet.getClient()
+        const account = wallet.address//(await signer.getAccounts())[0];
         console.log("account: ");
         console.log(account);
 
@@ -222,6 +248,9 @@ const Vote = () => {
         setFlag4(false);
         setFlag5(true);
         // return queryResponse
+    }catch(error: any) {
+        toast.error(error.message, { style: { maxWidth: 'none' } })
+    }
     };
 
     //////////////////////////////// UI ////////////////////////////
