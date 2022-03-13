@@ -18,13 +18,28 @@ const Voting = (props: {
     };
 
     const votedYes = () => {
-        setYesVote(true);
-        props.function(id, yesVote, "YES");
+        console.log(Number(id))
+        if (Number(id) < 1) {
+            alert("Ids start from 1")
+        } else if (isNaN(Number(id))) {
+            alert("Please enter a number that is bigger than 0")
+        }
+        else {
+            setYesVote(true);
+            props.function(id, yesVote, "YES");
+        }
     };
 
     const votedNo = () => {
-        setNoVote(false);
-        props.function(id, noVote, "NO");
+        if (Number(id) < 1) {
+            alert("Ids start from 1")
+        } else if (isNaN(Number(id))) {
+            alert("Please enter a number that is bigger than 0")
+        }
+        else {
+            setNoVote(false);
+            props.function(id, noVote, "NO");
+        }
     };
 
     return (
