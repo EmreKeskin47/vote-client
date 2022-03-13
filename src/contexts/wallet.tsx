@@ -22,7 +22,7 @@ interface WalletContextType {
 }
 
 function throwNotInitialized(): any {
-    throw new Error("Not yet initialized");
+    throw new Error("Oops! Need to connect your Keplr Wallet first.");
 }
 
 const defaultContext: WalletContextType = {
