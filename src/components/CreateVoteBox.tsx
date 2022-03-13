@@ -3,9 +3,12 @@ import { Grid } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import CustomAlert from "./CustomAlert";
 
 const CreateVoteBox = (props: { function: (arg0: number) => void }) => {
     const [height, setHeight] = useState("0");
+    const [flag, setFlag] = useState(false)
+    const [flag2, setFlag2] = useState(false)
 
     const handleChange = (event: {
         target: { value: React.SetStateAction<string> };
@@ -15,14 +18,19 @@ const CreateVoteBox = (props: { function: (arg0: number) => void }) => {
 
     const createVoteBox = () => {
         if (Number(height) < 1) {
-            alert("Deadline height starts from 1");
+            setFlag(true)
         } else if (isNaN(Number(height))) {
-            alert("Please enter a number that is bigger than 0")
+            setFlag2(true)
         }
         else {
             props.function(Number(height));
         }
     };
+
+    const resetFlags = () => {
+        setFlag(false);
+        setFlag2(false);
+    }
 
     return (
         <Grid
@@ -86,6 +94,13 @@ const CreateVoteBox = (props: { function: (arg0: number) => void }) => {
                     </Button>
                 </Grid>
             </Grid>
+            <br/>
+            {flag &&
+                <CustomAlert severity="error" text="Deadline height starts from 1" function={resetFlags} />
+            }
+            {flag2 &&
+                <CustomAlert severity="error" text="Please enter a number that is bigger than 0" function={resetFlags} />
+            }
         </Grid>
     );
 };
