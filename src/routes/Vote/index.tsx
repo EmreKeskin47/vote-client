@@ -175,6 +175,7 @@ const Vote = () => {
             }
         );
         for (let i = 0; i < queryResponse.voteList.length; i++) {
+            let deadlineDate: String = new Date(parseInt(queryResponse.voteList[i].deadline.at_time)/1000000).toString()
             // @ts-ignore
             setIdArray((oldArray) => [
                 ...oldArray,
@@ -198,13 +199,14 @@ const Vote = () => {
             // @ts-ignore
             setDeadlineArray((oldArray) => [
                 ...oldArray,
-                queryResponse.voteList[i].deadline.at_height,
+                deadlineDate,
             ]);
             // @ts-ignore
             setTopicArray((oldArray) => [
                 ...oldArray,
-                queryResponse.voteList[i].topic,
+                , queryResponse.voteList[i].topic,
             ]);
+            console.log(deadlineDate);
         }
         setFlag5(true);
         // return queryResponse
