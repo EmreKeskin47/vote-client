@@ -48,8 +48,10 @@ const QueryBox = (props: {
     const queryVoteBox = () => {
         if (Number(id) < 1) {
             setFlag(true);
+            setTimeout(resetFlags, 3000);
         } else if (isNaN(Number(id))) {
             setFlag2(true);
+            setTimeout(resetFlags, 3000);
         }
         else {
             props.function((Number(id) - 1).toString());

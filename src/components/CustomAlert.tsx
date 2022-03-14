@@ -18,7 +18,7 @@ export default function CustomAlert(props: { function: () => void; severity: str
                             color="inherit"
                             size="small"
                             onClick={() => {
-                                setOpen(false);
+                                setOpen(false)
                                 props.function();
                             }}
                         >

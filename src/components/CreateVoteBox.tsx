@@ -1,14 +1,15 @@
-import React, { useState } from "react";
-import { Grid } from "@mui/material";
+import React, {useState} from "react";
+import {Grid} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CustomAlert from "./CustomAlert";
 
-const CreateVoteBox = (props: { function: (arg0: number) => void }) => {
+const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void }) => {
     const [height, setHeight] = useState("0");
-    const [flag, setFlag] = useState(false)
-    const [flag2, setFlag2] = useState(false)
+    const [flag, setFlag] = useState(false);
+    const [flag2, setFlag2] = useState(false);
+    const [topic, setTopic] = useState("");
 
     const handleChange = (event: {
         target: { value: React.SetStateAction<string> };
@@ -16,14 +17,19 @@ const CreateVoteBox = (props: { function: (arg0: number) => void }) => {
         setHeight(event.target.value);
     };
 
+    const handleChange2 = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setTopic(event.target.value);
+    }
+
     const createVoteBox = () => {
         if (Number(height) < 1) {
-            setFlag(true)
+            setFlag(true);
+            setTimeout(resetFlags, 3000);
         } else if (isNaN(Number(height))) {
-            setFlag2(true)
-        }
-        else {
-            props.function(Number(height));
+            setFlag2(true);
+            setTimeout(resetFlags, 3000);
+        } else {
+            props.function(Number(height), topic);
         }
     };
 
@@ -32,6 +38,7 @@ const CreateVoteBox = (props: { function: (arg0: number) => void }) => {
         setFlag2(false);
     }
 
+    // @ts-ignore
     return (
         <Grid
             sx={{
@@ -48,7 +55,7 @@ const CreateVoteBox = (props: { function: (arg0: number) => void }) => {
                 variant="h4"
                 gutterBottom
                 component="div"
-                sx={{ color: "whitesmoke" }}
+                sx={{color: "whitesmoke"}}
             >
                 Create Your VoteBox
             </Typography>
@@ -56,12 +63,12 @@ const CreateVoteBox = (props: { function: (arg0: number) => void }) => {
                 variant="subtitle1"
                 gutterBottom
                 component="div"
-                sx={{ color: "whitesmoke" }}
+                sx={{color: "whitesmoke"}}
             >
                 Enter the deadline height for the votebox and click create
                 button
             </Typography>
-            <br />
+            <br/>
             <Grid
                 container
                 direction="row"
@@ -70,13 +77,20 @@ const CreateVoteBox = (props: { function: (arg0: number) => void }) => {
                 alignItems="center"
                 justifyContent="center"
             >
-                <Grid item sm={12} md={8} justifyItems="center">
+                <Grid item container justifyContent="space-evenly" sm={12} md={8} justifyItems="center">
                     <TextField
                         id="deadline-height"
                         label="Deadline Height"
                         variant="filled"
                         onChange={handleChange}
-                        sx={{ backgroundColor: "white" }}
+                        sx={{backgroundColor: "white"}}
+                    />
+                    <TextField
+                        id="topic"
+                        label="Topic"
+                        variant="filled"
+                        onChange={handleChange2}
+                        sx={{backgroundColor: "white"}}
                     />
                 </Grid>
 
@@ -96,10 +110,10 @@ const CreateVoteBox = (props: { function: (arg0: number) => void }) => {
             </Grid>
             <br/>
             {flag &&
-                <CustomAlert severity="error" text="Deadline height starts from 1" function={resetFlags} />
+                <CustomAlert severity="error" text="Deadline height starts from 1" function={resetFlags}/>
             }
             {flag2 &&
-                <CustomAlert severity="error" text="Please enter a number that is bigger than 0" function={resetFlags} />
+                <CustomAlert severity="error" text="Please enter a number that is bigger than 0" function={resetFlags}/>
             }
         </Grid>
     );

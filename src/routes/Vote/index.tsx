@@ -9,6 +9,7 @@ import QueryBox from "../../components/QueryBox";
 import Voting from "../../components/Voting";
 import ListResponseItem from "../../components/ListResponseItem";
 import Typography from "@mui/material/Typography";
+import CustomAlert from "../../components/CustomAlert";
 
 ////////////////////////Wallet//////////////////////////////////
 const walletOptions = {
@@ -37,18 +38,13 @@ const Vote = () => {
 
     const CONTRACT_ADDRESS =
         //Votebox contract adress
-        "juno13qcfy3tlrs20430cx28w76c4fjlzsmhj9d0decyy30m5jsh70cps22vc06";
-    //Serkan Abi Lockbox contract adress
-    // "juno16u4knekeyqqs45ywxejm4x9v0m6rsy0xp5vlahrc5a0gp7sm78ks87gqw9"
+        // "juno13qcfy3tlrs20430cx28w76c4fjlzsmhj9d0decyy30m5jsh70cps22vc06";
+        "juno1vknw4cnp6g2eh8mzthdlgr759prhtypa3r6pgmgj4naxtcakqkes5zxuuk";
 
     let signer: DirectSecp256k1HdWallet;
     let client: SigningCosmWasmClient;
 
-    // const querySmartContract = async (message: Record<string, unknown>) => {
-    //     client.queryContractSmart(CONTRACT_ADDRESS, message)
-    // }
-
-    const createVB = async (height: Number) => {
+    const createVB = async (height: Number, topic: string) => {
         setFlag(true);
         signer = await getSigner(MNEMONIC);
 
@@ -72,6 +68,7 @@ const Vote = () => {
                 create_vote_box: {
                     deadline: { at_height: height },
                     owner: account.address,
+                    topic: topic,
                 },
             },
             "auto"
@@ -80,7 +77,8 @@ const Vote = () => {
         if (executeResponse === undefined) {
             alert("Something went wrong with the VoteBox creation");
         } else {
-            alert("Your txhash : " + executeResponse.transactionHash);
+            setCreateVoteBoxResponse("Your txhash : " + executeResponse.transactionHash);
+            setCreateVoteBoxResponseFlag(true);
         }
         setFlag(false);
     };
@@ -121,7 +119,8 @@ const Vote = () => {
         if (executeResponse === undefined) {
             alert("Something went wrong");
         } else {
-            alert("You have voted " + decision);
+            setVoteResponse("You have voted " + decision);
+            setVoteResponseFlag(true);
         }
         setFlag2(false);
     };
@@ -153,18 +152,21 @@ const Vote = () => {
             }
         );
         console.log(queryResponse);
-        alert(
+        setResponse(
             "id : " +
-                queryResponse.id +
-                "\nowner : " +
-                queryResponse.owner +
-                "\nyes count : " +
-                queryResponse.yes_count +
-                "\nno count : " +
-                queryResponse.no_count +
-                "\ndeadline block : " +
-                queryResponse.deadline.at_height
+            queryResponse.id +
+            "\nowner : " +
+            queryResponse.owner +
+            "\ntopic : " +
+            queryResponse.topic +
+            "\nyes count : " +
+            queryResponse.yes_count +
+            "\nno count : " +
+            queryResponse.no_count +
+            "\ndeadline block : " +
+            queryResponse.deadline.at_height
         );
+        setQueryResponseFlag(true);
         setFlag3(false);
     };
 
@@ -218,6 +220,11 @@ const Vote = () => {
                 ...oldArray,
                 queryResponse.voteList[i].deadline.at_height,
             ]);
+            // @ts-ignore
+            setTopicArray((oldArray) => [
+                ...oldArray,
+                queryResponse.voteList[i].topic,
+            ]);
         }
         setFlag4(false);
         setFlag5(true);
@@ -229,6 +236,12 @@ const Vote = () => {
     const [flag2, setFlag2] = useState(false);
     const [flag3, setFlag3] = useState(false);
     const [flag4, setFlag4] = useState(false);
+    const [queryResponseFlag, setQueryResponseFlag] = useState(false);
+    const [response, setResponse] = useState("");
+    const [createVoteBoxResponseFlag, setCreateVoteBoxResponseFlag] = useState(false);
+    const [createVoteBoxResponse, setCreateVoteBoxResponse] = useState("");
+    const [voteResponse, setVoteResponse] = useState("");
+    const [voteResponseFlag, setVoteResponseFlag] = useState(false);
     // eslint-disable-next-line
     const [flag5, setFlag5] = useState(false);
     const [idArray, setIdArray] = useState([]);
@@ -236,10 +249,26 @@ const Vote = () => {
     const [noCountArray, setNoCountArray] = useState([]);
     const [ownerArray, setOwnerArray] = useState([]);
     const [deadlineArray, setDeadlineArray] = useState([]);
+    const [topicArray, setTopicArray] = useState([]);
+
+    const resetFlags = (type: string) => {
+        if (type === "create") {
+            setCreateVoteBoxResponseFlag(false);
+        } else if (type === "vote") {
+            setVoteResponseFlag(false);
+        } else if (type === "query") {
+            setQueryResponseFlag(false);
+        }
+    }
 
     return (
         <Grid container>
+            {/*@ts-ignore*/}
             <CreateVoteBox function={createVB} />
+            {createVoteBoxResponseFlag &&
+                // @ts-ignore
+                <CustomAlert severity="success" text={createVoteBoxResponse} function={resetFlags} type="create" />
+            }
             {flag && (
                 <Typography
                     variant="overline"
@@ -252,6 +281,10 @@ const Vote = () => {
             )}
             <br />
             <Voting function={vote} />
+            {voteResponseFlag &&
+                // @ts-ignore
+                <CustomAlert severity="success" text={voteResponse} function={resetFlags} type="vote"/>
+            }
             {flag2 && (
                 <Typography
                     variant="overline"
@@ -270,6 +303,10 @@ const Vote = () => {
                 idText="VoteBox ID"
                 buttonText="Query VoteBox"
             />
+            {queryResponseFlag &&
+                // @ts-ignore
+                <CustomAlert severity="success" text={response} function={resetFlags} type="query"/>
+            }
             {flag3 && (
                 <Typography
                     variant="overline"
@@ -303,6 +340,7 @@ const Vote = () => {
                     <ListResponseItem
                         key={index}
                         id={idArray[index]}
+                        topic={topicArray[index]}
                         yesCount={yesCountArray[index]}
                         noCount={noCountArray[index]}
                         owner={ownerArray[index]}
