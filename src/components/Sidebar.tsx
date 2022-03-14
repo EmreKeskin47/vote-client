@@ -119,9 +119,9 @@ export function Sidebar(): JSX.Element {
                         <ListItemText primary={walletText}/>
                     )}
                 </ListItem>
-                <Grid sx={{backgroundColor: "whitesmoke", border: "1px solid blue", borderRadius: "3px", padding: 1}}>
+                <Grid sx={{padding: 1}}>
                     {flag &&
-                        <Button onClick={toggleCount}>{countLabel}</Button>
+                        <Button variant="outlined" color="success" onClick={toggleCount}>{countLabel}</Button>
                     }
                     {flag2 &&
                         <Typography

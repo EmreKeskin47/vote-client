@@ -331,7 +331,7 @@ const Vote = () => {
                 </Typography>
             )}
             <br/>
-            <Button onClick={showRecentsClicked}>
+            <Button variant="outlined" color="success" onClick={showRecentsClicked}>
                 <KeyboardArrowDownIcon/>
                 Show Recent VoteBoxes
             </Button>
@@ -352,7 +352,7 @@ const Vote = () => {
                             );
                         }
                     })}
-                    <Button onClick={hideRecentsClicked}>
+                    <Button variant="outlined" color="success" onClick={hideRecentsClicked}>
                         <KeyboardArrowUpIcon/>
                         Hide Recent VoteBoxes
                     </Button>
