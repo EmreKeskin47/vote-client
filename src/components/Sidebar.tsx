@@ -119,19 +119,22 @@ export function Sidebar(): JSX.Element {
                         <ListItemText primary={walletText}/>
                     )}
                 </ListItem>
-                {flag &&
-                    <Button onClick={toggleCount}>{countLabel}</Button>
-                }
-                {flag2 &&
-                    <Typography
-                        variant="overline"
-                        gutterBottom
-                        component="div"
-                        sx={{color: "gray"}}
-                    >
-                        VoteBox Count: {count}
-                    </Typography>
-                }
+                <Grid sx={{backgroundColor: "whitesmoke", border: "1px solid blue", borderRadius: "3px", padding: 1}}>
+                    {flag &&
+                        <Button onClick={toggleCount}>{countLabel}</Button>
+                    }
+                    {flag2 &&
+                        <Typography
+                            variant="overline"
+                            gutterBottom
+                            component="div"
+                            sx={{color: "gray"}}
+                            pl={2}
+                        >
+                            VoteBox Count: {count}
+                        </Typography>
+                    }
+                </Grid>
                 <Link href="/" underline="none" sx={{color: "white"}}>
                     <ListItem>
                         <ListItemIcon>

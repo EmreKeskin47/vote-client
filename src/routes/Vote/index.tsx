@@ -202,7 +202,6 @@ const Vote = () => {
                     queryResponse.voteList[i].topic,
                 ]);
             }
-            setFlag5(true);
             // return queryResponse
         } catch (error: any) {
             toast.error(error.message, {style: {maxWidth: 'none'}})
@@ -221,8 +220,6 @@ const Vote = () => {
     const [voteResponse, setVoteResponse] = useState("");
     const [voteResponseFlag, setVoteResponseFlag] = useState(false);
     const [recentLimit, setRecentLimit] = useState(false);
-    // eslint-disable-next-line
-    const [flag5, setFlag5] = useState(false);
     const [idArray, setIdArray] = useState([]);
     const [yesCountArray, setYesCountArray] = useState([]);
     const [noCountArray, setNoCountArray] = useState([]);
