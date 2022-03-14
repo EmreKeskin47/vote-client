@@ -4,32 +4,36 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CustomAlert from "./CustomAlert";
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DateTimePicker from '@mui/lab/DateTimePicker';
 
 const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void }) => {
-    const [height, setHeight] = useState("0");
+    const [time, setTime] = useState<Number>(0);
     const [flag, setFlag] = useState(false);
     const [flag2, setFlag2] = useState(false);
     const [topic, setTopic] = useState("");
+    const [date, setDate] = React.useState<Date | null>(new Date());
 
-    const handleChange = (event: {
-        target: { value: React.SetStateAction<string> };
-    }) => {
-        setHeight(event.target.value);
-    };
+    // const handleChange = (event: {
+    //     target: { value: React.SetStateAction<string> };
+    // }) => {
+    //     setTime(event.target.value);
+    // };
 
     const handleChange2 = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setTopic(event.target.value);
     }
 
     const createVoteBox = () => {
-        if (Number(height) < 1) {
+        if (Number(time) < 1) {
             setFlag(true);
             setTimeout(resetFlags, 3000);
-        } else if (isNaN(Number(height))) {
+        } else if (isNaN(Number(time))) {
             setFlag2(true);
             setTimeout(resetFlags, 3000);
         } else {
-            props.function(Number(height), topic);
+            props.function(Number(time), topic);
         }
     };
 
@@ -50,7 +54,7 @@ const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void 
                 height: "35%",
                 width: "100%",
             }}
-        >
+        >   
             <Typography
                 variant="h4"
                 gutterBottom
@@ -65,7 +69,7 @@ const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void 
                 component="div"
                 sx={{color: "whitesmoke"}}
             >
-                Enter the deadline height for the votebox and click create
+                Enter the deadline time for the votebox and click create
                 button
             </Typography>
             <br/>
@@ -78,13 +82,40 @@ const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void 
                 justifyContent="center"
             >
                 <Grid item container justifyContent="space-evenly" sm={12} md={8} justifyItems="center">
-                    <TextField
-                        id="deadline-height"
-                        label="Deadline Height"
+                    <Typography
+                    variant="subtitle1"
+                    gutterBottom
+                    component="div"
+                    sx={{backgroundColor: "white", borderRadius: 1.5}}
+                    >
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DateTimePicker
+                            
+                            minDateTime= {new Date()}
+                            renderInput={(props) => <TextField {...props} />}
+                            label="Deadline Time"
+                            value={date}
+                            onChange={(newDate) => {
+                                setDate(newDate)
+                                if(newDate != null){
+                                    let timeInNanoSeconds : Number = newDate.getTime()*1000000
+                                    console.log("Time in ns:")
+                                    console.log(timeInNanoSeconds)
+                                    
+                                    setTime(timeInNanoSeconds)
+                                }
+                            }}
+                        />
+                        </LocalizationProvider>
+                         {/* <TextField
+                        id="deadline-time"
+                        label="Deadline Time"
                         variant="filled"
                         onChange={handleChange}
                         sx={{backgroundColor: "white"}}
-                    />
+                         /> */}
+                    </Typography>
+                   
                     <TextField
                         id="topic"
                         label="Topic"
@@ -110,7 +141,7 @@ const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void 
             </Grid>
             <br/>
             {flag &&
-                <CustomAlert severity="error" text="Deadline height starts from 1" function={resetFlags}/>
+                <CustomAlert severity="error" text="Deadline time starts from 1" function={resetFlags}/>
             }
             {flag2 &&
                 <CustomAlert severity="error" text="Please enter a number that is bigger than 0" function={resetFlags}/>

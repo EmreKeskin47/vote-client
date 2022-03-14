@@ -37,7 +37,7 @@ const Vote = () => {
     let client: SigningCosmWasmClient;
 
 
-    const createVB = async (height: Number, topic: string) => {
+    const createVB = async (time: Number, topic: string) => {
         try{
         setFlag(true);
 
@@ -46,13 +46,15 @@ const Vote = () => {
         const account = wallet.address
         console.log("account: ");
         console.log(account);
+        console.log("createVB -> time in ns:")
+        console.log(time)
 
         const executeResponse = await client.execute(
             wallet.address,
             CONTRACT_ADDRESS,
             {
                 create_vote_box: {
-                    deadline: { at_height: height },
+                    deadline: { at_time: time.toString() },
                     owner: wallet.address,
                     topic: topic,
                 },
