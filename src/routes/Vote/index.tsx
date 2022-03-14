@@ -30,46 +30,20 @@ export const getSigner = async (mnemonic: string) => {
 
 const Vote = () => {
     const wallet = useWallet()
-    
-    const IS_TESTNET = !process.argv.includes("--mainnet");
-
-    const JUNO_MAINNET_RPC = "https://rpc.juno-1.deuslabs.fi";
-    const JUNO_TESTNET_RPC = "https://rpc.uni.juno.deuslabs.fi";
-
-    //Transaction signlamak icin
-    const MNEMONIC =
-        "term kangaroo lonely pact dove kiwi attitude swim deliver giggle resist pride similar turtle chicken sport phone foam mail wall account large settle firm";
 
     const CONTRACT_ADDRESS =
-        //Votebox contract adress
-        // "juno13qcfy3tlrs20430cx28w76c4fjlzsmhj9d0decyy30m5jsh70cps22vc06";
         "juno1vknw4cnp6g2eh8mzthdlgr759prhtypa3r6pgmgj4naxtcakqkes5zxuuk";
 
-    let signer: DirectSecp256k1HdWallet;
     let client: SigningCosmWasmClient;
 
-    // const querySmartContract = async (message: Record<string, unknown>) => {
-    //     client.queryContractSmart(CONTRACT_ADDRESS, message)
-    // }
 
     const createVB = async (height: Number, topic: string) => {
         try{
         setFlag(true);
-        // signer = await getSigner(MNEMONIC);
-
-        // client = await SigningCosmWasmClient.connectWithSigner(
-        //     IS_TESTNET ? JUNO_TESTNET_RPC : JUNO_MAINNET_RPC,
-        //     signer,
-        //     {
-        //         prefix: "juno",
-        //         gasPrice: GasPrice.fromString("0.0025ujunox"),
-        //     }
-        // );
 
         client = wallet.getClient()
         
         const account = wallet.address
-        // const account = (await signer.getAccounts())[0];
         console.log("account: ");
         console.log(account);
 
@@ -107,16 +81,6 @@ const Vote = () => {
         try{
 
         setFlag2(true);
-        // signer = await getSigner(MNEMONIC);
-
-        // client = await SigningCosmWasmClient.connectWithSigner(
-        //     IS_TESTNET ? JUNO_TESTNET_RPC : JUNO_MAINNET_RPC,
-        //     signer,
-        //     {
-        //         prefix: "juno",
-        //         gasPrice: GasPrice.fromString("0.0025ujunox"),
-        //     }
-        // );
         client = wallet.getClient()
         const account = wallet.address//(await signer.getAccounts())[0];
         console.log("account: ");
@@ -150,17 +114,6 @@ const Vote = () => {
     const query = async (boxId: string) => {
         try{
         setFlag3(true);
-
-        // signer = await getSigner(MNEMONIC);
-
-        // client = await SigningCosmWasmClient.connectWithSigner(
-        //     IS_TESTNET ? JUNO_TESTNET_RPC : JUNO_MAINNET_RPC,
-        //     signer,
-        //     {
-        //         prefix: "juno",
-        //         gasPrice: GasPrice.fromString("0.0025ujunox"),
-        //     }
-        // );
         client = wallet.getClient()
 
         const account = wallet.address//(await signer.getAccounts())[0];
@@ -202,17 +155,6 @@ const Vote = () => {
         try{
         setFlag4(true);
 
-        // signer = await getSigner(MNEMONIC);
-
-        // client = await SigningCosmWasmClient.connectWithSigner(
-        //     IS_TESTNET ? JUNO_TESTNET_RPC : JUNO_MAINNET_RPC,
-        //     signer,
-        //     {
-        //         prefix: "juno",
-        //         gasPrice: GasPrice.fromString("0.0025ujunox"),
-        //     }
-        // );
-
         client = wallet.getClient()
         const account = wallet.address//(await signer.getAccounts())[0];
         console.log("account: ");
@@ -224,7 +166,7 @@ const Vote = () => {
                 get_list: { start_after: Number(boxId) },
             }
         );
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < queryResponse.voteList.length; i++) {
             // @ts-ignore
             setIdArray((oldArray) => [
                 ...oldArray,

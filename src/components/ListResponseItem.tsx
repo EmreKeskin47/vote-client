@@ -39,6 +39,7 @@ const ListResponseItem = (props) => {
                     variant="h5"
                     gutterBottom
                     component="div"
+                    pl={2}
                     sx={{ color: "white" }}
                 >
                     TOPIC: {props.topic}
