@@ -93,6 +93,7 @@ export function Sidebar(): JSX.Element {
     };
 
     const toggleCount = () => {
+        // @ts-ignore
         getVBCount();
         // @ts-ignore
         console.log("context count is: " + context.data);
@@ -105,11 +106,16 @@ export function Sidebar(): JSX.Element {
         }
     }
 
+    const walletAndCount = () => {
+        walletOnClick();
+        toggleCount();
+    }
+
     const drawer = (
         <Box>
             <Toolbar/>
             <List>
-                <ListItem button onClick={walletOnClick}>
+                <ListItem button onClick={walletAndCount}>
                     <ListItemIcon>
                         <AddCardIcon sx={{color: "white"}}/>
                     </ListItemIcon>
@@ -120,20 +126,9 @@ export function Sidebar(): JSX.Element {
                     )}
                 </ListItem>
                 <Grid sx={{padding: 1}}>
-                    {flag &&
-                        <Button variant="outlined" color="success" onClick={toggleCount}>{countLabel}</Button>
-                    }
-                    {flag2 &&
-                        <Typography
-                            variant="overline"
-                            gutterBottom
-                            component="div"
-                            sx={{color: "gray"}}
-                            pl={2}
-                        >
-                            VoteBox Count: {count}
-                        </Typography>
-                    }
+                    {/*{flag &&*/}
+                    {/*    <Button variant="outlined" color="success" onClick={toggleCount}>{countLabel}</Button>*/}
+                    {/*}*/}
                 </Grid>
                 <Link href="/" underline="none" sx={{color: "white"}}>
                     <ListItem>
@@ -152,6 +147,17 @@ export function Sidebar(): JSX.Element {
                     </ListItem>
                 </Link>
             </List>
+            {flag2 &&
+                <Typography
+                    variant="overline"
+                    gutterBottom
+                    component="div"
+                    sx={{color: "gray"}}
+                    pl={2}
+                >
+                    VoteBox Count: {count}
+                </Typography>
+            }
         </Box>
     );
 
