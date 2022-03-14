@@ -220,7 +220,7 @@ const Vote = () => {
     const [createVoteBoxResponse, setCreateVoteBoxResponse] = useState("");
     const [voteResponse, setVoteResponse] = useState("");
     const [voteResponseFlag, setVoteResponseFlag] = useState(false);
-    const [count, setCount] = useState(0);
+    const [recentLimit, setRecentLimit] = useState(false);
     // eslint-disable-next-line
     const [flag5, setFlag5] = useState(false);
     const [idArray, setIdArray] = useState([]);
@@ -244,6 +244,19 @@ const Vote = () => {
         console.log(startId);
         queryList(startId);
         setFlag4(true);
+
+        // @ts-ignore
+        setIdArray([]);
+        // @ts-ignore
+        setYesCountArray([]);
+        // @ts-ignore
+        setNoCountArray([]);
+        // @ts-ignore
+        setOwnerArray([]);
+        // @ts-ignore
+        setDeadlineArray([]);
+        // @ts-ignore
+        setTopicArray([]);
     }
 
     const hideRecentsClicked = () => {
@@ -258,6 +271,10 @@ const Vote = () => {
         } else if (type === "query") {
             setQueryResponseFlag(false);
         }
+    }
+
+    const limitRecentVoteBoxes = () => {
+        setRecentLimit(true);
     }
 
     return (
@@ -324,17 +341,19 @@ const Vote = () => {
             {flag4 &&
                 <>
                     {idArray.map((item: any, index: number) => {
-                        return (
-                            <ListResponseItem
-                                key={index}
-                                id={idArray[index]}
-                                topic={topicArray[index]}
-                                yesCount={yesCountArray[index]}
-                                noCount={noCountArray[index]}
-                                owner={ownerArray[index]}
-                                deadline={deadlineArray[index]}
-                            />
-                        );
+                        if (!recentLimit) {
+                            return (
+                                <ListResponseItem
+                                    key={index}
+                                    id={idArray[index]}
+                                    topic={topicArray[index]}
+                                    yesCount={yesCountArray[index]}
+                                    noCount={noCountArray[index]}
+                                    owner={ownerArray[index]}
+                                    deadline={deadlineArray[index]}
+                                />
+                            );
+                        }
                     })}
                     <Button onClick={hideRecentsClicked}>
                         <KeyboardArrowUpIcon/>
