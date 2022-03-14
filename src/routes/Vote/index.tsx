@@ -2,7 +2,7 @@ import { makeCosmoshubPath } from "@cosmjs/amino";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { GasPrice } from "@cosmjs/stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useWallet } from '../../contexts/wallet'
 import { Grid } from "@mui/material";
 import CreateVoteBox from "../../components/CreateVoteBox";
@@ -29,7 +29,28 @@ export const getSigner = async (mnemonic: string) => {
 ////////////////////////Wallet//////////////////////////////////
 
 const Vote = () => {
-    const wallet = useWallet()
+    const [flag, setFlag] = useState(false);
+    const [flag2, setFlag2] = useState(false);
+    const [flag3, setFlag3] = useState(false);
+    const [flag4, setFlag4] = useState(false);
+    const [queryResponseFlag, setQueryResponseFlag] = useState(false);
+    const [response, setResponse] = useState("");
+    const [createVoteBoxResponseFlag, setCreateVoteBoxResponseFlag] = useState(false);
+    const [createVoteBoxResponse, setCreateVoteBoxResponse] = useState("");
+    const [voteResponse, setVoteResponse] = useState("");
+    const [voteResponseFlag, setVoteResponseFlag] = useState(false);
+    const [count, setCount] = useState(0);
+    // eslint-disable-next-line
+    const [flag5, setFlag5] = useState(false);
+    const [idArray, setIdArray] = useState([]);
+    const [yesCountArray, setYesCountArray] = useState([]);
+    const [noCountArray, setNoCountArray] = useState([]);
+    const [ownerArray, setOwnerArray] = useState([]);
+    const [deadlineArray, setDeadlineArray] = useState([]);
+    const [topicArray, setTopicArray] = useState([]);
+
+
+    const wallet = useWallet();
 
     const CONTRACT_ADDRESS =
         "juno1vknw4cnp6g2eh8mzthdlgr759prhtypa3r6pgmgj4naxtcakqkes5zxuuk";
@@ -209,24 +230,6 @@ const Vote = () => {
     };
 
     //////////////////////////////// UI ////////////////////////////
-    const [flag, setFlag] = useState(false);
-    const [flag2, setFlag2] = useState(false);
-    const [flag3, setFlag3] = useState(false);
-    const [flag4, setFlag4] = useState(false);
-    const [queryResponseFlag, setQueryResponseFlag] = useState(false);
-    const [response, setResponse] = useState("");
-    const [createVoteBoxResponseFlag, setCreateVoteBoxResponseFlag] = useState(false);
-    const [createVoteBoxResponse, setCreateVoteBoxResponse] = useState("");
-    const [voteResponse, setVoteResponse] = useState("");
-    const [voteResponseFlag, setVoteResponseFlag] = useState(false);
-    // eslint-disable-next-line
-    const [flag5, setFlag5] = useState(false);
-    const [idArray, setIdArray] = useState([]);
-    const [yesCountArray, setYesCountArray] = useState([]);
-    const [noCountArray, setNoCountArray] = useState([]);
-    const [ownerArray, setOwnerArray] = useState([]);
-    const [deadlineArray, setDeadlineArray] = useState([]);
-    const [topicArray, setTopicArray] = useState([]);
 
     const resetFlags = (type: string) => {
         if (type === "create") {
@@ -295,13 +298,13 @@ const Vote = () => {
                 </Typography>
             )}
             <br />
-            <QueryBox
+            {/* <QueryBox
                 function={queryList}
                 heading="Query VoteBox List"
                 subHeading="Enter the id that the list of VoteBoxes will start from"
                 idText="Starting VoteBox ID"
                 buttonText="Query VoteBox List"
-            />
+            /> */}
             {flag4 && (
                 <Typography
                     variant="overline"

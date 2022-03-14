@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -18,10 +18,21 @@ import HowToVoteIcon from "@mui/icons-material/HowToVote";
 import { useWallet } from "../contexts/wallet";
 import { useKeplr } from "../services/keplr";
 import getShortAddress from "../utils/getShortAddress";
+import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import toast from 'react-hot-toast';
+import { setEmitFlags } from "typescript";
+// import { Grid } from "antd";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid"
 
 export const drawerWidth = 240;
 
 export function Sidebar(): JSX.Element {
+    const [count, setCount] = useState(0);
+    const [flag, setFlag] = useState(false);
+    const [flag2, setFlag2] = useState(false);
+    const [countLabel, setCountLabel] = useState("Show VoteBox Count");
+
     const wallet = useWallet();
     const keplr = useKeplr();
 
@@ -48,8 +59,45 @@ export function Sidebar(): JSX.Element {
             keplr.disconnect();
         } else {
             connectWallet();
+            setFlag(true);
         }
     };
+
+    const CONTRACT_ADDRESS =
+        "juno1vknw4cnp6g2eh8mzthdlgr759prhtypa3r6pgmgj4naxtcakqkes5zxuuk";
+
+    let client: SigningCosmWasmClient;
+
+    const getVBCount = async () => {
+        try{
+        client = wallet.getClient()
+
+        const queryResponse = await client.queryContractSmart(
+            CONTRACT_ADDRESS,
+            {
+                get_votebox_count: {},
+            }
+        );
+        console.log(queryResponse);
+        setCount(
+            queryResponse.count
+        );
+        }
+        catch(error: any) {
+            toast.error(error.message, { style: { maxWidth: 'none' } })
+          }
+    };
+
+    const toggleCount = () => {
+        if (flag2 === false) {
+            setFlag2(true);
+            setCountLabel("Hide Votebox Count");
+        } else {
+            setFlag2(false);
+            setCountLabel("Show Votebox Count");
+        }
+        getVBCount();
+    }
 
     const drawer = (
         <Box>
@@ -65,6 +113,19 @@ export function Sidebar(): JSX.Element {
                         <ListItemText primary={walletText} />
                     )}
                 </ListItem>
+                {flag && 
+                    <Button onClick={toggleCount}>{countLabel}</Button>
+                }
+                {flag2 && 
+                    <Typography
+                    variant="overline"
+                    gutterBottom
+                    component="div"
+                    sx={{ color: "gray" }}
+                >
+                    VoteBox Count: {count}
+                </Typography>
+                }
                 <Link href="/" underline="none" sx={{ color: "white" }}>
                     <ListItem>
                         <ListItemIcon>
