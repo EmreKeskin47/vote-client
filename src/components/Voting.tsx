@@ -9,8 +9,6 @@ const Voting = (props: {
     function: (arg0: string, arg1: boolean, arg2: string) => void;
 }) => {
     const [id, setId] = useState("0");
-    const [yesVote, setYesVote] = useState(false);
-    const [noVote, setNoVote] = useState(false);
     const [flag, setFlag] = useState(false);
     const [flag2, setFlag2] = useState(false);
 
@@ -35,8 +33,7 @@ const Voting = (props: {
             setTimeout(resetFlags, 3000);
         }
         else {
-            setYesVote(true);
-            props.function(id, yesVote, "YES");
+            props.function(id, true, "YES");
         }
     };
 
@@ -49,8 +46,7 @@ const Voting = (props: {
             setTimeout(resetFlags, 3000);
         }
         else {
-            setNoVote(false);
-            props.function(id, noVote, "NO");
+            props.function(id, false, "NO");
         }
     };
 
