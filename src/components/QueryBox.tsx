@@ -3,6 +3,7 @@ import { Grid } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import CustomAlert from "./CustomAlert";
 
 const QueryBox = (props: {
     function: (arg0: string) => void;
@@ -30,6 +31,13 @@ const QueryBox = (props: {
         | undefined;
 }) => {
     const [id, setId] = useState("0");
+    const [flag, setFlag] = useState(false);
+    const [flag2, setFlag2] = useState(false);
+
+    const resetFlags = () => {
+        setFlag(false);
+        setFlag2(false);
+    }
 
     const handleChange = (event: {
         target: { value: React.SetStateAction<string> };
@@ -39,9 +47,11 @@ const QueryBox = (props: {
 
     const queryVoteBox = () => {
         if (Number(id) < 1) {
-            alert("Ids start from 1");
+            setFlag(true);
+            setTimeout(resetFlags, 3000);
         } else if (isNaN(Number(id))) {
-            alert("Please enter a number that is bigger than 0")
+            setFlag2(true);
+            setTimeout(resetFlags, 3000);
         }
         else {
             props.function((Number(id) - 1).toString());
@@ -109,6 +119,13 @@ const QueryBox = (props: {
                     </Button>
                 </Grid>
             </Grid>
+            <br/>
+            {flag &&
+                <CustomAlert severity="error" text="Deadline height starts from 1" function={resetFlags} />
+            }
+            {flag2 &&
+                <CustomAlert severity="error" text="Please enter a number that is bigger than 0" function={resetFlags} />
+            }
         </Grid>
     );
 };

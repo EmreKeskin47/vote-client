@@ -3,6 +3,7 @@ import { Grid } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import CustomAlert from "./CustomAlert";
 
 const Voting = (props: {
     function: (arg0: string, arg1: boolean, arg2: string) => void;
@@ -10,6 +11,13 @@ const Voting = (props: {
     const [id, setId] = useState("0");
     const [yesVote, setYesVote] = useState(false);
     const [noVote, setNoVote] = useState(false);
+    const [flag, setFlag] = useState(false);
+    const [flag2, setFlag2] = useState(false);
+
+    const resetFlags = () => {
+        setFlag(false);
+        setFlag2(false);
+    }
 
     const handleChange = (event: {
         target: { value: React.SetStateAction<string> };
@@ -20,9 +28,11 @@ const Voting = (props: {
     const votedYes = () => {
         console.log(Number(id))
         if (Number(id) < 1) {
-            alert("Ids start from 1")
+            setFlag(true);
+            setTimeout(resetFlags, 3000);
         } else if (isNaN(Number(id))) {
-            alert("Please enter a number that is bigger than 0")
+            setFlag2(true);
+            setTimeout(resetFlags, 3000);
         }
         else {
             setYesVote(true);
@@ -32,9 +42,11 @@ const Voting = (props: {
 
     const votedNo = () => {
         if (Number(id) < 1) {
-            alert("Ids start from 1")
+            setFlag(true);
+            setTimeout(resetFlags, 3000);
         } else if (isNaN(Number(id))) {
-            alert("Please enter a number that is bigger than 0")
+            setFlag2(true);
+            setTimeout(resetFlags, 3000);
         }
         else {
             setNoVote(false);
@@ -118,6 +130,13 @@ const Voting = (props: {
                     </Grid>
                 </Grid>
             </Grid>
+            <br/>
+            {flag &&
+                <CustomAlert severity="error" text="Deadline height starts from 1" function={resetFlags} />
+            }
+            {flag2 &&
+                <CustomAlert severity="error" text="Please enter a number that is bigger than 0" function={resetFlags} />
+            }
         </Grid>
     );
 };

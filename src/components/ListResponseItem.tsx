@@ -2,43 +2,8 @@ import React from "react";
 import { Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
-const ListResponseItem = (props: {
-    id:
-        | boolean
-        | React.ReactChild
-        | React.ReactFragment
-        | React.ReactPortal
-        | null
-        | undefined;
-    yesCount:
-        | boolean
-        | React.ReactChild
-        | React.ReactFragment
-        | React.ReactPortal
-        | null
-        | undefined;
-    noCount:
-        | boolean
-        | React.ReactChild
-        | React.ReactFragment
-        | React.ReactPortal
-        | null
-        | undefined;
-    owner:
-        | boolean
-        | React.ReactChild
-        | React.ReactFragment
-        | React.ReactPortal
-        | null
-        | undefined;
-    deadline:
-        | boolean
-        | React.ReactChild
-        | React.ReactFragment
-        | React.ReactPortal
-        | null
-        | undefined;
-}) => {
+// @ts-ignore
+const ListResponseItem = (props) => {
     return (
         <Grid
             container
@@ -69,6 +34,14 @@ const ListResponseItem = (props: {
                     sx={{ color: "white" }}
                 >
                     ID: {props.id}
+                </Typography>
+                <Typography
+                    variant="h5"
+                    gutterBottom
+                    component="div"
+                    sx={{ color: "white" }}
+                >
+                    TOPIC: {props.topic}
                 </Typography>
                 <Typography
                     variant="h5"
