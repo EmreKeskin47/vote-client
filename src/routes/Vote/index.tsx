@@ -2,7 +2,7 @@ import { makeCosmoshubPath } from "@cosmjs/amino";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { GasPrice } from "@cosmjs/stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import React, { useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { useWallet } from '../../contexts/wallet'
 import { Grid } from "@mui/material";
 import CreateVoteBox from "../../components/CreateVoteBox";
@@ -12,6 +12,10 @@ import ListResponseItem from "../../components/ListResponseItem";
 import Typography from "@mui/material/Typography";
 import toast from 'react-hot-toast'
 import CustomAlert from "../../components/CustomAlert";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import Button from "@mui/material/Button";
+import SingleContext from "../../SingleContext";
+import singleContext from "../../SingleContext";
 
 ////////////////////////Wallet//////////////////////////////////
 const walletOptions = {
@@ -29,7 +33,8 @@ export const getSigner = async (mnemonic: string) => {
 ////////////////////////Wallet//////////////////////////////////
 
 const Vote = () => {
-    const wallet = useWallet()
+
+    const wallet = useWallet();
 
     const CONTRACT_ADDRESS =
         "juno1vknw4cnp6g2eh8mzthdlgr759prhtypa3r6pgmgj4naxtcakqkes5zxuuk";
@@ -115,6 +120,7 @@ const Vote = () => {
       }
     };
 
+
     const query = async (boxId: string) => {
         try{
         setFlag3(true);
@@ -155,10 +161,8 @@ const Vote = () => {
           }
     };
 
-    const queryList = async (boxId: string) => {
+    const queryList = async (boxId: number) => {
         try{
-        setFlag4(true);
-
         client = wallet.getClient()
         const account = wallet.address//(await signer.getAccounts())[0];
         console.log("account: ");
@@ -167,7 +171,7 @@ const Vote = () => {
         const queryResponse = await client.queryContractSmart(
             CONTRACT_ADDRESS,
             {
-                get_list: { start_after: Number(boxId) },
+                get_list: { start_after:boxId },
             }
         );
         for (let i = 0; i < queryResponse.voteList.length; i++) {
@@ -202,7 +206,6 @@ const Vote = () => {
                 queryResponse.voteList[i].topic,
             ]);
         }
-        setFlag4(false);
         setFlag5(true);
         // return queryResponse
     }catch(error: any) {
@@ -221,6 +224,7 @@ const Vote = () => {
     const [createVoteBoxResponse, setCreateVoteBoxResponse] = useState("");
     const [voteResponse, setVoteResponse] = useState("");
     const [voteResponseFlag, setVoteResponseFlag] = useState(false);
+    const [count, setCount] = useState(0);
     // eslint-disable-next-line
     const [flag5, setFlag5] = useState(false);
     const [idArray, setIdArray] = useState([]);
@@ -229,6 +233,22 @@ const Vote = () => {
     const [ownerArray, setOwnerArray] = useState([]);
     const [deadlineArray, setDeadlineArray] = useState([]);
     const [topicArray, setTopicArray] = useState([]);
+
+    const context = useContext(singleContext);
+
+    const showRecentsClicked = () => {
+        // @ts-ignore
+        console.log(context.data);
+        // @ts-ignore
+        let startId = context.data - 10;
+        console.log(startId);
+        if (startId < 1) {
+            startId = 1;
+        }
+        console.log(startId);
+        queryList(startId);
+        setFlag4(true);
+    }
 
     const resetFlags = (type: string) => {
         if (type === "create") {
@@ -297,36 +317,25 @@ const Vote = () => {
                 </Typography>
             )}
             <br />
-            <QueryBox
-                function={queryList}
-                heading="Query VoteBox List"
-                subHeading="Enter the id that the list of VoteBoxes will start from"
-                idText="Starting VoteBox ID"
-                buttonText="Query VoteBox List"
-            />
-            {flag4 && (
-                <Typography
-                    variant="overline"
-                    gutterBottom
-                    component="div"
-                    sx={{ color: "gray" }}
-                >
-                    Getting the list of results...
-                </Typography>
-            )}
-            {idArray.map((item, index) => {
-                return (
-                    <ListResponseItem
-                        key={index}
-                        id={idArray[index]}
-                        topic={topicArray[index]}
-                        yesCount={yesCountArray[index]}
-                        noCount={noCountArray[index]}
-                        owner={ownerArray[index]}
-                        deadline={deadlineArray[index]}
-                    />
-                );
-            })}
+            <Button onClick={showRecentsClicked}>
+                <KeyboardArrowDownIcon />
+                Show Recent VoteBoxes
+            </Button>
+            {flag4 && 
+                idArray.map((item: any, index: number) => {
+                    return (
+                        <ListResponseItem
+                            key={index}
+                            id={idArray[index]}
+                            topic={topicArray[index]}
+                            yesCount={yesCountArray[index]}
+                            noCount={noCountArray[index]}
+                            owner={ownerArray[index]}
+                            deadline={deadlineArray[index]}
+                        />
+                    );
+                })
+            }
         </Grid>
     );
 };
