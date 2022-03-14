@@ -107,7 +107,9 @@ const Vote = () => {
         setFlag2(false);
     }
     catch(error: any) {
-        toast.error(error.message, { style: { maxWidth: 'none' } })
+        // toast.error(error.message, { style: { maxWidth: 'none' } });
+        toast.error("Something went wrong.\nYou may have tried to vote for an expired contract.", {style: {maxWidth: 'none'}});
+        setFlag2(false);
       }
     };
 
