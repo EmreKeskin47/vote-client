@@ -69,7 +69,7 @@ const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void 
                 component="div"
                 sx={{color: "whitesmoke"}}
             >
-                Enter the deadline time for the votebox and click create
+                Enter the deadline time for the votebox and click on the create VoteBox
                 button
             </Typography>
             <br/>

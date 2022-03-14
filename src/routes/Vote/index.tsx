@@ -37,7 +37,7 @@ const Vote = () => {
     const wallet = useWallet();
 
     const CONTRACT_ADDRESS =
-        "juno1vknw4cnp6g2eh8mzthdlgr759prhtypa3r6pgmgj4naxtcakqkes5zxuuk";
+        "juno1asxh2ydzpujch7l7hguzejfjlfadxjydnpqcf4vdve90x2frqh3s8f9hmx";
 
     let client: SigningCosmWasmClient;
 
@@ -150,8 +150,8 @@ const Vote = () => {
             queryResponse.yes_count +
             "\nno count : " +
             queryResponse.no_count +
-            "\ndeadline block : " +
-            queryResponse.deadline.at_height
+            "\ndeadline time : " +
+            new Date(parseInt(queryResponse.deadline.at_time)/1000000)
         );
         setQueryResponseFlag(true);
         setFlag3(false);
