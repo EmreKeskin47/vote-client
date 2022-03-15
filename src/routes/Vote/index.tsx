@@ -70,7 +70,10 @@ const Vote = () => {
         if (executeResponse === undefined) {
             alert("Something went wrong with the VoteBox creation");
         } else {
-            setCreateVoteBoxResponse("Your txhash : " + executeResponse.transactionHash);
+            
+            setCreateVoteBoxResponse("VoteBox ID: " + executeResponse.logs[0].events[2].attributes[2].value + " | Your TxHash : " + executeResponse.transactionHash);
+
+
             setCreateVoteBoxResponseFlag(true);
         }
         setFlag(false);
