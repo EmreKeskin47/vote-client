@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import {Grid, Typography} from "@mui/material";
 import React, {useContext, useEffect, useState} from "react";
 import Logo from "./logo.png";
 import {CosmWasmClient} from "@cosmjs/cosmwasm-stargate";
@@ -8,6 +8,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ListResponseItem from "../../components/ListResponseItem";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import singleContext from "../../SingleContext";
+import CubeItem from "../../components/Cube";
 
 
 const Home = () => {
@@ -159,7 +160,7 @@ const Home = () => {
 
                 <Typography
                     variant="h5"
-                    sx={{ color: "whitesmoke", textAlign: "center" }}
+                    sx={{color: "whitesmoke", textAlign: "center"}}
                     marginTop={5}
                 >
                     With VoteBox, you can create your own vote boxes and people
@@ -178,7 +179,7 @@ const Home = () => {
                     Let&apos;s start with your first VoteBox!
                 </Typography>
             </Grid>
-            <Button color="success" onClick={showRecentsClicked}>
+            <Button color="secondary" onClick={showRecentsClicked} sx={{marginBottom: "30px"}}>
                 <KeyboardArrowDownIcon/>
                 {/*@ts-ignore*/}
                 Show Recent VoteBoxes
@@ -186,20 +187,38 @@ const Home = () => {
             {/*@ts-ignore*/}
             {recentsFlag &&
                 <>
+                    {/*{idArray.map((item: any, index: number) => {*/}
+                    {/*    return (*/}
+                    {/*        <ListResponseItem*/}
+                    {/*            key={index}*/}
+                    {/*            id={idArray[index]}*/}
+                    {/*            topic={topicArray[index]}*/}
+                    {/*            yesCount={yesCountArray[index]}*/}
+                    {/*            noCount={noCountArray[index]}*/}
+                    {/*            owner={ownerArray[index]}*/}
+                    {/*            deadline={deadlineArray[index]}*/}
+                    {/*        />*/}
+                    {/*    );*/}
+                    {/*})}*/}
                     {idArray.map((item: any, index: number) => {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
                         return (
-                            <ListResponseItem
-                                key={index}
-                                id={idArray[index]}
-                                topic={topicArray[index]}
-                                yesCount={yesCountArray[index]}
-                                noCount={noCountArray[index]}
-                                owner={ownerArray[index]}
-                                deadline={deadlineArray[index]}
-                            />
+                            // eslint-disable-next-line react/jsx-key
+                            <Grid container direction="row" justifyContent="space-between" p={5}>
+                                <CubeItem
+                                    key={index}
+                                    id={idArray[index]}
+                                    topic={topicArray[index]}
+                                    yesCount={yesCountArray[index]}
+                                    noCount={noCountArray[index]}
+                                    owner={ownerArray[index]}
+                                    deadline={deadlineArray[index]}
+                                />
+                            </Grid>
                         );
                     })}
-                    <Button color="success" onClick={hideRecentsClicked}>
+                    <Button color="secondary" onClick={hideRecentsClicked}>
                         <KeyboardArrowUpIcon/>
                         Hide Recent VoteBoxes
                     </Button>
