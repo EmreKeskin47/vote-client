@@ -42,7 +42,7 @@ const ListResponseItem = (props) => {
                     pl={2}
                     sx={{ color: "white" }}
                 >
-                    TOPIC: {props.topic}
+                    Topic: {props.topic}
                 </Typography>
                 <Typography
                     variant="h5"
@@ -51,7 +51,7 @@ const ListResponseItem = (props) => {
                     pl={2}
                     sx={{ color: "white" }}
                 >
-                    YES: {props.yesCount}
+                    Yes: {props.yesCount}
                 </Typography>
                 <Typography
                     variant="h5"
@@ -60,7 +60,7 @@ const ListResponseItem = (props) => {
                     pl={2}
                     sx={{ color: "white" }}
                 >
-                    NO: {props.noCount}
+                    No: {props.noCount}
                 </Typography>
                 <Typography
                     variant="h5"
@@ -69,7 +69,25 @@ const ListResponseItem = (props) => {
                     pl={2}
                     sx={{ color: "white" }}
                 >
-                    DEADLINE: {props.deadline}
+                    Abstain: {props.abstainCount}
+                </Typography>
+                <Typography
+                    variant="h5"
+                    gutterBottom
+                    component="div"
+                    pl={2}
+                    sx={{ color: "white" }}
+                >
+                    No with Veto: {props.noWithVetoCount}
+                </Typography>
+                <Typography
+                    variant="h5"
+                    gutterBottom
+                    component="div"
+                    pl={2}
+                    sx={{ color: "white" }}
+                >
+                    Deadline: {props.deadline}
                 </Typography>
             </Grid>
             <hr />
@@ -81,7 +99,7 @@ const ListResponseItem = (props) => {
                     component="div"
                     sx={{ color: "white" }}
                 >
-                    OWNER: <br />
+                    Owner: <br />
                     {props.owner}
                 </Typography>
             </Grid>

@@ -155,21 +155,21 @@ const Vote = () => {
             );
             console.log(queryResponse);
             setResponse(
-                "id : " +
+                "ID : " +
                     queryResponse.id +
-                    "\nowner : " +
+                    "\nOwner : " +
                     queryResponse.owner +
-                    "\ntopic : " +
+                    "\nTopic : " +
                     queryResponse.topic +
-                    "\nyes count : " +
+                    "\nYes Count : " +
                     queryResponse.yes_count +
-                    "\nno count : " +
+                    "\nNo Count : " +
                     queryResponse.no_count +
-                    "\nabstain count : " +
+                    "\nAbstain Count : " +
                     queryResponse.abstain_count +
-                    "\nno count : " +
+                    "\nNo with Veto Count : " +
                     queryResponse.no_with_veto_count +
-                    "\ndeadline time : " +
+                    "\nDeadline Time : " +
                     new Date(parseInt(queryResponse.deadline.at_time)/1000000)
             );
             setQueryResponseFlag(true);
@@ -288,7 +288,7 @@ const Vote = () => {
 
     useEffect(()=> {
         queryMyList();
-    },[wallet.initialized, wallet.address, createVoteBoxResponse]);
+    },[wallet.initialized, wallet.address, createVoteBoxResponse,voteResponse]);
 
     const resetFlags = (type: string) => {
         if (type === "create") {
@@ -387,6 +387,8 @@ const Vote = () => {
                                 topic={topicArray[index]}
                                 yesCount={yesCountArray[index]}
                                 noCount={noCountArray[index]}
+                                abstainCount={abstainCountArray[index]}
+                                noWithVetoCount={noWithVetoCountArray[index]}
                                 owner={ownerArray[index]}
                                 deadline={deadlineArray[index]}
                             />
