@@ -21,9 +21,6 @@ const Home = () => {
 
     const context = useContext(singleContext);
 
-    const CONTRACT_ADDRESS =
-        "juno1asxh2ydzpujch7l7hguzejfjlfadxjydnpqcf4vdve90x2frqh3s8f9hmx";
-
     useEffect(() => {
         getVBCount();
     }, []);
@@ -37,7 +34,9 @@ const Home = () => {
             mockClient = await CosmWasmClient.connect("https://rpc.uni.juno.deuslabs.fi");
 
             const queryResponse = await mockClient.queryContractSmart(
-                CONTRACT_ADDRESS,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                context.contractAdress,
                 {
                     get_votebox_count: {},
                 }
@@ -65,7 +64,9 @@ const Home = () => {
             // console.log(account);
 
             const queryResponse = await mockClient.queryContractSmart(
-                CONTRACT_ADDRESS,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                context.contractAdress,
                 {
                     get_list: {start_after: boxId},
                 }

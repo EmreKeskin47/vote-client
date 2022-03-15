@@ -30,10 +30,9 @@ export const getSigner = async (mnemonic: string) => {
 
 const Vote = () => {
 
-    const wallet = useWallet();
+    const context = useContext(singleContext);
 
-    const CONTRACT_ADDRESS =
-        "juno1asxh2ydzpujch7l7hguzejfjlfadxjydnpqcf4vdve90x2frqh3s8f9hmx";
+    const wallet = useWallet();
 
     let client: SigningCosmWasmClient;
 
@@ -50,7 +49,9 @@ const Vote = () => {
 
             const executeResponse = await client.execute(
                 wallet.address,
-                CONTRACT_ADDRESS,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                context.contractAdress,
                 {
                     create_vote_box: {
                         deadline: {at_height: height},
@@ -88,7 +89,9 @@ const Vote = () => {
 
             const executeResponse = await client.execute(
                 wallet.address,
-                CONTRACT_ADDRESS,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                context.contractAdress,
                 {
                     vote: {
                         id: voteId,
@@ -125,7 +128,9 @@ const Vote = () => {
             const id = Number(boxId) + 1;
 
             const queryResponse = await client.queryContractSmart(
-                CONTRACT_ADDRESS,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                context.contractAdress,
                 {
                     query_vote: {id: id.toString()},
                 }
@@ -162,8 +167,6 @@ const Vote = () => {
     const [createVoteBoxResponse, setCreateVoteBoxResponse] = useState("");
     const [voteResponse, setVoteResponse] = useState("");
     const [voteResponseFlag, setVoteResponseFlag] = useState(false);
-
-    const context = useContext(singleContext);
 
     const resetFlags = (type: string) => {
         if (type === "create") {

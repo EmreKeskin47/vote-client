@@ -96,7 +96,7 @@ const ListResponseItem = (props) => {
                 >
                     <Button
                         variant="contained"
-                        color="error"
+                        color="warning"
                         onClick={() => props.reset(props.id)}
                     >
                         Reset Votes

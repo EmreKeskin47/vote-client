@@ -61,7 +61,7 @@ const Reset = () => {
         }
     };
 
-    const resetVote = async (id: String) => {
+    const resetVote = async (id: string) => {
         try {
             client = wallet.getClient();
             const res = await client.execute(
@@ -82,7 +82,7 @@ const Reset = () => {
         }
     };
 
-    const deleteVoteBox = async (id: String) => {
+    const deleteVoteBox = async (id: string) => {
         try {
             client = wallet.getClient();
             const res = await client.execute(
@@ -106,7 +106,7 @@ const Reset = () => {
 
     return (
         <Grid container>
-            <Button onClick={queryList}>
+            <Button onClick={queryList} color="secondary">
                 {listEnd === 0 ? (
                     <KeyboardArrowRightIcon />
                 ) : (
@@ -135,7 +135,7 @@ const Reset = () => {
                     );
                 })}
             {voteboxList.length > 0 && loadMoreBtn && (
-                <Button onClick={queryList}>Load More</Button>
+                <Button color="secondary" onClick={queryList}>Load More</Button>
             )}
         </Grid>
     );
