@@ -15,7 +15,6 @@ import CustomAlert from "../../components/CustomAlert";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Button from "@mui/material/Button";
-import SingleContext from "../../SingleContext";
 import singleContext from "../../SingleContext";
 
 ////////////////////////Wallet//////////////////////////////////
@@ -38,7 +37,7 @@ const Vote = () => {
     const wallet = useWallet();
 
     const CONTRACT_ADDRESS =
-        "juno1vknw4cnp6g2eh8mzthdlgr759prhtypa3r6pgmgj4naxtcakqkes5zxuuk";
+        "juno1asxh2ydzpujch7l7hguzejfjlfadxjydnpqcf4vdve90x2frqh3s8f9hmx";
 
     let client: SigningCosmWasmClient;
 
