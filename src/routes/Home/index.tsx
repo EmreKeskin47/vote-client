@@ -30,8 +30,9 @@ const Home = () => {
     const getVBCount = async () => {
         let startCount = 1;
         try {
-            // client = wallet.getClient()
-            mockClient = await CosmWasmClient.connect("https://rpc.uni.juno.deuslabs.fi");
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            mockClient = await CosmWasmClient.connect(context.testUrl);
 
             const queryResponse = await mockClient.queryContractSmart(
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
