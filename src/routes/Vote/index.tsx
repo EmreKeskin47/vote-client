@@ -8,13 +8,9 @@ import {Grid} from "@mui/material";
 import CreateVoteBox from "../../components/CreateVoteBox";
 import QueryBox from "../../components/QueryBox";
 import Voting from "../../components/Voting";
-import ListResponseItem from "../../components/ListResponseItem";
 import Typography from "@mui/material/Typography";
 import toast from 'react-hot-toast'
 import CustomAlert from "../../components/CustomAlert";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Button from "@mui/material/Button";
 import singleContext from "../../SingleContext";
 
 ////////////////////////Wallet//////////////////////////////////
@@ -41,39 +37,8 @@ const Vote = () => {
 
     let client: SigningCosmWasmClient;
 
-    let mockClient: CosmWasmClient;
 
-    const getVBCount = async () => {
-        let startCount = 1;
-        try {
-            // client = wallet.getClient()
-            mockClient = await CosmWasmClient.connect("https://rpc.uni.juno.deuslabs.fi");
-
-            const queryResponse = await mockClient.queryContractSmart(
-                CONTRACT_ADDRESS,
-                {
-                    get_votebox_count: {},
-                }
-            );
-            startCount = queryResponse.count;
-            startCount -= 10;
-            if (startCount < 1)
-            startCount = 1;
-            queryList(startCount);
-            // @ts-ignore
-            context.updateCount(Number(queryResponse.count));
-            setRecentsFlag(true);
-        } catch (error: any) {
-            toast.error(error.message, {style: {maxWidth: 'none'}})
-        }
-    };
-
-    useEffect(() => {
-        getVBCount();
-    }, [])
-
-
-    const createVB = async (height: Number, topic: string) => {
+    const createVB = async (height: number, topic: string) => {
         try {
             setFlag(true);
 
@@ -157,7 +122,7 @@ const Vote = () => {
             console.log("account: ");
             console.log(account);
 
-            let id = Number(boxId) + 1;
+            const id = Number(boxId) + 1;
 
             const queryResponse = await client.queryContractSmart(
                 CONTRACT_ADDRESS,
@@ -187,58 +152,6 @@ const Vote = () => {
         }
     };
 
-    const queryList = async (boxId: number) => {
-        try {
-            // client = wallet.getClient()
-            mockClient = await CosmWasmClient.connect("https://rpc.uni.juno.deuslabs.fi");
-            // const account = wallet.address//(await signer.getAccounts())[0];
-            // console.log("account: ");
-            // console.log(account);
-
-            const queryResponse = await mockClient.queryContractSmart(
-                CONTRACT_ADDRESS,
-                {
-                    get_list: {start_after: boxId},
-                }
-            );
-            for (let i = 0; i < queryResponse.voteList.length; i++) {
-                // @ts-ignore
-                setIdArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].id,
-                ]);
-                // @ts-ignore
-                setYesCountArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].yes_count,
-                ]);
-                // @ts-ignore
-                setNoCountArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].no_count,
-                ]);
-                // @ts-ignore
-                setOwnerArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].owner,
-                ]);
-                // @ts-ignore
-                setDeadlineArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].deadline.at_height,
-                ]);
-                // @ts-ignore
-                setTopicArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].topic,
-                ]);
-            }
-            // return queryResponse
-        } catch (error: any) {
-            toast.error(error.message, {style: {maxWidth: 'none'}})
-        }
-    };
-
     //////////////////////////////// UI ////////////////////////////
     const [flag, setFlag] = useState(false);
     const [flag2, setFlag2] = useState(false);
@@ -249,23 +162,8 @@ const Vote = () => {
     const [createVoteBoxResponse, setCreateVoteBoxResponse] = useState("");
     const [voteResponse, setVoteResponse] = useState("");
     const [voteResponseFlag, setVoteResponseFlag] = useState(false);
-    const [idArray, setIdArray] = useState([]);
-    const [yesCountArray, setYesCountArray] = useState([]);
-    const [noCountArray, setNoCountArray] = useState([]);
-    const [ownerArray, setOwnerArray] = useState([]);
-    const [deadlineArray, setDeadlineArray] = useState([]);
-    const [topicArray, setTopicArray] = useState([]);
-    const [recentsFlag, setRecentsFlag] = useState(false);
 
     const context = useContext(singleContext);
-
-    const showRecentsClicked = () => {
-        setRecentsFlag(true);
-    }
-
-    const hideRecentsClicked = () => {
-        setRecentsFlag(false);
-    }
 
     const resetFlags = (type: string) => {
         if (type === "create") {
@@ -277,12 +175,12 @@ const Vote = () => {
         }
     }
 
-    // @ts-ignore
     return (
         <Grid container>
             {/*@ts-ignore*/}
             <CreateVoteBox function={createVB}/>
             {createVoteBoxResponseFlag &&
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 <CustomAlert severity="success" text={createVoteBoxResponse} function={resetFlags} type="create"/>
             }
@@ -299,6 +197,7 @@ const Vote = () => {
             <br/>
             <Voting function={vote}/>
             {voteResponseFlag &&
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 <CustomAlert severity="success" text={voteResponse} function={resetFlags} type="vote"/>
             }
@@ -321,6 +220,7 @@ const Vote = () => {
                 buttonText="Query VoteBox"
             />
             {queryResponseFlag &&
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 <CustomAlert severity="success" text={response} function={resetFlags} type="query"/>
             }
@@ -335,33 +235,6 @@ const Vote = () => {
                 </Typography>
             )}
             <br/>
-            <Button color="success" onClick={showRecentsClicked}>
-                <KeyboardArrowDownIcon/>
-                {/*@ts-ignore*/}
-                Show Recent VoteBoxes
-            </Button>
-            {/*@ts-ignore*/}
-            {recentsFlag &&
-                <>
-                    {idArray.map((item: any, index: number) => {
-                        return (
-                            <ListResponseItem
-                                key={index}
-                                id={idArray[index]}
-                                topic={topicArray[index]}
-                                yesCount={yesCountArray[index]}
-                                noCount={noCountArray[index]}
-                                owner={ownerArray[index]}
-                                deadline={deadlineArray[index]}
-                            />
-                        );
-                    })}
-                    <Button color="success" onClick={hideRecentsClicked}>
-                        <KeyboardArrowUpIcon/>
-                        Hide Recent VoteBoxes
-                    </Button>
-                </>
-            }
         </Grid>
     );
 };

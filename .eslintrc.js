@@ -10,8 +10,6 @@ module.exports = {
   extends: [
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended", // Make sure this is always the last configuration in the extends array
   ],
   overrides: [
     {
