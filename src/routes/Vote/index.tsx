@@ -1,5 +1,5 @@
 import {makeCosmoshubPath} from "@cosmjs/amino";
-import {SigningCosmWasmClient} from "@cosmjs/cosmwasm-stargate";
+import {SigningCosmWasmClient, CosmWasmClient} from "@cosmjs/cosmwasm-stargate";
 import {GasPrice} from "@cosmjs/stargate";
 import {DirectSecp256k1HdWallet} from "@cosmjs/proto-signing";
 import React, {useContext, useEffect, useState} from "react";
@@ -41,6 +41,37 @@ const Vote = () => {
         "juno1vknw4cnp6g2eh8mzthdlgr759prhtypa3r6pgmgj4naxtcakqkes5zxuuk";
 
     let client: SigningCosmWasmClient;
+
+    let mockClient: CosmWasmClient;
+
+    const getVBCount = async () => {
+        let startCount = 1;
+        try {
+            // client = wallet.getClient()
+            mockClient = await CosmWasmClient.connect("https://rpc.uni.juno.deuslabs.fi");
+
+            const queryResponse = await mockClient.queryContractSmart(
+                CONTRACT_ADDRESS,
+                {
+                    get_votebox_count: {},
+                }
+            );
+            startCount = queryResponse.count;
+            startCount -= 10;
+            if (startCount < 1)
+            startCount = 1;
+            queryList(startCount);
+            // @ts-ignore
+            context.updateCount(Number(queryResponse.count));
+            setRecentsFlag(true);
+        } catch (error: any) {
+            toast.error(error.message, {style: {maxWidth: 'none'}})
+        }
+    };
+
+    useEffect(() => {
+        getVBCount();
+    }, [])
 
 
     const createVB = async (height: Number, topic: string) => {
@@ -159,12 +190,13 @@ const Vote = () => {
 
     const queryList = async (boxId: number) => {
         try {
-            client = wallet.getClient()
-            const account = wallet.address//(await signer.getAccounts())[0];
-            console.log("account: ");
-            console.log(account);
+            // client = wallet.getClient()
+            mockClient = await CosmWasmClient.connect("https://rpc.uni.juno.deuslabs.fi");
+            // const account = wallet.address//(await signer.getAccounts())[0];
+            // console.log("account: ");
+            // console.log(account);
 
-            const queryResponse = await client.queryContractSmart(
+            const queryResponse = await mockClient.queryContractSmart(
                 CONTRACT_ADDRESS,
                 {
                     get_list: {start_after: boxId},
@@ -212,52 +244,28 @@ const Vote = () => {
     const [flag, setFlag] = useState(false);
     const [flag2, setFlag2] = useState(false);
     const [flag3, setFlag3] = useState(false);
-    const [flag4, setFlag4] = useState(false);
     const [queryResponseFlag, setQueryResponseFlag] = useState(false);
     const [response, setResponse] = useState("");
     const [createVoteBoxResponseFlag, setCreateVoteBoxResponseFlag] = useState(false);
     const [createVoteBoxResponse, setCreateVoteBoxResponse] = useState("");
     const [voteResponse, setVoteResponse] = useState("");
     const [voteResponseFlag, setVoteResponseFlag] = useState(false);
-    const [recentLimit, setRecentLimit] = useState(false);
     const [idArray, setIdArray] = useState([]);
     const [yesCountArray, setYesCountArray] = useState([]);
     const [noCountArray, setNoCountArray] = useState([]);
     const [ownerArray, setOwnerArray] = useState([]);
     const [deadlineArray, setDeadlineArray] = useState([]);
     const [topicArray, setTopicArray] = useState([]);
+    const [recentsFlag, setRecentsFlag] = useState(false);
 
     const context = useContext(singleContext);
 
     const showRecentsClicked = () => {
-        // @ts-ignore
-        console.log(context.data);
-        // @ts-ignore
-        let startId = context.data - 10;
-        console.log(startId);
-        if (startId < 1) {
-            startId = 1;
-        }
-        console.log(startId);
-        queryList(startId);
-        setFlag4(true);
-
-        // @ts-ignore
-        setIdArray([]);
-        // @ts-ignore
-        setYesCountArray([]);
-        // @ts-ignore
-        setNoCountArray([]);
-        // @ts-ignore
-        setOwnerArray([]);
-        // @ts-ignore
-        setDeadlineArray([]);
-        // @ts-ignore
-        setTopicArray([]);
+        setRecentsFlag(true);
     }
 
     const hideRecentsClicked = () => {
-        setFlag4(false);
+        setRecentsFlag(false);
     }
 
     const resetFlags = (type: string) => {
@@ -270,10 +278,7 @@ const Vote = () => {
         }
     }
 
-    const limitRecentVoteBoxes = () => {
-        setRecentLimit(true);
-    }
-
+    // @ts-ignore
     return (
         <Grid container>
             {/*@ts-ignore*/}
@@ -331,28 +336,28 @@ const Vote = () => {
                 </Typography>
             )}
             <br/>
-            <Button variant="outlined" color="success" onClick={showRecentsClicked}>
+            <Button color="success" onClick={showRecentsClicked}>
                 <KeyboardArrowDownIcon/>
+                {/*@ts-ignore*/}
                 Show Recent VoteBoxes
             </Button>
-            {flag4 &&
+            {/*@ts-ignore*/}
+            {recentsFlag &&
                 <>
                     {idArray.map((item: any, index: number) => {
-                        if (!recentLimit) {
-                            return (
-                                <ListResponseItem
-                                    key={index}
-                                    id={idArray[index]}
-                                    topic={topicArray[index]}
-                                    yesCount={yesCountArray[index]}
-                                    noCount={noCountArray[index]}
-                                    owner={ownerArray[index]}
-                                    deadline={deadlineArray[index]}
-                                />
-                            );
-                        }
+                        return (
+                            <ListResponseItem
+                                key={index}
+                                id={idArray[index]}
+                                topic={topicArray[index]}
+                                yesCount={yesCountArray[index]}
+                                noCount={noCountArray[index]}
+                                owner={ownerArray[index]}
+                                deadline={deadlineArray[index]}
+                            />
+                        );
                     })}
-                    <Button variant="outlined" color="success" onClick={hideRecentsClicked}>
+                    <Button color="success" onClick={hideRecentsClicked}>
                         <KeyboardArrowUpIcon/>
                         Hide Recent VoteBoxes
                     </Button>
