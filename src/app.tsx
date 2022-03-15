@@ -1,14 +1,15 @@
-import React, {useState} from "react";
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {WalletProvider} from "./contexts/wallet";
-import {ThemeProvider} from "./contexts/theme";
-import {Toaster} from "react-hot-toast";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { WalletProvider } from "./contexts/wallet";
+import { ThemeProvider } from "./contexts/theme";
+import { Toaster } from "react-hot-toast";
 import Vote from "./routes/Vote";
-import {NETWORK} from "./utils/constants";
+import { NETWORK } from "./utils/constants";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Home from "./routes/Home";
-import {drawerWidth, Sidebar} from "./components/Sidebar";
+import Reset from "./routes/Reset-Remove";
+import { drawerWidth, Sidebar } from "./components/Sidebar";
 import SingleProvider from "./SingleProvider";
 
 export function App(): JSX.Element {
@@ -28,27 +29,36 @@ export function App(): JSX.Element {
                             backgroundColor: "#1F2123 !important",
                         }}
                     >
-                        <Sidebar/>
+                        <Sidebar />
 
-                        <CssBaseline/>
+                        <CssBaseline />
 
                         <Box
                             component="main"
                             sx={{
                                 flexGrow: 1,
                                 p: 3,
-                                width: {sm: `calc(100% - ${drawerWidth}px)`},
+                                width: { sm: `calc(100% - ${drawerWidth}px)` },
                             }}
                         >
                             <Router basename={process.env.PUBLIC_URL}>
                                 <Box marginTop={10}>
-                                    <Toaster position="top-right"/>
+                                    <Toaster position="top-right" />
                                     <Switch>
-                                        <Route exact path="/" component={Home}/>
+                                        <Route
+                                            exact
+                                            path="/"
+                                            component={Home}
+                                        />
                                         <Route
                                             exact
                                             path="/vote"
                                             component={Vote}
+                                        />
+                                        <Route
+                                            exact
+                                            path="/reset-remove"
+                                            component={Reset}
                                         />
                                     </Switch>
                                 </Box>

@@ -22,7 +22,6 @@ import {SigningCosmWasmClient} from "@cosmjs/cosmwasm-stargate";
 import toast from 'react-hot-toast';
 import singleContext from "../SingleContext";
 import {setEmitFlags} from "typescript";
-// import { Grid } from "antd";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid"
 
@@ -91,6 +90,18 @@ export function Sidebar(): JSX.Element {
                             <HowToVoteIcon sx={{color: "white"}}/>
                         </ListItemIcon>
                         <ListItemText primary={"Vote"}/>
+                    </ListItem>
+                </Link>
+              <Link
+                    href="/reset-remove"
+                    underline="none"
+                    sx={{ color: "white" }}
+                >
+                    <ListItem>
+                        <ListItemIcon>
+                            <HowToVoteIcon sx={{ color: "white" }} />
+                        </ListItemIcon>
+                        <ListItemText primary={"Reset/Remove "} />
                     </ListItem>
                 </Link>
             </List>

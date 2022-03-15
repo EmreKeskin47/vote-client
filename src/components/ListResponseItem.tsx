@@ -1,6 +1,7 @@
 import React, {useEffect} from "react";
 import { Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
 // @ts-ignore
 const ListResponseItem = (props) => {
@@ -23,7 +24,6 @@ const ListResponseItem = (props) => {
             <Grid
                 container
                 direction="row"
-                xs={12}
                 spacing={2}
                 alignItems="center"
                 justifyContent="center"
@@ -75,15 +75,41 @@ const ListResponseItem = (props) => {
             </Grid>
             <hr />
             <br />
-            <Typography
-                variant="h5"
-                gutterBottom
-                component="div"
-                sx={{ color: "white" }}
-            >
-                OWNER: <br />
-                {props.owner}
-            </Typography>
+            <Grid>
+                <Typography
+                    variant="h5"
+                    gutterBottom
+                    component="div"
+                    sx={{ color: "white" }}
+                >
+                    OWNER: <br />
+                    {props.owner}
+                </Typography>
+            </Grid>
+            {props.delete && (
+                <Grid
+                    container
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    marginTop={4}
+                >
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => props.reset(props.id)}
+                    >
+                        Reset Votes
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => props.delete(props.id)}
+                    >
+                        Delete Votebox
+                    </Button>
+                </Grid>
+            )}
         </Grid>
     );
 };
