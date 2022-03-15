@@ -154,7 +154,7 @@ const Voting = (props: {
                             }}
                             onClick={votedAbstain}
                         >
-                            No
+                            Abstain
                         </Button>
                         <Button
                             sx={{
@@ -164,7 +164,7 @@ const Voting = (props: {
                             }}
                             onClick={votedNoWithVeto}
                         >
-                            No
+                            No with veto
                         </Button>
                     </Grid>
                 </Grid>
