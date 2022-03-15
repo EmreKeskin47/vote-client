@@ -1,13 +1,14 @@
 import { makeCosmoshubPath } from "@cosmjs/amino";
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import React, { useContext, useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { useWallet } from "../../contexts/wallet";
 import { Grid } from "@mui/material";
 import CreateVoteBox from "../../components/CreateVoteBox";
 import QueryBox from "../../components/QueryBox";
 import Voting from "../../components/Voting";
 import Typography from "@mui/material/Typography";
+import ListResponseItem from "../../components/ListResponseItem";
 import toast from "react-hot-toast";
 import CustomAlert from "../../components/CustomAlert";
 import singleContext from "../../SingleContext";
@@ -28,11 +29,17 @@ export const getSigner = async (mnemonic: string) => {
 ////////////////////////Wallet//////////////////////////////////
 
 const Vote = () => {
+    
+    
 
     const context = useContext(singleContext);
 
     const wallet = useWallet();
-
+    
+    useEffect(()=> {
+        queryMyList();
+    },[wallet.initialized,wallet.address]);
+   
     let client: SigningCosmWasmClient;
 
     const createVB = async (height: number, topic: string) => {
@@ -119,6 +126,7 @@ const Vote = () => {
         }
     };
 
+    
     const query = async (boxId: string) => {
         try {
             setFlag3(true);
@@ -160,10 +168,87 @@ const Vote = () => {
         }
     };
 
+    const [idArray, setIdArray] = useState([]);
+    const [yesCountArray, setYesCountArray] = useState([]);
+    const [noCountArray, setNoCountArray] = useState([]);
+    const [ownerArray, setOwnerArray] = useState([]);
+    const [deadlineArray, setDeadlineArray] = useState([]);
+    const [topicArray, setTopicArray] = useState([]);
+
+    let mockClient: CosmWasmClient;
+    const queryMyList = async () => {
+        try {
+            setIdArray([]);
+            setYesCountArray([]);
+            setNoCountArray([]);
+            setOwnerArray([]);
+            setDeadlineArray([]);
+            setTopicArray([]);
+           // setQueryMyListFlag(true);
+            // client = wallet.getClient()
+            mockClient = await CosmWasmClient.connect("https://rpc.uni.juno.deuslabs.fi");
+            // const account = wallet.address//(await signer.getAccounts())[0];
+           
+            const queryResponse = await mockClient.queryContractSmart(
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                context.contractAdress,
+                {
+                    get_voteboxes_by_owner: {owner: wallet.address},
+                }
+            );
+            for (let i = 0; i < queryResponse.voteList.length; i++) {
+                let deadlineDate: String = new Date(parseInt(queryResponse.voteList[i].deadline.at_time)/1000000).toString()
+
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setIdArray((oldArray) => [
+                    ...oldArray,
+                    queryResponse.voteList[i].id,
+                ]);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setYesCountArray((oldArray) => [
+                    ...oldArray,
+                    queryResponse.voteList[i].yes_count,
+                ]);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setNoCountArray((oldArray) => [
+                    ...oldArray,
+                    queryResponse.voteList[i].no_count,
+                ]);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setOwnerArray((oldArray) => [
+                    ...oldArray,
+                    queryResponse.voteList[i].owner,
+                ]);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setDeadlineArray((oldArray) => [
+                    ...oldArray,
+                    deadlineDate,
+                ]);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setTopicArray((oldArray) => [
+                    ...oldArray,
+                    queryResponse.voteList[i].topic,
+                ]);
+               // setQueryMyListFlag(false)
+            }
+            // return queryResponse
+        } catch (error: any) {
+            toast.error(error.message, {style: {maxWidth: 'none'}})
+        }
+    };
+
     //////////////////////////////// UI ////////////////////////////
     const [flag, setFlag] = useState(false);
     const [flag2, setFlag2] = useState(false);
-    const [flag3, setFlag3] = useState(false);
+    const [flag3, setFlag3] = useState(true);
+    const [queryMyListFlag, setQueryMyListFlag] = useState(true);
     const [queryResponseFlag, setQueryResponseFlag] = useState(false);
     const [response, setResponse] = useState("");
     const [createVoteBoxResponseFlag, setCreateVoteBoxResponseFlag] =
@@ -181,7 +266,11 @@ const Vote = () => {
             setQueryResponseFlag(false);
         }
     };
+    const resetQueryMyListFlag= () =>{
+        setQueryMyListFlag(true);
+    }
 
+    
     return (
         <Grid container>
             {/*@ts-ignore*/}
@@ -206,7 +295,7 @@ const Vote = () => {
                 </Typography>
             )}
             <br />
-            <Voting function={vote} />
+           <Voting function={vote} />
             {voteResponseFlag && (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -243,17 +332,36 @@ const Vote = () => {
                     function={() => resetFlags("query")}
                 />
             )}
-            {flag3 && (
+            {wallet.initialized  && (
                 <Typography
                     variant="overline"
                     gutterBottom
                     component="div"
                     sx={{ color: "gray" }}
                 >
-                    Getting results...
+                    Your VoteBoxes:
                 </Typography>
             )}
             <br />
+            {/*@ts-ignore*/}
+            {wallet.initialized && queryMyListFlag &&
+                <>
+                    {idArray.map((item: any, index: number) => {
+                        return (
+                            <ListResponseItem
+                                key={index}
+                                id={idArray[index]}
+                                topic={topicArray[index]}
+                                yesCount={yesCountArray[index]}
+                                noCount={noCountArray[index]}
+                                owner={ownerArray[index]}
+                                deadline={deadlineArray[index]}
+                            />
+                        );
+                    })}
+                </>
+            }
+
         </Grid>
     );
 };
