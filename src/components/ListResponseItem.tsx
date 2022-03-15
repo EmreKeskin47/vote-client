@@ -1,37 +1,98 @@
-import React from "react";
-import { Grid } from "@mui/material";
+import React, {useEffect, useState} from "react";
+import {Grid} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import {VictoryBar, VictoryChart, VictoryAxis} from 'victory';
+import toast from "react-hot-toast";
 
 // @ts-ignore
 const ListResponseItem = (props) => {
+    const [res, setRes] = useState([]);
+    const [ownerText, setOwnerText] = useState("No owner has found.");
+    const createOwnerText = () => {
+        if (props.owner) {
+            let text = props.owner;
+            let len = text.length;
+            let first = text.slice(0, 5);
+            let last = text.slice(len - 5, len - 1);
+            return first + "....." + last;
+        } else {
+            return "No owner has found.";
+        }
+    }
+
+    const createChartData = () => {
+        return [
+            {x: "Yes", y: Number(props.yesCount)},
+            {x: "No", y: Number(props.noCount)},
+            {x: "No With Veto", y: Number(props.nwvCount)},
+            {x: "Abstain", y: Number(props.abstainCount)},
+        ];
+    }
+
+    useEffect(() => {
+        setOwnerText(createOwnerText());
+        setRes(createChartData());
+    })
+
+    const ownerClicked = () => {
+        navigator.clipboard.writeText(props.owner);
+        toast.success("Copied to clipboard", {style: {maxWidth: "none"}});
+    }
+
+    const createThickValues = () => {
+        return [props.yesCount, props.noCount, props.nwvCount, props.abstainCount].sort();
+    }
+
     return (
         <Grid
             container
-            direction="column"
-            justifyContent="center"
+            direction="row"
             sx={{
                 border: "2px solid gray",
                 borderRadius: "7px 7px 7px 7px",
-                backgroundColor: "#1F2123",
-                padding: 3,
-                margin: 3,
-                height: "35%",
-                width: "100%",
+                backgroundColor: "whitesmoke",
+                margin: 2,
             }}
         >
+            <Grid item sx={{width: "50%",}}>
+                <VictoryChart
+                    // domainPadding will add space to each side of VictoryBar to
+                    // prevent it from overlapping the axis
+                    domainPadding={20}
+                    colorScale={"grayscale"}
+                >
+                    <VictoryAxis
+                        // tickValues specifies both the number of ticks and where
+                        // they are placed on the axis
+                        tickValues={[1, 2, 3, 4]}
+                        tickFormat={["Yes", "No", "No With Veto", "Abstain"]}
+                    />
+                    <VictoryAxis
+                        dependentAxis
+                        // tickFormat specifies how ticks should be displayed
+                        tickValues={createThickValues()}
+                        tickFormat={(x: number) => (x)}
+                    />
+                    <VictoryBar
+                        data={res}
+                        x="x"
+                        y="y"
+                    />
+                </VictoryChart>
+            </Grid>
             <Grid
+                item
                 container
-                direction="row"
-                spacing={2}
-                alignItems="center"
-                justifyContent="center"
+                direction="column"
+                alignItems="left"
+                sx={{width: "50%", align: "center", padding: "10%"}}
             >
                 <Typography
                     variant="h5"
                     gutterBottom
                     component="div"
-                    sx={{ color: "white" }}
+                    sx={{color: "gray"}}
                 >
                     ID: {props.id}
                 </Typography>
@@ -39,8 +100,7 @@ const ListResponseItem = (props) => {
                     variant="h5"
                     gutterBottom
                     component="div"
-                    pl={2}
-                    sx={{ color: "white" }}
+                    sx={{color: "gray"}}
                 >
                     TOPIC: {props.topic}
                 </Typography>
@@ -48,8 +108,7 @@ const ListResponseItem = (props) => {
                     variant="h5"
                     gutterBottom
                     component="div"
-                    pl={2}
-                    sx={{ color: "white" }}
+                    sx={{color: "gray"}}
                 >
                     YES: {props.yesCount}
                 </Typography>
@@ -57,8 +116,7 @@ const ListResponseItem = (props) => {
                     variant="h5"
                     gutterBottom
                     component="div"
-                    pl={2}
-                    sx={{ color: "white" }}
+                    sx={{color: "gray"}}
                 >
                     NO: {props.noCount}
                 </Typography>
@@ -66,24 +124,21 @@ const ListResponseItem = (props) => {
                     variant="h5"
                     gutterBottom
                     component="div"
-                    pl={2}
-                    sx={{ color: "white" }}
+                    sx={{color: "gray"}}
                 >
                     DEADLINE: {props.deadline}
                 </Typography>
-            </Grid>
-            <hr />
-            <br />
-            <Grid>
                 <Typography
                     variant="h5"
                     gutterBottom
                     component="div"
-                    sx={{ color: "white" }}
+                    sx={{color: "gray"}}
                 >
-                    OWNER: <br />
-                    {props.owner}
+                    <Button color="success" onClick={ownerClicked}>
+                        OWNER: {ownerText}
+                    </Button>
                 </Typography>
+                <br/>
             </Grid>
             {props.delete && (
                 <Grid

@@ -198,6 +198,8 @@ const Home = () => {
                                 noCount={noCountArray[index]}
                                 owner={ownerArray[index]}
                                 deadline={deadlineArray[index]}
+                                abstainCount="0"
+                                nwvCount="0"
                             />
                         );
                     })}
