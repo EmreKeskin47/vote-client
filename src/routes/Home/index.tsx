@@ -102,7 +102,7 @@ const Home = () => {
                 // @ts-ignore
                 setDeadlineArray((oldArray) => [
                     ...oldArray,
-                    queryResponse.voteList[i].deadline.at_height,
+                    queryResponse.voteList[i].deadline.at_time,
                 ]);
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
