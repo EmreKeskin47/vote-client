@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import CustomAlert from "./CustomAlert";
 
 const Voting = (props: {
-    function: (arg0: string, arg1: boolean, arg2: string) => void;
+    function: (arg0: string, arg1: Number, arg2: string) => void;
 }) => {
     const [id, setId] = useState("0");
     const [flag, setFlag] = useState(false);
@@ -23,6 +23,30 @@ const Voting = (props: {
         setId(event.target.value);
     };
 
+    const votedNo = () => {
+        if (Number(id) < 1) {
+            setFlag(true);
+            setTimeout(resetFlags, 3000);
+        } else if (isNaN(Number(id))) {
+            setFlag2(true);
+            setTimeout(resetFlags, 3000);
+        }
+        else {
+            props.function(id, 0, "NO");
+        }
+    };
+    const votedAbstain = () => {
+        if (Number(id) < 1) {
+            setFlag(true);
+            setTimeout(resetFlags, 3000);
+        } else if (isNaN(Number(id))) {
+            setFlag2(true);
+            setTimeout(resetFlags, 3000);
+        }
+        else {
+            props.function(id, 1, "NO");
+        }
+    };
     const votedYes = () => {
         console.log(Number(id))
         if (Number(id) < 1) {
@@ -33,11 +57,10 @@ const Voting = (props: {
             setTimeout(resetFlags, 3000);
         }
         else {
-            props.function(id, true, "YES");
+            props.function(id, 2, "YES");
         }
     };
-
-    const votedNo = () => {
+    const votedNoWithVeto = () => {
         if (Number(id) < 1) {
             setFlag(true);
             setTimeout(resetFlags, 3000);
@@ -46,7 +69,7 @@ const Voting = (props: {
             setTimeout(resetFlags, 3000);
         }
         else {
-            props.function(id, false, "NO");
+            props.function(id, 3, "NO");
         }
     };
 
@@ -102,7 +125,7 @@ const Voting = (props: {
                         />
                     </Grid>
 
-                    <Grid item sm={12} md={4} justifyItems="space-between">
+                    <Grid item sm={12} md={8} justifyItems="space-between">
                         <Button
                             sx={{
                                 border: "1px solid",
@@ -122,6 +145,26 @@ const Voting = (props: {
                             onClick={votedYes}
                         >
                             Yes
+                        </Button>
+                        <Button
+                            sx={{
+                                border: "1px solid",
+                                borderRadius: "5px",
+                                color: "whitesmoke",
+                            }}
+                            onClick={votedAbstain}
+                        >
+                            No
+                        </Button>
+                        <Button
+                            sx={{
+                                border: "1px solid",
+                                borderRadius: "5px",
+                                color: "whitesmoke",
+                            }}
+                            onClick={votedNoWithVeto}
+                        >
+                            No
                         </Button>
                     </Grid>
                 </Grid>

@@ -144,7 +144,7 @@ const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void 
                 <CustomAlert severity="error" text="Please specify a future time for the deadline." function={resetFlags}/>
             }
             {flag2 &&
-                <CustomAlert severity="error" text="Please enter a number that is bigger than 0" function={resetFlags}/>
+                <CustomAlert severity="error" text="Please specify a future time for the deadline." function={resetFlags}/>
             }
         </Grid>
     );
