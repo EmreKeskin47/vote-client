@@ -1,15 +1,14 @@
-import {makeCosmoshubPath} from "@cosmjs/amino";
-import {SigningCosmWasmClient, CosmWasmClient} from "@cosmjs/cosmwasm-stargate";
-import {GasPrice} from "@cosmjs/stargate";
-import {DirectSecp256k1HdWallet} from "@cosmjs/proto-signing";
-import React, {useContext, useEffect, useState} from "react";
-import {useWallet} from '../../contexts/wallet'
-import {Grid} from "@mui/material";
+import { makeCosmoshubPath } from "@cosmjs/amino";
+import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import React, { useContext, useState } from "react";
+import { useWallet } from "../../contexts/wallet";
+import { Grid } from "@mui/material";
 import CreateVoteBox from "../../components/CreateVoteBox";
 import QueryBox from "../../components/QueryBox";
 import Voting from "../../components/Voting";
 import Typography from "@mui/material/Typography";
-import toast from 'react-hot-toast'
+import toast from "react-hot-toast";
 import CustomAlert from "../../components/CustomAlert";
 import singleContext from "../../SingleContext";
 
@@ -29,7 +28,6 @@ export const getSigner = async (mnemonic: string) => {
 ////////////////////////Wallet//////////////////////////////////
 
 const Vote = () => {
-
     const wallet = useWallet();
 
     const CONTRACT_ADDRESS =
@@ -37,14 +35,13 @@ const Vote = () => {
 
     let client: SigningCosmWasmClient;
 
-
     const createVB = async (height: number, topic: string) => {
         try {
             setFlag(true);
 
-            client = wallet.getClient()
+            client = wallet.getClient();
 
-            const account = wallet.address
+            const account = wallet.address;
             console.log("account: ");
             console.log(account);
 
@@ -53,7 +50,7 @@ const Vote = () => {
                 CONTRACT_ADDRESS,
                 {
                     create_vote_box: {
-                        deadline: {at_height: height},
+                        deadline: { at_height: height },
                         owner: wallet.address,
                         topic: topic,
                     },
@@ -64,12 +61,14 @@ const Vote = () => {
             if (executeResponse === undefined) {
                 alert("Something went wrong with the VoteBox creation");
             } else {
-                setCreateVoteBoxResponse("Your txhash : " + executeResponse.transactionHash);
+                setCreateVoteBoxResponse(
+                    "Your txhash : " + executeResponse.transactionHash
+                );
                 setCreateVoteBoxResponseFlag(true);
             }
             setFlag(false);
         } catch (error: any) {
-            toast.error(error.message, {style: {maxWidth: 'none'}})
+            toast.error(error.message, { style: { maxWidth: "none" } });
         }
     };
 
@@ -79,10 +78,9 @@ const Vote = () => {
         decision: string
     ) => {
         try {
-
             setFlag2(true);
-            client = wallet.getClient()
-            const account = wallet.address//(await signer.getAccounts())[0];
+            client = wallet.getClient();
+            const account = wallet.address; //(await signer.getAccounts())[0];
             console.log("account: ");
             console.log(account);
 
@@ -107,18 +105,20 @@ const Vote = () => {
             setFlag2(false);
         } catch (error: any) {
             // toast.error(error.message, { style: { maxWidth: 'none' } });
-            toast.error("Something went wrong.\nYou may have tried to vote for an expired contract.", {style: {maxWidth: 'none'}});
+            toast.error(
+                "Something went wrong.\nYou may have tried to vote for an expired contract.",
+                { style: { maxWidth: "none" } }
+            );
             setFlag2(false);
         }
     };
 
-
     const query = async (boxId: string) => {
         try {
             setFlag3(true);
-            client = wallet.getClient()
+            client = wallet.getClient();
 
-            const account = wallet.address//(await signer.getAccounts())[0];
+            const account = wallet.address; //(await signer.getAccounts())[0];
             console.log("account: ");
             console.log(account);
 
@@ -127,28 +127,28 @@ const Vote = () => {
             const queryResponse = await client.queryContractSmart(
                 CONTRACT_ADDRESS,
                 {
-                    query_vote: {id: id.toString()},
+                    query_vote: { id: id.toString() },
                 }
             );
             console.log(queryResponse);
             setResponse(
                 "id : " +
-                queryResponse.id +
-                "\nowner : " +
-                queryResponse.owner +
-                "\ntopic : " +
-                queryResponse.topic +
-                "\nyes count : " +
-                queryResponse.yes_count +
-                "\nno count : " +
-                queryResponse.no_count +
-                "\ndeadline block : " +
-                queryResponse.deadline.at_height
+                    queryResponse.id +
+                    "\nowner : " +
+                    queryResponse.owner +
+                    "\ntopic : " +
+                    queryResponse.topic +
+                    "\nyes count : " +
+                    queryResponse.yes_count +
+                    "\nno count : " +
+                    queryResponse.no_count +
+                    "\ndeadline block : " +
+                    queryResponse.deadline.at_height
             );
             setQueryResponseFlag(true);
             setFlag3(false);
         } catch (error: any) {
-            toast.error(error.message, {style: {maxWidth: 'none'}})
+            toast.error(error.message, { style: { maxWidth: "none" } });
         }
     };
 
@@ -158,7 +158,8 @@ const Vote = () => {
     const [flag3, setFlag3] = useState(false);
     const [queryResponseFlag, setQueryResponseFlag] = useState(false);
     const [response, setResponse] = useState("");
-    const [createVoteBoxResponseFlag, setCreateVoteBoxResponseFlag] = useState(false);
+    const [createVoteBoxResponseFlag, setCreateVoteBoxResponseFlag] =
+        useState(false);
     const [createVoteBoxResponse, setCreateVoteBoxResponse] = useState("");
     const [voteResponse, setVoteResponse] = useState("");
     const [voteResponseFlag, setVoteResponseFlag] = useState(false);
@@ -173,45 +174,53 @@ const Vote = () => {
         } else if (type === "query") {
             setQueryResponseFlag(false);
         }
-    }
+    };
 
     return (
         <Grid container>
             {/*@ts-ignore*/}
-            <CreateVoteBox function={createVB}/>
-            {createVoteBoxResponseFlag &&
+            <CreateVoteBox function={createVB} />
+            {createVoteBoxResponseFlag && (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                <CustomAlert severity="success" text={createVoteBoxResponse} function={resetFlags} type="create"/>
-            }
+                <CustomAlert
+                    severity="success"
+                    text={createVoteBoxResponse}
+                    function={() => resetFlags("create")}
+                />
+            )}
             {flag && (
                 <Typography
                     variant="overline"
                     gutterBottom
                     component="div"
-                    sx={{color: "gray"}}
+                    sx={{ color: "gray" }}
                 >
                     Creating the votebox...
                 </Typography>
             )}
-            <br/>
-            <Voting function={vote}/>
-            {voteResponseFlag &&
+            <br />
+            <Voting function={vote} />
+            {voteResponseFlag && (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                <CustomAlert severity="success" text={voteResponse} function={resetFlags} type="vote"/>
-            }
+                <CustomAlert
+                    severity="success"
+                    text={voteResponse}
+                    function={() => resetFlags("vote")}
+                />
+            )}
             {flag2 && (
                 <Typography
                     variant="overline"
                     gutterBottom
                     component="div"
-                    sx={{color: "gray"}}
+                    sx={{ color: "gray" }}
                 >
                     Voting...
                 </Typography>
             )}
-            <br/>
+            <br />
             <QueryBox
                 function={query}
                 heading="Query VoteBox"
@@ -219,22 +228,26 @@ const Vote = () => {
                 idText="VoteBox ID"
                 buttonText="Query VoteBox"
             />
-            {queryResponseFlag &&
+            {queryResponseFlag && (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                <CustomAlert severity="success" text={response} function={resetFlags} type="query"/>
-            }
+                <CustomAlert
+                    severity="success"
+                    text={response}
+                    function={() => resetFlags("query")}
+                />
+            )}
             {flag3 && (
                 <Typography
                     variant="overline"
                     gutterBottom
                     component="div"
-                    sx={{color: "gray"}}
+                    sx={{ color: "gray" }}
                 >
                     Getting results...
                 </Typography>
             )}
-            <br/>
+            <br />
         </Grid>
     );
 };
