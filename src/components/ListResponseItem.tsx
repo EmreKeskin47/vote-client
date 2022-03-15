@@ -1,11 +1,10 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
 // @ts-ignore
 const ListResponseItem = (props) => {
-
     return (
         <Grid
             container

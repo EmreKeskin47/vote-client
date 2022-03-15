@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useState, useContext} from "react";
+import React, { useEffect, useCallback, useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -15,15 +15,11 @@ import Link from "@mui/material/Link";
 import HomeIcon from "@mui/icons-material/Home";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import HowToVoteIcon from "@mui/icons-material/HowToVote";
-import {useWallet} from "../contexts/wallet";
-import {useKeplr} from "../services/keplr";
+import { useWallet } from "../contexts/wallet";
+import { useKeplr } from "../services/keplr";
 import getShortAddress from "../utils/getShortAddress";
-import {SigningCosmWasmClient} from "@cosmjs/cosmwasm-stargate";
-import toast from 'react-hot-toast';
 import singleContext from "../SingleContext";
-import {setEmitFlags} from "typescript";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid"
+import Grid from "@mui/material/Grid";
 
 export const drawerWidth = 240;
 
@@ -62,37 +58,36 @@ export function Sidebar(): JSX.Element {
 
     const drawer = (
         <Box>
-            <Toolbar/>
+            <Toolbar />
             <List>
                 <ListItem button onClick={walletOnClick}>
                     <ListItemIcon>
-                        <AddCardIcon sx={{color: "white"}}/>
+                        <AddCardIcon sx={{ color: "white" }} />
                     </ListItemIcon>
                     {keplr.initializing ? (
-                        <ListItemText primary={"Connect Wallet"}/>
+                        <ListItemText primary={"Connect Wallet"} />
                     ) : (
-                        <ListItemText primary={walletText}/>
+                        <ListItemText primary={walletText} />
                     )}
                 </ListItem>
-                <Grid sx={{padding: 1}}>
-                </Grid>
-                <Link href="/" underline="none" sx={{color: "white"}}>
+                <Grid sx={{ padding: 1 }}></Grid>
+                <Link href="/" underline="none" sx={{ color: "white" }}>
                     <ListItem>
                         <ListItemIcon>
-                            <HomeIcon sx={{color: "white"}}/>
+                            <HomeIcon sx={{ color: "white" }} />
                         </ListItemIcon>
-                        <ListItemText primary={"Home"}/>
+                        <ListItemText primary={"Home"} />
                     </ListItem>
                 </Link>
-                <Link href="/vote" underline="none" sx={{color: "white"}}>
+                <Link href="/vote" underline="none" sx={{ color: "white" }}>
                     <ListItem>
                         <ListItemIcon>
-                            <HowToVoteIcon sx={{color: "white"}}/>
+                            <HowToVoteIcon sx={{ color: "white" }} />
                         </ListItemIcon>
-                        <ListItemText primary={"Vote"}/>
+                        <ListItemText primary={"Vote"} />
                     </ListItem>
                 </Link>
-              <Link
+                <Link
                     href="/reset-remove"
                     underline="none"
                     sx={{ color: "white" }}
@@ -115,29 +110,29 @@ export function Sidebar(): JSX.Element {
                 backgroundColor: "#1F2123 !important",
             }}
         >
-            <CssBaseline/>
+            <CssBaseline />
             <AppBar
                 position="fixed"
                 sx={{
-                    width: {sm: `calc(100% - ${drawerWidth}px)`},
-                    ml: {sm: `${drawerWidth}px`},
+                    width: { sm: `calc(100% - ${drawerWidth}px)` },
+                    ml: { sm: `${drawerWidth}px` },
                 }}
             >
-                <Toolbar sx={{backgroundColor: "#1F2123"}}>
+                <Toolbar sx={{ backgroundColor: "#1F2123" }}>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
                         edge="start"
                         onClick={handleDrawerToggle}
-                        sx={{mr: 2, display: {sm: "none"}}}
+                        sx={{ mr: 2, display: { sm: "none" } }}
                     >
-                        <MenuIcon/>
+                        <MenuIcon />
                     </IconButton>
                     <Typography
                         variant="h5"
                         noWrap
                         component="div"
-                        sx={{textAlign: "center", width: "100%"}}
+                        sx={{ textAlign: "center", width: "100%" }}
                     >
                         VoteBox
                     </Typography>
@@ -146,8 +141,8 @@ export function Sidebar(): JSX.Element {
             <Box
                 component="nav"
                 sx={{
-                    width: {sm: drawerWidth},
-                    flexShrink: {sm: 0},
+                    width: { sm: drawerWidth },
+                    flexShrink: { sm: 0 },
                 }}
                 aria-label="mailbox folders"
             >
@@ -166,7 +161,7 @@ export function Sidebar(): JSX.Element {
                         },
                     }}
                     sx={{
-                        display: {xs: "block", sm: "none"},
+                        display: { xs: "block", sm: "none" },
                         "& .MuiDrawer-paper": {
                             boxSizing: "border-box",
                             width: drawerWidth,
@@ -184,7 +179,7 @@ export function Sidebar(): JSX.Element {
                     }}
                     variant="permanent"
                     sx={{
-                        display: {xs: "none", sm: "block"},
+                        display: { xs: "none", sm: "block" },
                         "& .MuiDrawer-paper": {
                             boxSizing: "border-box",
                             width: drawerWidth,
