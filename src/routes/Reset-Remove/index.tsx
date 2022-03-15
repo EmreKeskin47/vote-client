@@ -134,7 +134,9 @@ const Reset = () => {
                         />
                     );
                 })}
-            {loadMoreBtn && <Button onClick={queryList}>Load More</Button>}
+            {voteboxList.length > 0 && loadMoreBtn && (
+                <Button onClick={queryList}>Load More</Button>
+            )}
         </Grid>
     );
 };

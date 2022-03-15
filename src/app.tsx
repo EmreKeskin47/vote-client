@@ -8,7 +8,7 @@ import { NETWORK } from "./utils/constants";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Home from "./routes/Home";
-import Reset from "./routes/Reset";
+import Reset from "./routes/Reset-Remove";
 import { drawerWidth, Sidebar } from "./components/Sidebar";
 import SingleProvider from "./SingleProvider";
 
@@ -57,7 +57,7 @@ export function App(): JSX.Element {
                                         />
                                         <Route
                                             exact
-                                            path="/vote-reset"
+                                            path="/reset-remove"
                                             component={Reset}
                                         />
                                     </Switch>

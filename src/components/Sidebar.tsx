@@ -144,7 +144,7 @@ export function Sidebar(): JSX.Element {
                     </ListItem>
                 </Link>
                 <Link
-                    href="/vote-reset"
+                    href="/reset-remove"
                     underline="none"
                     sx={{ color: "white" }}
                 >
@@ -152,7 +152,7 @@ export function Sidebar(): JSX.Element {
                         <ListItemIcon>
                             <HowToVoteIcon sx={{ color: "white" }} />
                         </ListItemIcon>
-                        <ListItemText primary={"Reset Vote"} />
+                        <ListItemText primary={"Reset/Remove "} />
                     </ListItem>
                 </Link>
             </List>
