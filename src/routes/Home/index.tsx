@@ -252,15 +252,26 @@ const Home = () => {
                     Let&apos;s start with your first VoteBox!
                 </Typography>
             </Grid>
-            <Typography
-                variant="h4"
-                sx={{
-                    color: "whitesmoke",
-                }}
-                marginTop={10}
-            >
-                Recent Voteboxes
-            </Typography>
+            <Grid direction="column" justifyContent="center">
+                <Typography
+                    variant="h4"
+                    sx={{
+                        color: "whitesmoke",
+                    }}
+                    marginTop={10}
+                >
+                    Recent Voteboxes
+                </Typography>
+                <Typography
+                    variant="overline"
+                    sx={{
+                        color: "whitesmoke",
+                    }}
+                    marginTop={10}
+                >
+                    Click on the VoteBoxes for description
+                </Typography>
+            </Grid>
 
             {recentsFlag && (
                 <Grid container direction="row" spacing={2} p={3}>
