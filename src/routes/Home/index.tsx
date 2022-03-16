@@ -4,9 +4,7 @@ import Logo from "./logo.png";
 import {CosmWasmClient} from "@cosmjs/cosmwasm-stargate";
 import toast from "react-hot-toast";
 import Button from "@mui/material/Button";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ListResponseItem from "../../components/ListResponseItem";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import singleContext from "../../SingleContext";
 
 
@@ -117,14 +115,7 @@ const Home = () => {
         }
     };
 
-    const showRecentsClicked = () => {
-        setRecentsFlag(true);
-    }
-
-    const hideRecentsClicked = () => {
-        setRecentsFlag(false);
-    }
-
+    // @ts-ignore
     return (
         <Grid container sm={12} justifySelf="center" justifyItems="center">
             <Grid
@@ -180,34 +171,36 @@ const Home = () => {
                     Let&apos;s start with your first VoteBox!
                 </Typography>
             </Grid>
-            <Button color="success" onClick={showRecentsClicked}>
-                <KeyboardArrowDownIcon/>
-                {/*@ts-ignore*/}
-                Show Recent VoteBoxes
-            </Button>
+            <Typography
+                variant="h4"
+                sx={{
+                    color: "whitesmoke",
+                }}
+                marginTop={10}
+            >
+                Recent Voteboxes
+            </Typography>
             {/*@ts-ignore*/}
             {recentsFlag &&
-                <>
+                <Grid container direction="row" spacing={2} p={3}>
                     {idArray.map((item: any, index: number) => {
                         return (
-                            <ListResponseItem
-                                key={index}
-                                id={idArray[index]}
-                                topic={topicArray[index]}
-                                yesCount={yesCountArray[index]}
-                                noCount={noCountArray[index]}
-                                owner={ownerArray[index]}
-                                deadline={deadlineArray[index]}
-                                abstainCount="0"
-                                nwvCount="0"
-                            />
+                            <Grid item xs={12} md={6} lg={6}>
+                                <ListResponseItem
+                                    key={index}
+                                    id={idArray[index]}
+                                    topic={topicArray[index]}
+                                    yesCount={Number(yesCountArray[index])}
+                                    noCount={Number(noCountArray[index])}
+                                    owner={ownerArray[index]}
+                                    deadline={deadlineArray[index]}
+                                    abstainCount={0}
+                                    nwvCount={0}
+                                />
+                            </Grid>
                         );
                     })}
-                    <Button color="success" onClick={hideRecentsClicked}>
-                        <KeyboardArrowUpIcon/>
-                        Hide Recent VoteBoxes
-                    </Button>
-                </>
+                </Grid>
             }
         </Grid>
     );

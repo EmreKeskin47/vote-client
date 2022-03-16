@@ -16,7 +16,7 @@ const SingleProvider = (props: { children: boolean | React.ReactChild | React.Re
             },
             updateCount: (item: number) => {
                 setCount(item);
-            }
+            },
         }}>
             {props.children}
         </singleContext.Provider>
