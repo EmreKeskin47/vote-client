@@ -17,6 +17,7 @@ const Home = () => {
     const [topicArray, setTopicArray] = useState([]);
     const [abstainArray, setAbstainArray] = useState([]);
     const [nwvArray, setNwvArray] = useState([]);
+    const [descriptionArray, setDescriptionArray] = useState([]);
     const [deadlineNum, setDeadlineNum] = useState(0);
 
     const context = useContext(singleContext);
@@ -184,6 +185,12 @@ const Home = () => {
                     ...oldArray,
                     queryResponse.voteList[i].vote_with_veto_count,
                 ]);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setDescriptionArray((oldArray) => [
+                    ...oldArray,
+                    queryResponse.voteList[i].description,
+                ]);
             }
             // return queryResponse
         } catch (error: any) {
@@ -290,6 +297,7 @@ const Home = () => {
                                     abstainCount={Number(abstainArray[index])}
                                     nwvCount={Number(nwvArray[index])}
                                     function={vote}
+                                    description={descriptionArray[index]}
                                 />
                             </Grid>
                         );

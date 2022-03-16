@@ -168,17 +168,7 @@ const ListResponseItem = (props) => {
                                 sx={{color: "gray"}}
                                 p={2}
                             >
-                                Some Content Some Content Some Content Some Content Some Content
-                                Some Content Some Content Some Content Some Content Some Content
-                                Some Content Some Content Some Content Some Content Some Content
-                                Some Content Some Content Some Content Some Content Some Content
-                                Some Content Some Content Some Content Some Content Some Content
-                                Some Content Some Content Some Content Some Content Some Content
-                                Some Content Some Content Some Content Some Content Some Content
-                                Some Content Some Content Some Content Some Content Some Content
-                                Some Content Some Content Some Content Some Content Some Content
-                                Some Content Some Content Some Content Some Content Some Content
-                                Some Content Some Content Some Content Some Content Some Content
+                                {props.description}
                             </Typography>
                         </List>
                     </Paper>
