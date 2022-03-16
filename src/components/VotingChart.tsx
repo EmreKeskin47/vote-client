@@ -21,11 +21,17 @@ const VotingChart = ({ yesCount, noCount, nwvCount, abstainCount }) => {
         noCount,
         yesCount + noCount + nwvCount + abstainCount
     );
-    const nwv = 0;
-    const abstain = 0;
+    const abstain = getPercentage(
+        abstainCount,
+        yesCount + noCount + nwvCount + abstainCount
+    );
+    const nwv = getPercentage(
+        nwvCount,
+        yesCount + noCount + nwvCount + abstainCount
+    );
 
     return (
-        <Stack sx={{ width: "100%", color: "grey.500" }} spacing={2}>
+        <Stack sx={{ width: "100%", color: "grey.500" }} spacing={1}>
             <Tooltip title={yes + "%"}>
                 <LinearProgress
                     color="success"

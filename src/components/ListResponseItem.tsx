@@ -5,10 +5,35 @@ import Button from "@mui/material/Button";
 import toast from "react-hot-toast";
 import Tooltip from "@mui/material/Tooltip";
 import VotingChart from "./VotingChart";
+import VoteDialog from "./VoteDialog";
 
 // @ts-ignore
 const ListResponseItem = (props) => {
+    const options = ["yes", "no", "no with veto", "abstain"];
     const [ownerText, setOwnerText] = useState("No owner has found.");
+    const [open, setOpen] = React.useState(false);
+    const [selectedValue, setSelectedValue] = React.useState(options[3]);
+
+    const voteOptionClicked = (option: string) => {
+        let selected: number = 1;
+            switch (option) {
+                case "yes":
+                    selected = 2;
+                    break;
+                case "no":
+                    selected = 0;
+                    break;
+                case "abstain":
+                    selected = 1;
+                    break;
+                case "no with veto":
+                    selected = 3;
+                    break;
+                default:
+                    break;
+        }
+        props.function(props.id, selected);
+    }
 
     useEffect(() => {
         const createOwnerText = () => {
@@ -29,6 +54,16 @@ const ListResponseItem = (props) => {
     const ownerClicked = () => {
         navigator.clipboard.writeText(props.owner);
         toast.success("Copied to clipboard", { style: { maxWidth: "none" } });
+    };
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (value: string) => {
+        setOpen(false);
+        console.log(value);
+        setSelectedValue(value);
     };
 
     // @ts-ignore
@@ -69,36 +104,48 @@ const ListResponseItem = (props) => {
                     {props.id}
                 </Typography>
             </Grid>
-            <Grid
-                container
-                direction="row"
-                alignItems="left"
-                sx={{ align: "center", padding: "10%" }}
-            >
-                <Typography
-                    variant="subtitle1"
-                    gutterBottom
-                    component="div"
-                    sx={{ color: "gray" }}
+            <Grid container item direction="row" sx={{ padding: 5}}>
+                <Grid item lg={6} md={6} xs={6}>
+                    <VotingChart
+                        yesCount={props.yesCount}
+                        noCount={props.noCount}
+                        nwvCount={props.nwvCount}
+                        abstainCount={props.abstainCount}
+                    />
+                </Grid>
+                <Grid
+                    item
+                    container
+                    direction="column"
+                    lg={6} md={6} xs={6}
+                    p={3}
                 >
-                    <span style={{ fontWeight: "bolder" }}>Deadline:</span>{" "}
-                    {props.deadline}
-                </Typography>
-                <Tooltip title="copy owner address">
-                    <Button onClick={ownerClicked} color="success">
-                        Owner: {ownerText}
-                    </Button>
-                </Tooltip>
-                <br />
+                    <Typography
+                        variant="subtitle1"
+                        gutterBottom
+                        component="div"
+                        sx={{ color: "gray" }}
+                    >
+                        <span style={{ fontWeight: "bolder" }}>Deadline:</span>{" "}
+                        {props.deadline}
+                    </Typography>
+                    <Tooltip title="copy owner address">
+                        <Button onClick={ownerClicked} color="success">
+                            {ownerText}
+                        </Button>
+                    </Tooltip>
+                    <br />
+                </Grid>
             </Grid>
-            <Grid sx={{ padding: 5 }}>
-                <VotingChart
-                    yesCount={props.yesCount}
-                    noCount={props.noCount}
-                    nwvCount={props.nwvCount}
-                    abstainCount={props.abstainCount}
-                />
-            </Grid>
+            <Button color="success" onClick={handleClickOpen}>
+                VOTE FOR THIS VOTEBOX
+            </Button>
+            <VoteDialog
+                selectedValue={selectedValue}
+                open={open}
+                onClose={handleClose}
+                function={voteOptionClicked}
+            />
             {/*//////////////////////////////////////////////////////////////////////////////*/}
             {props.delete && (
                 <Grid

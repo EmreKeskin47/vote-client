@@ -1,10 +1,11 @@
-import { Grid, Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import {Button, Grid, Typography} from "@mui/material";
+import React, {useContext, useEffect, useState} from "react";
 import Logo from "./logo.png";
-import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import {CosmWasmClient, SigningCosmWasmClient} from "@cosmjs/cosmwasm-stargate";
 import toast from "react-hot-toast";
 import ListResponseItem from "../../components/ListResponseItem";
 import singleContext from "../../SingleContext";
+import {useWallet} from "../../contexts/wallet";
 
 const Home = () => {
     const [recentsFlag, setRecentsFlag] = useState(false);
@@ -14,8 +15,12 @@ const Home = () => {
     const [ownerArray, setOwnerArray] = useState([]);
     const [deadlineArray, setDeadlineArray] = useState([]);
     const [topicArray, setTopicArray] = useState([]);
+    const [abstainArray, setAbstainArray] = useState([]);
+    const [nwvArray, setNwvArray] = useState([]);
 
     const context = useContext(singleContext);
+    const wallet = useWallet();
+    let client: SigningCosmWasmClient;
 
     useEffect(() => {
         getVBCount();
@@ -47,32 +52,84 @@ const Home = () => {
             context.updateCount(Number(queryResponse.count));
             setRecentsFlag(true);
         } catch (error: any) {
-            toast.error(error.message, { style: { maxWidth: "none" } });
+            toast.error(error.message, {style: {maxWidth: "none"}});
         }
     };
 
+    const vote = async (voteId: string, voteType: Number) => {
+        try {
+            client = wallet.getClient();
+            const account = wallet.address; //(await signer.getAccounts())[0];
+            console.log("account: ");
+            console.log(account);
+
+            const executeResponse = await client.execute(
+                wallet.address,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                context.contractAdress,
+                {
+                    vote: {
+                        id: voteId,
+                        vote_type: voteType,
+                    },
+                },
+                "auto"
+            );
+            let option = "";
+            console.log(executeResponse);
+            if (executeResponse === undefined) {
+                alert("Something went wrong");
+            } else {
+                switch (voteType) {
+                    case 0:
+                        option = "no";
+                        break;
+                    case 1:
+                        option = "abstain";
+                        break;
+                    case 2:
+                        option = "yes";
+                        break;
+                    case 3:
+                        option = "no with vote";
+                        break;
+                    default:
+                        break;
+                }
+                toast.success("You have voted: " + option, {style: {maxWidth: "none"}});
+            }
+        } catch (error: any) {
+            // toast.error(error.message, { style: { maxWidth: 'none' } });
+            toast.error(
+                "Something went wrong.\nYou may have tried to vote for an expired contract.",
+                {style: {maxWidth: "none"}}
+            );
+        }
+    };
+
+
     const queryList = async (boxId: number) => {
         try {
-            // client = wallet.getClient()
+
             mockClient = await CosmWasmClient.connect(
-                "https://rpc.uni.juno.deuslabs.fi"
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                context.testUrl
             );
-            // const account = wallet.address//(await signer.getAccounts())[0];
-            // console.log("account: ");
-            // console.log(account);
 
             const queryResponse = await mockClient.queryContractSmart(
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 context.contractAdress,
                 {
-                    get_list: { start_after: boxId },
+                    get_list: {start_after: boxId},
                 }
             );
             for (let i = 0; i < queryResponse.voteList.length; i++) {
                 let deadlineDate: String = new Date(
                     parseInt(queryResponse.voteList[i].deadline.at_time) /
-                        1000000
+                    1000000
                 ).toString();
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -107,10 +164,22 @@ const Home = () => {
                     ...oldArray,
                     queryResponse.voteList[i].topic,
                 ]);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setAbstainArray((oldArray) => [
+                    ...oldArray,
+                    queryResponse.voteList[i].abstain_count,
+                ]);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setNwvArray((oldArray) => [
+                    ...oldArray,
+                    queryResponse.voteList[i].vote_with_veto_count,
+                ]);
             }
             // return queryResponse
         } catch (error: any) {
-            toast.error(error.message, { style: { maxWidth: "none" } });
+            toast.error(error.message, {style: {maxWidth: "none"}});
         }
     };
 
@@ -118,7 +187,7 @@ const Home = () => {
     return (
         <Grid
             container
-            sx={{ width: "100%" }}
+            sx={{width: "100%"}}
             justifySelf="center"
             justifyItems="center"
         >
@@ -156,7 +225,7 @@ const Home = () => {
 
                 <Typography
                     variant="h5"
-                    sx={{ color: "whitesmoke", textAlign: "center" }}
+                    sx={{color: "whitesmoke", textAlign: "center"}}
                     marginTop={5}
                 >
                     With VoteBox, you can create your own vote boxes and people
@@ -198,8 +267,9 @@ const Home = () => {
                                     noCount={Number(noCountArray[index])}
                                     owner={ownerArray[index]}
                                     deadline={deadlineArray[index]}
-                                    abstainCount={0}
-                                    nwvCount={0}
+                                    abstainCount={Number(abstainArray[index])}
+                                    nwvCount={Number(nwvArray[index])}
+                                    function={vote}
                                 />
                             </Grid>
                         );
