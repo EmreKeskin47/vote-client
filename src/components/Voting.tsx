@@ -31,7 +31,7 @@ const Voting = (props: {
             setFlag2(true);
             setTimeout(resetFlags, 3000);
         } else {
-            props.function(id, 0, "NO");
+            props.function(id, 0, "No");
         }
     };
     const votedAbstain = () => {
@@ -42,7 +42,7 @@ const Voting = (props: {
             setFlag2(true);
             setTimeout(resetFlags, 3000);
         } else {
-            props.function(id, 1, "NO");
+            props.function(id, 1, "Abstain");
         }
     };
     const votedYes = () => {
@@ -54,7 +54,7 @@ const Voting = (props: {
             setFlag2(true);
             setTimeout(resetFlags, 3000);
         } else {
-            props.function(id, 2, "YES");
+            props.function(id, 2, "Yes");
         }
     };
     const votedNoWithVeto = () => {
@@ -65,7 +65,7 @@ const Voting = (props: {
             setFlag2(true);
             setTimeout(resetFlags, 3000);
         } else {
-            props.function(id, 3, "NO");
+            props.function(id, 3, "No with veto");
         }
     };
 

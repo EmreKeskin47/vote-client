@@ -8,7 +8,7 @@ import VotingChart from "./VotingChart";
 
 // @ts-ignore
 const ListResponseItem = (props) => {
-    const [ownerText, setOwnerText] = useState("No owner has found.");
+    const [ownerText, setOwnerText] = useState("No owner was found.");
 
     useEffect(() => {
         const createOwnerText = () => {
@@ -19,7 +19,7 @@ const ListResponseItem = (props) => {
                 let last = text.slice(len - 5, len);
                 return first + "....." + last;
             } else {
-                return "No owner has found.";
+                return "No owner was found.";
             }
         };
 
@@ -84,7 +84,7 @@ const ListResponseItem = (props) => {
                     <span style={{ fontWeight: "bolder" }}>Deadline:</span>{" "}
                     {props.deadline}
                 </Typography>
-                <Tooltip title="copy owner address">
+                <Tooltip title="Copy Owner Address">
                     <Button onClick={ownerClicked} color="success">
                         Owner: {ownerText}
                     </Button>
