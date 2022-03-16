@@ -30,28 +30,35 @@ export const getSigner = async (mnemonic: string) => {
 
 const Vote = () => {
     
-    
-
     const context = useContext(singleContext);
 
     const wallet = useWallet();
     
-    useEffect(()=> {
-        queryMyList();
-    },[wallet.initialized,wallet.address]);
-   
     let client: SigningCosmWasmClient;
 
-    const createVB = async (height: number, topic: string) => {
+    const createVB = async (time: number, topic: string) => {
         try {
             setFlag(true);
-
+            console.log("createVB() -> time: ")
+            console.log(time)
             client = wallet.getClient();
 
             const account = wallet.address;
             console.log("account: ");
             console.log(account);
 
+            // const executeResponse = await client.execute(
+            //     wallet.address,
+            //     "juno1x2fa4h4wpvh7mu3a99txsyshgprrwx0f73jngseuydcfhw4hanwsuetldp",
+            //     {
+            //         create_vote_box: {
+            //             deadline: { at_time: time.toString() },
+            //             owner: wallet.address,
+            //             topic: topic,
+            //         },
+            //     },
+            //     "auto"
+            // );
             const executeResponse = await client.execute(
                 wallet.address,
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -59,7 +66,7 @@ const Vote = () => {
                 context.contractAdress,
                 {
                     create_vote_box: {
-                        deadline: { at_height: height },
+                        deadline: { at_time: time.toString() },
                         owner: wallet.address,
                         topic: topic,
                     },
@@ -85,7 +92,7 @@ const Vote = () => {
 
     const vote = async (
         voteId: string,
-        voteFlag: boolean,
+        voteType: Number,
         decision: string
     ) => {
         try {
@@ -103,7 +110,7 @@ const Vote = () => {
                 {
                     vote: {
                         id: voteId,
-                        vote: voteFlag,
+                        vote_type: voteType,
                     },
                 },
                 "auto"
@@ -148,18 +155,22 @@ const Vote = () => {
             );
             console.log(queryResponse);
             setResponse(
-                "id : " +
+                "ID : " +
                     queryResponse.id +
-                    "\nowner : " +
+                    "\nOwner : " +
                     queryResponse.owner +
-                    "\ntopic : " +
+                    "\nTopic : " +
                     queryResponse.topic +
-                    "\nyes count : " +
+                    "\nYes Count : " +
                     queryResponse.yes_count +
-                    "\nno count : " +
+                    "\nNo Count : " +
                     queryResponse.no_count +
-                    "\ndeadline block : " +
-                    queryResponse.deadline.at_height
+                    "\nAbstain Count : " +
+                    queryResponse.abstain_count +
+                    "\nNo with Veto Count : " +
+                    queryResponse.no_with_veto_count +
+                    "\nDeadline Time : " +
+                    new Date(parseInt(queryResponse.deadline.at_time)/1000000)
             );
             setQueryResponseFlag(true);
             setFlag3(false);
@@ -171,16 +182,22 @@ const Vote = () => {
     const [idArray, setIdArray] = useState([]);
     const [yesCountArray, setYesCountArray] = useState([]);
     const [noCountArray, setNoCountArray] = useState([]);
+    const [abstainCountArray, setAbstainCountArray] = useState([]);
+    const [noWithVetoCountArray, setNoWithVetoCountArray] = useState([]);
     const [ownerArray, setOwnerArray] = useState([]);
     const [deadlineArray, setDeadlineArray] = useState([]);
     const [topicArray, setTopicArray] = useState([]);
 
+ 
     let mockClient: CosmWasmClient;
+    //Query the VoteBoxes owned by the wallet address
     const queryMyList = async () => {
         try {
             setIdArray([]);
             setYesCountArray([]);
             setNoCountArray([]);
+            setAbstainCountArray([]);
+            setNoWithVetoCountArray([]);
             setOwnerArray([]);
             setDeadlineArray([]);
             setTopicArray([]);
@@ -217,6 +234,18 @@ const Vote = () => {
                 setNoCountArray((oldArray) => [
                     ...oldArray,
                     queryResponse.voteList[i].no_count,
+                ]);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setAbstainCountArray((oldArray) => [
+                    ...oldArray,
+                    queryResponse.voteList[i].abstain_count,
+                ]);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setNoWithVetoCountArray((oldArray) => [
+                    ...oldArray,
+                    queryResponse.voteList[i].no_with_veto_count,
                 ]);
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -257,6 +286,10 @@ const Vote = () => {
     const [voteResponse, setVoteResponse] = useState("");
     const [voteResponseFlag, setVoteResponseFlag] = useState(false);
 
+    useEffect(()=> {
+        queryMyList();
+    },[wallet.initialized, wallet.address, createVoteBoxResponse,voteResponse]);
+
     const resetFlags = (type: string) => {
         if (type === "create") {
             setCreateVoteBoxResponseFlag(false);
@@ -266,9 +299,9 @@ const Vote = () => {
             setQueryResponseFlag(false);
         }
     };
-    const resetQueryMyListFlag= () =>{
-        setQueryMyListFlag(true);
-    }
+    // const resetQueryMyListFlag= () =>{
+    //     setQueryMyListFlag(true);
+    // }
 
     
     return (
@@ -354,6 +387,8 @@ const Vote = () => {
                                 topic={topicArray[index]}
                                 yesCount={yesCountArray[index]}
                                 noCount={noCountArray[index]}
+                                abstainCount={abstainCountArray[index]}
+                                noWithVetoCount={noWithVetoCountArray[index]}
                                 owner={ownerArray[index]}
                                 deadline={deadlineArray[index]}
                             />
