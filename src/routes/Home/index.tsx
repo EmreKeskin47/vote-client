@@ -71,7 +71,7 @@ const Home = () => {
                 }
             );
             for (let i = 0; i < queryResponse.voteList.length; i++) {
-
+                let deadlineDate: String = new Date(parseInt(queryResponse.voteList[i].deadline.at_time)/1000000).toString()
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 setIdArray((oldArray) => [
@@ -100,7 +100,7 @@ const Home = () => {
                 // @ts-ignore
                 setDeadlineArray((oldArray) => [
                     ...oldArray,
-                    queryResponse.voteList[i].deadline.at_time,
+                    deadlineDate,
                 ]);
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
