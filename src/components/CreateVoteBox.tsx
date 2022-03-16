@@ -9,20 +9,21 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 
 const CreateVoteBox = (props: {
-    function: (arg0: number, topic: string) => void;
+    function: (arg0: number, topic: string, description: string) => void;
 }) => {
     const [time, setTime] = useState<Number>(0);
     const [flag, setFlag] = useState(false);
     const [flag2, setFlag2] = useState(false);
     const [flag3, setFlag3] = useState(false);
     const [topic, setTopic] = useState("");
+    const [description, setDescription] = useState("");
     const [date, setDate] = React.useState<Date | null>(new Date());
 
-    // const handleChange = (event: {
-    //     target: { value: React.SetStateAction<string> };
-    // }) => {
-    //     setTime(event.target.value);
-    // };
+    const handleChange = (event: {
+        target: { value: React.SetStateAction<string> };
+    }) => {
+        setDescription(event.target.value);
+    };
 
     const handleChange2 = (event: {
         target: { value: React.SetStateAction<string> };
@@ -42,7 +43,7 @@ const CreateVoteBox = (props: {
             setTimeout(resetFlags, 3000); 
         }
         else {
-            props.function(Number(time), topic);
+            props.function(Number(time), topic, description);
         }
     };
 
@@ -140,6 +141,13 @@ const CreateVoteBox = (props: {
                         label="Topic"
                         variant="filled"
                         onChange={handleChange2}
+                        sx={{ backgroundColor: "white" }}
+                    />
+                    <TextField
+                        id="description"
+                        label="Description"
+                        variant="filled"
+                        onChange={handleChange}
                         sx={{ backgroundColor: "white" }}
                     />
                 </Grid>

@@ -36,7 +36,7 @@ const Vote = () => {
     const wallet = useWallet();
     let client: SigningCosmWasmClient;
 
-    const createVB = async (time: number, topic: string) => {
+    const createVB = async (time: number, topic: string, description: string) => {
         try {
             setFlag(true);
             console.log("createVB() -> time: ");
@@ -47,6 +47,7 @@ const Vote = () => {
             console.log("account: ");
             console.log(account);
 
+            let currentTimeInNanoSeconds = ((new Date().getTime())*1000000).toString();
             // const executeResponse = await client.execute(
             //     wallet.address,
             //     "juno1x2fa4h4wpvh7mu3a99txsyshgprrwx0f73jngseuydcfhw4hanwsuetldp",
@@ -66,7 +67,9 @@ const Vote = () => {
                 context.contractAdress,
                 {
                     create_vote_box: {
+                        create_date:{currentTimeInNanoSeconds},
                         deadline: { at_time: time.toString() },
+                        description:{description},
                         owner: wallet.address,
                         topic: topic,
                     },
