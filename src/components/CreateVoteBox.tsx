@@ -14,6 +14,7 @@ const CreateVoteBox = (props: {
     const [time, setTime] = useState<Number>(0);
     const [flag, setFlag] = useState(false);
     const [flag2, setFlag2] = useState(false);
+    const [flag3, setFlag3] = useState(false);
     const [topic, setTopic] = useState("");
     const [date, setDate] = React.useState<Date | null>(new Date());
 
@@ -36,7 +37,11 @@ const CreateVoteBox = (props: {
         } else if (isNaN(Number(time))) {
             setFlag2(true);
             setTimeout(resetFlags, 3000);
-        } else {
+        } else if (!topic) {
+            setFlag3(true);
+            setTimeout(resetFlags, 3000); 
+        }
+        else {
             props.function(Number(time), topic);
         }
     };
@@ -44,6 +49,7 @@ const CreateVoteBox = (props: {
     const resetFlags = () => {
         setFlag(false);
         setFlag2(false);
+        setFlag3(false);
     };
 
     // @ts-ignore
@@ -164,6 +170,13 @@ const CreateVoteBox = (props: {
                 <CustomAlert
                     severity="error"
                     text="Please specify a future time for the deadline."
+                    function={resetFlags}
+                />
+            )}
+            {flag3 && (
+                <CustomAlert
+                    severity="error"
+                    text="Please specify a topic for your VoteBox."
                     function={resetFlags}
                 />
             )}
