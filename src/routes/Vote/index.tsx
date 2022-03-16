@@ -12,6 +12,7 @@ import ListResponseItem from "../../components/ListResponseItem";
 import toast from "react-hot-toast";
 import CustomAlert from "../../components/CustomAlert";
 import singleContext from "../../SingleContext";
+import { useKeplr } from "../../services/keplr";
 
 ////////////////////////Wallet//////////////////////////////////
 const walletOptions = {
@@ -33,6 +34,21 @@ const Vote = () => {
     const context = useContext(singleContext);
 
     const wallet = useWallet();
+    const keplr = useKeplr();
+ 
+    useEffect(()=> {
+        window.onload = async () => {
+         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+         // @ts-ignore
+         console.log(context.isFirstTimeVisit)
+         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+         // @ts-ignore
+             if(!(context.isFirstTimeVisit)){
+                 keplr.connect();
+             }         
+         }
+      },[]);
+  
     
     let client: SigningCosmWasmClient;
 

@@ -46,7 +46,17 @@ export function Sidebar(): JSX.Element {
         });
     }, []);
 
-    const connectWallet = useCallback(() => keplr.connect(), [keplr]);
+    const connectWallet = useCallback(() => {
+        keplr.connect();
+         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+         // @ts-ignore
+         context.updateIsFirstTimeVisit(false);
+         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+         // @ts-ignore
+         console.log(context.isFirstTimeVisit);
+    
+    
+    }, [keplr]);
 
     const walletOnClick = () => {
         if (wallet.initialized) {

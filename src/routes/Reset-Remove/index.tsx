@@ -9,6 +9,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Votebox } from "../../models/Votebox";
 import ListResponseItem from "../../components/ListResponseItem";
+import { useKeplr } from "../../services/keplr";
 
 ////////////////////////Wallet//////////////////////////////////
 const walletOptions = {
@@ -27,6 +28,7 @@ export const getSigner = async (mnemonic: string) => {
 
 const Reset = () => {
     const wallet = useWallet();
+    const keplr = useKeplr();
     const CONTRACT_ADDRESS =
         "juno1asxh2ydzpujch7l7hguzejfjlfadxjydnpqcf4vdve90x2frqh3s8f9hmx";
 

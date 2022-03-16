@@ -8,6 +8,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ListResponseItem from "../../components/ListResponseItem";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import singleContext from "../../SingleContext";
+import { useWallet } from "../../contexts/wallet";
+import { useKeplr } from "../../services/keplr";
 
 
 const Home = () => {
@@ -20,10 +22,28 @@ const Home = () => {
     const [topicArray, setTopicArray] = useState([]);
 
     const context = useContext(singleContext);
+    const wallet = useWallet();
+    const keplr = useKeplr();
+    
+    
 
     useEffect(() => {
         getVBCount();
     }, []);
+    
+    useEffect(()=> {
+       window.onload = async () => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+            if(!(context.isFirstTimeVisit)){
+                keplr.connect();
+            }
+            
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+           context.updateIsFirstTimeVisit(false);
+        }
+     },[]);
 
     let mockClient: CosmWasmClient;
 

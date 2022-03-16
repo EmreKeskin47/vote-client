@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useCallback } from "react";
 import { useKeplr } from "../services/keplr";
+import singleContext from "../SingleContext";
 
 const WalletLoader = () => {
+    const context = useContext(singleContext);
     const keplr = useKeplr();
 
-    const connectWallet = useCallback(() => keplr.connect(), [keplr]);
+    const connectWallet = useCallback(() => {
+        keplr.connect();
+        
+        }, [keplr]);
 
     return (
         <button onClick={connectWallet}>

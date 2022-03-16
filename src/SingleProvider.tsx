@@ -5,12 +5,17 @@ import singleContext from './SingleContext';
 const SingleProvider = (props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }) => {
 
     const [count, setCount] = useState(0);
+    const [firstTimeVisit, setFirstTimeVisit] = useState(true);
 
     return (
         <singleContext.Provider value={{
             data: count,
-            contractAdress: "juno15f386vfzu7vaahu54ullts5dzqeyp6nhv9aa0lupr5h976jxh5xqsjkkru",
+            contractAdress: "juno1mlfwusx5556tmej3rm37hgg34et9kmjqfycccwndzdwgd5f4r69sd6cpe2",
             testUrl: "https://rpc.uni.juno.deuslabs.fi",
+            isFirstTimeVisit: firstTimeVisit,
+            updateIsFirstTimeVisit: (value: boolean) =>{
+                setFirstTimeVisit(value => value.valueOf());
+            },
             updateCountByOne: () => {
                 setCount(count + 1);
             },
