@@ -389,23 +389,25 @@ const Vote = () => {
             <br />
             {/*@ts-ignore*/}
             {wallet.initialized && queryMyListFlag && (
-                <>
+                <Grid container direction="row" spacing={2} p={3}>
                     {idArray.map((item: any, index: number) => {
                         return (
-                            <ListResponseItem
-                                key={index}
-                                id={idArray[index]}
-                                topic={topicArray[index]}
-                                yesCount={yesCountArray[index]}
-                                noCount={noCountArray[index]}
-                                abstainCount={abstainCountArray[index]}
-                                noWithVetoCount={noWithVetoCountArray[index]}
-                                owner={ownerArray[index]}
-                                deadline={deadlineArray[index]}
-                            />
+                            <Grid key={index} item xs={12} md={6} lg={6}>
+                                <ListResponseItem
+                                    key={index}
+                                    id={idArray[index]}
+                                    topic={topicArray[index]}
+                                    yesCount={yesCountArray[index]}
+                                    noCount={noCountArray[index]}
+                                    abstainCount={abstainCountArray[index]}
+                                    noWithVetoCount={noWithVetoCountArray[index]}
+                                    owner={ownerArray[index]}
+                                    deadline={deadlineArray[index]}
+                                />
+                            </Grid>
                         );
                     })}
-                </>
+                </Grid>
             )}
         </Grid>
     );
