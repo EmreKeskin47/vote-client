@@ -1,12 +1,10 @@
 import { Grid, Typography } from "@mui/material";
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Logo from "./logo.png";
-import {CosmWasmClient} from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import toast from "react-hot-toast";
-import Button from "@mui/material/Button";
 import ListResponseItem from "../../components/ListResponseItem";
 import singleContext from "../../SingleContext";
-
 
 const Home = () => {
     const [recentsFlag, setRecentsFlag] = useState(false);
@@ -42,22 +40,23 @@ const Home = () => {
             );
             startCount = queryResponse.count;
             startCount -= 10;
-            if (startCount < 1)
-                startCount = 1;
+            if (startCount < 1) startCount = 1;
             queryList(startCount);
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             context.updateCount(Number(queryResponse.count));
             setRecentsFlag(true);
         } catch (error: any) {
-            toast.error(error.message, {style: {maxWidth: 'none'}})
+            toast.error(error.message, { style: { maxWidth: "none" } });
         }
     };
 
     const queryList = async (boxId: number) => {
         try {
             // client = wallet.getClient()
-            mockClient = await CosmWasmClient.connect("https://rpc.uni.juno.deuslabs.fi");
+            mockClient = await CosmWasmClient.connect(
+                "https://rpc.uni.juno.deuslabs.fi"
+            );
             // const account = wallet.address//(await signer.getAccounts())[0];
             // console.log("account: ");
             // console.log(account);
@@ -67,11 +66,14 @@ const Home = () => {
                 // @ts-ignore
                 context.contractAdress,
                 {
-                    get_list: {start_after: boxId},
+                    get_list: { start_after: boxId },
                 }
             );
             for (let i = 0; i < queryResponse.voteList.length; i++) {
-                let deadlineDate: String = new Date(parseInt(queryResponse.voteList[i].deadline.at_time)/1000000).toString()
+                let deadlineDate: String = new Date(
+                    parseInt(queryResponse.voteList[i].deadline.at_time) /
+                        1000000
+                ).toString();
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 setIdArray((oldArray) => [
@@ -98,10 +100,7 @@ const Home = () => {
                 ]);
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                setDeadlineArray((oldArray) => [
-                    ...oldArray,
-                    deadlineDate,
-                ]);
+                setDeadlineArray((oldArray) => [...oldArray, deadlineDate]);
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 setTopicArray((oldArray) => [
@@ -111,13 +110,18 @@ const Home = () => {
             }
             // return queryResponse
         } catch (error: any) {
-            toast.error(error.message, {style: {maxWidth: 'none'}})
+            toast.error(error.message, { style: { maxWidth: "none" } });
         }
     };
 
     // @ts-ignore
     return (
-        <Grid container sm={12} justifySelf="center" justifyItems="center">
+        <Grid
+            container
+            sx={{ width: "100%" }}
+            justifySelf="center"
+            justifyItems="center"
+        >
             <Grid
                 item
                 xs={12}
@@ -180,12 +184,12 @@ const Home = () => {
             >
                 Recent Voteboxes
             </Typography>
-            {/*@ts-ignore*/}
-            {recentsFlag &&
+
+            {recentsFlag && (
                 <Grid container direction="row" spacing={2} p={3}>
                     {idArray.map((item: any, index: number) => {
                         return (
-                            <Grid item xs={12} md={6} lg={6}>
+                            <Grid key={index} item xs={12} md={6} lg={6}>
                                 <ListResponseItem
                                     key={index}
                                     id={idArray[index]}
@@ -201,7 +205,7 @@ const Home = () => {
                         );
                     })}
                 </Grid>
-            }
+            )}
         </Grid>
     );
 };

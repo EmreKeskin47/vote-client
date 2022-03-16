@@ -37,7 +37,7 @@ const QueryBox = (props: {
     const resetFlags = () => {
         setFlag(false);
         setFlag2(false);
-    }
+    };
 
     const handleChange = (event: {
         target: { value: React.SetStateAction<string> };
@@ -52,8 +52,7 @@ const QueryBox = (props: {
         } else if (isNaN(Number(id))) {
             setFlag2(true);
             setTimeout(resetFlags, 3000);
-        }
-        else {
+        } else {
             props.function((Number(id) - 1).toString());
         }
     };
@@ -90,7 +89,7 @@ const QueryBox = (props: {
             <Grid
                 container
                 direction="row"
-                xs={12}
+                sx={{ width: "100%" }}
                 spacing={2}
                 alignItems="center"
                 justifyContent="center"
@@ -119,13 +118,21 @@ const QueryBox = (props: {
                     </Button>
                 </Grid>
             </Grid>
-            <br/>
-            {flag &&
-                <CustomAlert severity="error" text="Deadline height starts from 1" function={resetFlags} />
-            }
-            {flag2 &&
-                <CustomAlert severity="error" text="Please enter a number that is bigger than 0" function={resetFlags} />
-            }
+            <br />
+            {flag && (
+                <CustomAlert
+                    severity="error"
+                    text="Deadline height starts from 1"
+                    function={resetFlags}
+                />
+            )}
+            {flag2 && (
+                <CustomAlert
+                    severity="error"
+                    text="Please enter a number that is bigger than 0"
+                    function={resetFlags}
+                />
+            )}
         </Grid>
     );
 };

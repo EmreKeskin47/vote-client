@@ -15,7 +15,7 @@ const Voting = (props: {
     const resetFlags = () => {
         setFlag(false);
         setFlag2(false);
-    }
+    };
 
     const handleChange = (event: {
         target: { value: React.SetStateAction<string> };
@@ -30,8 +30,7 @@ const Voting = (props: {
         } else if (isNaN(Number(id))) {
             setFlag2(true);
             setTimeout(resetFlags, 3000);
-        }
-        else {
+        } else {
             props.function(id, 0, "NO");
         }
     };
@@ -42,21 +41,19 @@ const Voting = (props: {
         } else if (isNaN(Number(id))) {
             setFlag2(true);
             setTimeout(resetFlags, 3000);
-        }
-        else {
+        } else {
             props.function(id, 1, "NO");
         }
     };
     const votedYes = () => {
-        console.log(Number(id))
+        console.log(Number(id));
         if (Number(id) < 1) {
             setFlag(true);
             setTimeout(resetFlags, 3000);
         } else if (isNaN(Number(id))) {
             setFlag2(true);
             setTimeout(resetFlags, 3000);
-        }
-        else {
+        } else {
             props.function(id, 2, "YES");
         }
     };
@@ -67,8 +64,7 @@ const Voting = (props: {
         } else if (isNaN(Number(id))) {
             setFlag2(true);
             setTimeout(resetFlags, 3000);
-        }
-        else {
+        } else {
             props.function(id, 3, "NO");
         }
     };
@@ -103,6 +99,7 @@ const Voting = (props: {
             </Typography>
             <br />
             <Grid
+                container
                 direction="row"
                 justifyContent="space-between"
                 sx={{ width: "100%" }}
@@ -110,7 +107,7 @@ const Voting = (props: {
                 <Grid
                     container
                     direction="row"
-                    xs={12}
+                    sx={{ width: "100%" }}
                     spacing={2}
                     alignItems="center"
                     justifyContent="center"
@@ -169,13 +166,21 @@ const Voting = (props: {
                     </Grid>
                 </Grid>
             </Grid>
-            <br/>
-            {flag &&
-                <CustomAlert severity="error" text="Deadline height starts from 1" function={resetFlags} />
-            }
-            {flag2 &&
-                <CustomAlert severity="error" text="Please enter a number that is bigger than 0" function={resetFlags} />
-            }
+            <br />
+            {flag && (
+                <CustomAlert
+                    severity="error"
+                    text="Deadline height starts from 1"
+                    function={resetFlags}
+                />
+            )}
+            {flag2 && (
+                <CustomAlert
+                    severity="error"
+                    text="Please enter a number that is bigger than 0"
+                    function={resetFlags}
+                />
+            )}
         </Grid>
     );
 };

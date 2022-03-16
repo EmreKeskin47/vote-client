@@ -1,14 +1,16 @@
-import React, {useState} from "react";
-import {Grid} from "@mui/material";
+import React, { useState } from "react";
+import { Grid } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CustomAlert from "./CustomAlert";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateTimePicker from '@mui/lab/DateTimePicker';
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DateTimePicker from "@mui/lab/DateTimePicker";
 
-const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void }) => {
+const CreateVoteBox = (props: {
+    function: (arg0: number, topic: string) => void;
+}) => {
     const [time, setTime] = useState<Number>(0);
     const [flag, setFlag] = useState(false);
     const [flag2, setFlag2] = useState(false);
@@ -21,9 +23,11 @@ const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void 
     //     setTime(event.target.value);
     // };
 
-    const handleChange2 = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    const handleChange2 = (event: {
+        target: { value: React.SetStateAction<string> };
+    }) => {
         setTopic(event.target.value);
-    }
+    };
 
     const createVoteBox = () => {
         if (Number(time) < 1) {
@@ -40,7 +44,7 @@ const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void 
     const resetFlags = () => {
         setFlag(false);
         setFlag2(false);
-    }
+    };
 
     // @ts-ignore
     return (
@@ -54,12 +58,12 @@ const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void 
                 height: "35%",
                 width: "100%",
             }}
-        >   
+        >
             <Typography
                 variant="h4"
                 gutterBottom
                 component="div"
-                sx={{color: "whitesmoke"}}
+                sx={{ color: "whitesmoke" }}
             >
                 Create Your VoteBox
             </Typography>
@@ -67,47 +71,56 @@ const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void 
                 variant="subtitle1"
                 gutterBottom
                 component="div"
-                sx={{color: "whitesmoke"}}
+                sx={{ color: "whitesmoke" }}
             >
-                Enter the deadline time for the votebox and click on the create VoteBox
-                button
+                Enter the deadline time for the votebox and click on the create
+                VoteBox button
             </Typography>
-            <br/>
+            <br />
             <Grid
                 container
                 direction="row"
-                xs={12}
+                sx={{ width: "100%" }}
                 spacing={2}
                 alignItems="center"
                 justifyContent="center"
             >
-                <Grid item container justifyContent="space-evenly" sm={12} md={8} justifyItems="center">
+                <Grid
+                    item
+                    container
+                    justifyContent="space-evenly"
+                    sm={12}
+                    md={8}
+                    justifyItems="center"
+                >
                     <Typography
-                    variant="subtitle1"
-                    gutterBottom
-                    component="div"
-                    sx={{backgroundColor: "white", borderRadius: 1.5}}
+                        variant="subtitle1"
+                        gutterBottom
+                        component="div"
+                        sx={{ backgroundColor: "white", borderRadius: 1.5 }}
                     >
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DateTimePicker
-                            
-                            minDateTime= {new Date()}
-                            renderInput={(props) => <TextField {...props} />}
-                            label="Deadline Time"
-                            value={date}
-                            onChange={(newDate) => {
-                                setDate(newDate)
-                                if(newDate != null){
-                                    let timeInNanoSeconds : Number = newDate.getTime()*1000000
-                                    console.log("Time in ns:")
-                                    console.log(timeInNanoSeconds)
-                                    
-                                    setTime(timeInNanoSeconds)
-                                }
-                            }}
-                        />
+                            <DateTimePicker
+                                minDateTime={new Date()}
+                                renderInput={(props) => (
+                                    <TextField {...props} />
+                                )}
+                                label="Deadline Time"
+                                value={date}
+                                onChange={(newDate) => {
+                                    setDate(newDate);
+                                    if (newDate != null) {
+                                        let timeInNanoSeconds: Number =
+                                            newDate.getTime() * 1000000;
+                                        console.log("Time in ns:");
+                                        console.log(timeInNanoSeconds);
+
+                                        setTime(timeInNanoSeconds);
+                                    }
+                                }}
+                            />
                         </LocalizationProvider>
-                         {/* <TextField
+                        {/* <TextField
                         id="deadline-time"
                         label="Deadline Time"
                         variant="filled"
@@ -115,13 +128,13 @@ const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void 
                         sx={{backgroundColor: "white"}}
                          /> */}
                     </Typography>
-                   
+
                     <TextField
                         id="topic"
                         label="Topic"
                         variant="filled"
                         onChange={handleChange2}
-                        sx={{backgroundColor: "white"}}
+                        sx={{ backgroundColor: "white" }}
                     />
                 </Grid>
 
@@ -139,13 +152,21 @@ const CreateVoteBox = (props: { function: (arg0: number, topic: string) => void 
                     </Button>
                 </Grid>
             </Grid>
-            <br/>
-            {flag &&
-                <CustomAlert severity="error" text="Please specify a future time for the deadline." function={resetFlags}/>
-            }
-            {flag2 &&
-                <CustomAlert severity="error" text="Please specify a future time for the deadline." function={resetFlags}/>
-            }
+            <br />
+            {flag && (
+                <CustomAlert
+                    severity="error"
+                    text="Please specify a future time for the deadline."
+                    function={resetFlags}
+                />
+            )}
+            {flag2 && (
+                <CustomAlert
+                    severity="error"
+                    text="Please specify a future time for the deadline."
+                    function={resetFlags}
+                />
+            )}
         </Grid>
     );
 };

@@ -2,7 +2,6 @@
     "name": "vote-client",
     "version": "0.4.0",
     "private": true,
-    "homepage": "https://emrekeskin47.github.io/vote-client/",
     "browserslist": [
         "last 2 chrome versions",
         "last 2 firefox versions",

@@ -1,34 +1,35 @@
-import React, {useEffect, useState} from "react";
-import {Grid} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import toast from "react-hot-toast";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from "@mui/material/Tooltip";
 import VotingChart from "./VotingChart";
 
 // @ts-ignore
 const ListResponseItem = (props) => {
     const [ownerText, setOwnerText] = useState("No owner has found.");
-    const createOwnerText = () => {
-        if (props.owner) {
-            let text = props.owner;
-            let len = text.length;
-            let first = text.slice(0, 5);
-            let last = text.slice(len - 5, len);
-            return first + "....." + last;
-        } else {
-            return "No owner has found.";
-        }
-    }
 
     useEffect(() => {
+        const createOwnerText = () => {
+            if (props.owner) {
+                let text = props.owner;
+                let len = text.length;
+                let first = text.slice(0, 5);
+                let last = text.slice(len - 5, len);
+                return first + "....." + last;
+            } else {
+                return "No owner has found.";
+            }
+        };
+
         setOwnerText(createOwnerText());
-    })
+    }, [setOwnerText, props.owner]);
 
     const ownerClicked = () => {
         navigator.clipboard.writeText(props.owner);
-        toast.success("Copied to clipboard", {style: {maxWidth: "none"}});
-    }
+        toast.success("Copied to clipboard", { style: { maxWidth: "none" } });
+    };
 
     // @ts-ignore
     return (
@@ -42,12 +43,18 @@ const ListResponseItem = (props) => {
                 margin: 2,
             }}
         >
-            <Grid container direction="row" justifyContent="space-between" p={2} sx={{backgroundColor: "#1F2123"}}>
+            <Grid
+                container
+                direction="row"
+                justifyContent="space-between"
+                p={2}
+                sx={{ backgroundColor: "#1F2123" }}
+            >
                 <Typography
                     variant="h4"
                     gutterBottom
                     component="div"
-                    sx={{color: "whitesmoke", paddingTop: 1}}
+                    sx={{ color: "whitesmoke", paddingTop: 1 }}
                     align="center"
                 >
                     {props.topic}
@@ -56,35 +63,35 @@ const ListResponseItem = (props) => {
                     variant="subtitle1"
                     gutterBottom
                     component="div"
-                    sx={{color: "whitesmoke", paddingTop: 1, float: "right"}}
+                    sx={{ color: "whitesmoke", paddingTop: 1, float: "right" }}
                     align="center"
                 >
                     {props.id}
                 </Typography>
             </Grid>
             <Grid
-                item
                 container
                 direction="row"
                 alignItems="left"
-                sx={{align: "center", padding: "10%"}}
+                sx={{ align: "center", padding: "10%" }}
             >
                 <Typography
                     variant="subtitle1"
                     gutterBottom
                     component="div"
-                    sx={{color: "gray"}}
+                    sx={{ color: "gray" }}
                 >
-                    <span style={{fontWeight: "bolder"}}>Deadline:</span> {props.deadline}
+                    <span style={{ fontWeight: "bolder" }}>Deadline:</span>{" "}
+                    {props.deadline}
                 </Typography>
                 <Tooltip title="copy owner address">
                     <Button onClick={ownerClicked} color="success">
                         Owner: {ownerText}
                     </Button>
                 </Tooltip>
-                <br/>
+                <br />
             </Grid>
-            <Grid sx={{padding: 5}}>
+            <Grid sx={{ padding: 5 }}>
                 <VotingChart
                     yesCount={props.yesCount}
                     noCount={props.noCount}
