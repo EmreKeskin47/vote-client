@@ -101,11 +101,17 @@ const Home = () => {
                 toast.success("You have voted: " + option, {style: {maxWidth: "none"}});
             }
         } catch (error: any) {
-            // toast.error(error.message, { style: { maxWidth: 'none' } });
-            toast.error(
-                "Something went wrong.\nYou may have tried to vote for an expired contract.",
-                {style: {maxWidth: "none"}}
-            );
+            let errMessage: String = error.message;
+            if(errMessage.includes("ended")){
+                toast.error("The voting period has ended for this VoteBox.", { style: { maxWidth: 'none' } });
+            }
+            else if(errMessage.includes("already")){
+                toast.error("You may only vote once per VoteBox.", { style: { maxWidth: 'none' } });
+            }
+            else{
+                toast.error(error.message, { style: { maxWidth: 'none' } });
+            }
+            
         }
     };
 
