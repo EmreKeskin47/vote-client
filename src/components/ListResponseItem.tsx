@@ -44,7 +44,7 @@ const ListResponseItem = (props) => {
                 let last = text.slice(len - 5, len);
                 return first + "....." + last;
             } else {
-                return "No owner has found.";
+                return "No owner was found.";
             }
         };
 
