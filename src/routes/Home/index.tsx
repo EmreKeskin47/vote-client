@@ -17,6 +17,7 @@ const Home = () => {
     const [topicArray, setTopicArray] = useState([]);
     const [abstainArray, setAbstainArray] = useState([]);
     const [nwvArray, setNwvArray] = useState([]);
+    const [deadlineNum, setDeadlineNum] = useState(0);
 
     const context = useContext(singleContext);
     const wallet = useWallet();
@@ -127,6 +128,7 @@ const Home = () => {
                 }
             );
             for (let i = 0; i < queryResponse.voteList.length; i++) {
+                setDeadlineNum(queryResponse.voteList[i].deadline.at_time)
                 let deadlineDate: String = new Date(
                     parseInt(queryResponse.voteList[i].deadline.at_time) /
                     1000000
@@ -267,6 +269,7 @@ const Home = () => {
                                     noCount={Number(noCountArray[index])}
                                     owner={ownerArray[index]}
                                     deadline={deadlineArray[index]}
+                                    deadlineNum={deadlineNum}
                                     abstainCount={Number(abstainArray[index])}
                                     nwvCount={Number(nwvArray[index])}
                                     function={vote}
