@@ -17,6 +17,7 @@ const Home = () => {
     const [topicArray, setTopicArray] = useState([]);
     const [abstainArray, setAbstainArray] = useState([]);
     const [nwvArray, setNwvArray] = useState([]);
+    const [deadlineNum, setDeadlineNum] = useState(0);
 
     const context = useContext(singleContext);
     const wallet = useWallet();
@@ -133,6 +134,7 @@ const Home = () => {
                 }
             );
             for (let i = 0; i < queryResponse.voteList.length; i++) {
+                setDeadlineNum(queryResponse.voteList[i].deadline.at_time)
                 let deadlineDate: String = new Date(
                     parseInt(queryResponse.voteList[i].deadline.at_time) /
                     1000000
@@ -250,15 +252,26 @@ const Home = () => {
                     Let&apos;s start with your first VoteBox!
                 </Typography>
             </Grid>
-            <Typography
-                variant="h4"
-                sx={{
-                    color: "whitesmoke",
-                }}
-                marginTop={10}
-            >
-                Recent Voteboxes
-            </Typography>
+            <Grid direction="column" justifyContent="center">
+                <Typography
+                    variant="h4"
+                    sx={{
+                        color: "whitesmoke",
+                    }}
+                    marginTop={10}
+                >
+                    Recent Voteboxes
+                </Typography>
+                <Typography
+                    variant="overline"
+                    sx={{
+                        color: "whitesmoke",
+                    }}
+                    marginTop={10}
+                >
+                    Click on the VoteBoxes for description
+                </Typography>
+            </Grid>
 
             {recentsFlag && (
                 <Grid container direction="row" spacing={2} p={3}>
@@ -273,6 +286,7 @@ const Home = () => {
                                     noCount={Number(noCountArray[index])}
                                     owner={ownerArray[index]}
                                     deadline={deadlineArray[index]}
+                                    deadlineNum={deadlineNum}
                                     abstainCount={Number(abstainArray[index])}
                                     nwvCount={Number(nwvArray[index])}
                                     function={vote}
