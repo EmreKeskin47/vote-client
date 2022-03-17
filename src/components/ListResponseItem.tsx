@@ -17,6 +17,7 @@ const ListResponseItem = (props) => {
     const [selectedValue, setSelectedValue] = React.useState(options[3]);
     const [boxState, setBoxState] = React.useState("");
     const [isFlipped, setIsFlipped] = React.useState(false);
+    const [description, setDescription] = React.useState("");
 
     const voteOptionClicked = (option: string) => {
         let selected: number = 1;
@@ -56,6 +57,11 @@ const ListResponseItem = (props) => {
         } else {
             setBoxState("Expired");
         }
+        if (props.description === undefined) {
+            setDescription("No description has provided.");
+        }
+        console.log("Type of the description is " + typeof description);
+        console.log("Description is " + description);
         setOwnerText(createOwnerText());
     }, [setOwnerText, props.owner]);
 
@@ -98,11 +104,11 @@ const ListResponseItem = (props) => {
                 container
                 direction="row"
                 justifyContent="space-between"
-                p={2}
+                p={1}
                 sx={{backgroundColor: "#1F2123"}}
             >
                 <Typography
-                    variant="h4"
+                    variant="h6"
                     gutterBottom
                     component="div"
                     sx={{color: "whitesmoke", paddingTop: 1}}
@@ -158,8 +164,8 @@ const ListResponseItem = (props) => {
                 </Grid>
             }
             {isFlipped &&
-                <Grid height={320} onClick={flip} justifyContent="center">
-                    <Paper variant="outlined" elevation={24} style={{maxHeight: 300, overflow: 'auto'}}>
+                <Grid height={334} onClick={flip} justifyContent="center">
+                    <Paper elevation={24} style={{height: 320, overflow: 'auto'}}>
                         <List>
                             <Typography
                                 variant="subtitle1"
@@ -168,7 +174,7 @@ const ListResponseItem = (props) => {
                                 sx={{color: "gray"}}
                                 p={2}
                             >
-                                {props.description}
+                                {description}
                             </Typography>
                         </List>
                     </Paper>

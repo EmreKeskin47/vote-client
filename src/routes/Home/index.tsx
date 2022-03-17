@@ -192,6 +192,7 @@ const Home = () => {
                     ...oldArray,
                     queryResponse.voteList[i].description,
                 ]);
+                console.log("Description in index is : " + queryResponse.voteList[i].description);
             }
             // return queryResponse
         } catch (error: any) {
