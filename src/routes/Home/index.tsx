@@ -15,17 +15,7 @@ import { Votebox } from "../../models/Votebox";
 
 const Home = () => {
     const [recentsFlag, setRecentsFlag] = useState(false);
-    const [idArray, setIdArray] = useState([]);
-    const [yesCountArray, setYesCountArray] = useState([]);
-    const [noCountArray, setNoCountArray] = useState([]);
-    const [ownerArray, setOwnerArray] = useState([]);
-    const [deadlineArray, setDeadlineArray] = useState([]);
-    const [topicArray, setTopicArray] = useState([]);
-    const [abstainArray, setAbstainArray] = useState([]);
-    const [nwvArray, setNwvArray] = useState([]);
-    const [descriptionArray, setDescriptionArray] = useState([]);
-    const [deadlineNum, setDeadlineNum] = useState(0);
-
+    
     const context = useContext(singleContext);
     const wallet = useWallet();
     let client: SigningCosmWasmClient;
@@ -126,9 +116,9 @@ const Home = () => {
         }
     };
 
-    const [listEnd, setListEnd] = useState(0);
+    
     const [voteboxList, setVoteboxList] = useState<Votebox[]>([]);
-    const [loadMoreBtn, setLoadMoreBtn] = useState(false);
+    
 
     const queryList = async (boxId: number) => {
         try {
