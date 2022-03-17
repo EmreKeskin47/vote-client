@@ -9,7 +9,7 @@ const SingleProvider = (props: { children: boolean | React.ReactChild | React.Re
     return (
         <singleContext.Provider value={{
             data: count,
-            contractAdress: "juno169swqjmpfu7fkwexhqhd5kyyme7j3kh0h5dxcj0sks8rvujtt45qkur6z7",
+            contractAdress: "juno1ftrqqu4x7wr92wg0n7ydey36y3hzef0vg4we8kx6r3lxus3c7jqqws5dza",
             testUrl: "https://rpc.uni.juno.deuslabs.fi",
             updateCountByOne: () => {
                 setCount(count + 1);
