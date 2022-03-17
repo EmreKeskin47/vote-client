@@ -11,7 +11,6 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
 import HomeIcon from "@mui/icons-material/Home";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import HowToVoteIcon from "@mui/icons-material/HowToVote";
@@ -20,17 +19,20 @@ import { useKeplr } from "../services/keplr";
 import getShortAddress from "../utils/getShortAddress";
 import singleContext from "../SingleContext";
 import Grid from "@mui/material/Grid";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import Home from "../routes/Home";
+import Vote from "../routes/Vote";
+import Reset from "../routes/Reset-Remove";
 
 export const drawerWidth = 240;
 
-export function Sidebar(): JSX.Element {
-    const context = useContext(singleContext);
-    console.log(context);
-
+export function SidebarLayout(): JSX.Element {
     const wallet = useWallet();
     const keplr = useKeplr();
 
     const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [selectedPage, setSelectedPage] = React.useState("home");
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -44,7 +46,7 @@ export function Sidebar(): JSX.Element {
         window.addEventListener("keplr_keystorechange", () => {
             keplr.connect(true);
         });
-    }, []);
+    }, [keplr]);
 
     const connectWallet = useCallback(() => keplr.connect(), [keplr]);
 
@@ -71,32 +73,60 @@ export function Sidebar(): JSX.Element {
                     )}
                 </ListItem>
                 <Grid sx={{ padding: 1 }}></Grid>
-                <Link href="/" underline="none" sx={{ color: "white" }}>
-                    <ListItem>
+                <Link to="/">
+                    <ListItem
+                        button
+                        onClick={() => setSelectedPage("home")}
+                        style={{
+                            backgroundColor:
+                                selectedPage === "home" ? "#9c27b0" : "#1F2123",
+                        }}
+                    >
                         <ListItemIcon>
                             <HomeIcon sx={{ color: "white" }} />
                         </ListItemIcon>
-                        <ListItemText primary={"Home"} />
+                        <ListItemText
+                            primary={"Home"}
+                            sx={{ color: "white" }}
+                        />
                     </ListItem>
                 </Link>
-                <Link href="/vote" underline="none" sx={{ color: "white" }}>
-                    <ListItem>
+                <Link to="/vote">
+                    <ListItem
+                        button
+                        onClick={() => setSelectedPage("vote")}
+                        style={{
+                            backgroundColor:
+                                selectedPage === "vote" ? "#9c27b0" : "#1F2123",
+                        }}
+                    >
                         <ListItemIcon>
                             <HowToVoteIcon sx={{ color: "white" }} />
                         </ListItemIcon>
-                        <ListItemText primary={"Vote"} />
+                        <ListItemText
+                            primary={"Vote"}
+                            sx={{ color: "white" }}
+                        />
                     </ListItem>
                 </Link>
-                <Link
-                    href="/reset-remove"
-                    underline="none"
-                    sx={{ color: "white" }}
-                >
-                    <ListItem>
+                <Link to="/reset-remove">
+                    <ListItem
+                        button
+                        onClick={() => setSelectedPage("reset-remove")}
+                        style={{
+                            backgroundColor:
+                                selectedPage === "reset-remove"
+                                    ? "#9c27b0"
+                                    : "#1F2123",
+                        }}
+                    >
                         <ListItemIcon>
                             <HowToVoteIcon sx={{ color: "white" }} />
                         </ListItemIcon>
-                        <ListItemText primary={"Reset/Remove "} />
+                        <ListItemText
+                            primary={"Reset/Remove "}
+                            sx={{ color: "white" }}
+                        />
                     </ListItem>
                 </Link>
             </List>
@@ -104,92 +134,116 @@ export function Sidebar(): JSX.Element {
     );
 
     return (
-        <Box
-            sx={{
-                display: "flex",
-                backgroundColor: "#1F2123 !important",
-            }}
-        >
-            <CssBaseline />
-            <AppBar
-                position="fixed"
-                sx={{
-                    width: { sm: `calc(100% - ${drawerWidth}px)` },
-                    ml: { sm: `${drawerWidth}px` },
-                }}
-            >
-                <Toolbar sx={{ backgroundColor: "#1F2123" }}>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ mr: 2, display: { sm: "none" } }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="div"
-                        sx={{ textAlign: "center", width: "100%" }}
-                    >
-                        VoteBox
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+        <Router basename={process.env.PUBLIC_URL}>
             <Box
-                component="nav"
                 sx={{
-                    width: { sm: drawerWidth },
-                    flexShrink: { sm: 0 },
+                    display: "flex",
                 }}
-                aria-label="mailbox folders"
             >
-                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-                <Drawer
-                    variant="temporary"
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
-                    }}
-                    PaperProps={{
-                        sx: {
-                            backgroundColor: "#1F2123",
-                            color: "white",
-                        },
-                    }}
+                <Box>
+                    <CssBaseline />
+                    <AppBar
+                        position="fixed"
+                        sx={{
+                            width: { sm: `calc(100% - ${drawerWidth}px)` },
+                            ml: { sm: `${drawerWidth}px` },
+                        }}
+                    >
+                        <Toolbar sx={{ backgroundColor: "#1F2123" }}>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                edge="start"
+                                onClick={handleDrawerToggle}
+                                sx={{ mr: 2, display: { sm: "none" } }}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography
+                                variant="h5"
+                                noWrap
+                                component="div"
+                                sx={{ textAlign: "center", width: "100%" }}
+                            >
+                                VoteBox
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
+                    <Box
+                        component="nav"
+                        sx={{
+                            width: { sm: drawerWidth },
+                            flexShrink: { sm: 0 },
+                        }}
+                        aria-label="mailbox folders"
+                    >
+                        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+                        <Drawer
+                            variant="temporary"
+                            open={mobileOpen}
+                            onClose={handleDrawerToggle}
+                            ModalProps={{
+                                keepMounted: true, // Better open performance on mobile.
+                            }}
+                            PaperProps={{
+                                sx: {
+                                    backgroundColor: "#1F2123",
+                                    color: "white",
+                                },
+                            }}
+                            sx={{
+                                display: { xs: "block", sm: "none" },
+                                "& .MuiDrawer-paper": {
+                                    boxSizing: "border-box",
+                                    width: drawerWidth,
+                                },
+                            }}
+                        >
+                            {drawer}
+                        </Drawer>
+                        <Drawer
+                            PaperProps={{
+                                sx: {
+                                    backgroundColor: "#1F2123",
+                                    color: "white",
+                                },
+                            }}
+                            variant="permanent"
+                            sx={{
+                                display: { xs: "none", sm: "block" },
+                                "& .MuiDrawer-paper": {
+                                    boxSizing: "border-box",
+                                    width: drawerWidth,
+                                },
+                            }}
+                            open
+                        >
+                            {drawer}
+                        </Drawer>
+                    </Box>
+                </Box>
+                <Box
+                    component="main"
                     sx={{
-                        display: { xs: "block", sm: "none" },
-                        "& .MuiDrawer-paper": {
-                            boxSizing: "border-box",
-                            width: drawerWidth,
-                        },
+                        flexGrow: 1,
+                        p: 3,
+                        width: { sm: `calc(100% - ${drawerWidth}px)` },
                     }}
                 >
-                    {drawer}
-                </Drawer>
-                <Drawer
-                    PaperProps={{
-                        sx: {
-                            backgroundColor: "#1F2123",
-                            color: "white",
-                        },
-                    }}
-                    variant="permanent"
-                    sx={{
-                        display: { xs: "none", sm: "block" },
-                        "& .MuiDrawer-paper": {
-                            boxSizing: "border-box",
-                            width: drawerWidth,
-                        },
-                    }}
-                    open
-                >
-                    {drawer}
-                </Drawer>
+                    <Box marginTop={10}>
+                        <Toaster position="top-right" />
+                        <Switch>
+                            <Route exact path="/" component={Home} />
+                            <Route exact path="/vote" component={Vote} />
+                            <Route
+                                exact
+                                path="/reset-remove"
+                                component={Reset}
+                            />
+                        </Switch>
+                    </Box>
+                </Box>
             </Box>
-        </Box>
+        </Router>
     );
 }
