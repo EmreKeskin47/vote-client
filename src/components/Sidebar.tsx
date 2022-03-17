@@ -21,9 +21,8 @@ import Grid from "@mui/material/Grid";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Home from "../routes/Home";
-import Vote from "../routes/Vote";
-import Reset from "../routes/Reset-Remove";
-import VoteboxList from "../routes/VoteboxList";
+import CreateVotebox from "../routes/CreateVotebox";
+import VoteboxList from "../routes/Vote";
 
 export const drawerWidth = 240;
 
@@ -109,13 +108,14 @@ export function SidebarLayout(): JSX.Element {
                         />
                     </ListItem>
                 </Link>
-                <Link to="/reset-remove">
+
+                <Link to="/create-votebox">
                     <ListItem
                         button
-                        onClick={() => setSelectedPage("reset-remove")}
+                        onClick={() => setSelectedPage("create-votebox")}
                         style={{
                             backgroundColor:
-                                selectedPage === "reset-remove"
+                                selectedPage === "create-votebox"
                                     ? "#9c27b0"
                                     : "#1F2123",
                         }}
@@ -124,27 +124,7 @@ export function SidebarLayout(): JSX.Element {
                             <HowToVoteIcon sx={{ color: "white" }} />
                         </ListItemIcon>
                         <ListItemText
-                            primary={"Reset/Remove "}
-                            sx={{ color: "white" }}
-                        />
-                    </ListItem>
-                </Link>
-                <Link to="/votebox-list">
-                    <ListItem
-                        button
-                        onClick={() => setSelectedPage("votebox-list")}
-                        style={{
-                            backgroundColor:
-                                selectedPage === "votebox-list"
-                                    ? "#9c27b0"
-                                    : "#1F2123",
-                        }}
-                    >
-                        <ListItemIcon>
-                            <HowToVoteIcon sx={{ color: "white" }} />
-                        </ListItemIcon>
-                        <ListItemText
-                            primary={"Votebox List "}
+                            primary={"Create Votebox"}
                             sx={{ color: "white" }}
                         />
                     </ListItem>
@@ -254,16 +234,11 @@ export function SidebarLayout(): JSX.Element {
                         <Toaster position="top-right" />
                         <Switch>
                             <Route exact path="/" component={Home} />
-                            <Route exact path="/vote" component={Vote} />
+                            <Route exact path="/vote" component={VoteboxList} />
                             <Route
                                 exact
-                                path="/reset-remove"
-                                component={Reset}
-                            />
-                            <Route
-                                exact
-                                path="/votebox-list"
-                                component={VoteboxList}
+                                path="/create-votebox"
+                                component={CreateVotebox}
                             />
                         </Switch>
                     </Box>

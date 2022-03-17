@@ -60,8 +60,6 @@ const ListResponseItem = (props) => {
         if (props.description === undefined) {
             setDescription("No description was provided.");
         }
-        console.log("Type of the description is " + typeof description);
-        console.log("Description is " + description);
         setOwnerText(createOwnerText());
     }, [setOwnerText, props.owner]);
 
@@ -87,7 +85,9 @@ const ListResponseItem = (props) => {
             setIsFlipped(false);
         }
     };
-    let deadlineDate = new Date(parseInt(props.deadlineNum) / 1000000).toString();
+    let deadlineDate = new Date(
+        parseInt(props.deadlineNum) / 1000000
+    ).toString();
     // @ts-ignore
     return (
         <Grid
