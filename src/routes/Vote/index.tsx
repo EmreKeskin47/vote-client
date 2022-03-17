@@ -184,7 +184,12 @@ const Vote = () => {
             setQueryResponseFlag(true);
             setFlag3(false);
         } catch (error: any) {
-            toast.error(error.message, { style: { maxWidth: "none" } });
+            if(error.message.includes("Vote not found")){
+                toast.error(("No VoteBox found with the specified ID."), { style: { maxWidth: "none" } });
+            }
+            else{
+                toast.error(error.message, { style: { maxWidth: "none" } });
+            }
         }
     };
 
