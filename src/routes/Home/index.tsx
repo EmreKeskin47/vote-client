@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import ListResponseItem from "../../components/ListResponseItem";
 import singleContext from "../../SingleContext";
 import {useWallet} from "../../contexts/wallet";
+import { TypingEffect } from "react-typing-text-effect";
 
 const Home = () => {
     const [recentsFlag, setRecentsFlag] = useState(false);
@@ -237,32 +238,22 @@ const Home = () => {
                             color: "whitesmoke",
                             paddingTop: "30px",
                             textAlign: "center",
+                            paddingBottom: 10,
                         }}
                     >
                         Welcome to VoteBox!
                     </Typography>
-                    <Typography
-                        variant="subtitle1"
-                        sx={{
-                            color: "whitesmoke",
-                            paddingTop: "10px",
-                            textAlign: "center",
-                            fontStyle: "italic",
-                        }}
-                    >
-                        You know what the world thinks
-                    </Typography>
+                    <TypingEffect texts={["You know what the world thinks.", "It is time to speak up your mind!"]} />
                 </Grid>
                 <Typography
                     variant="h5"
                     sx={{color: "whitesmoke", textAlign: "center"}}
-                    marginTop={8}
+                    paddingTop={10}
                 >
                     With VoteBox, you can create your own VoteBoxes and people
                     from all around the world can participate in the voting
                     process with total anonymity.
                 </Typography>
-
                 <Typography
                     variant="h5"
                     sx={{
