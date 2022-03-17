@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useContext } from "react";
+import React, { useEffect, useCallback } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -17,7 +17,6 @@ import HowToVoteIcon from "@mui/icons-material/HowToVote";
 import { useWallet } from "../contexts/wallet";
 import { useKeplr } from "../services/keplr";
 import getShortAddress from "../utils/getShortAddress";
-import singleContext from "../SingleContext";
 import Grid from "@mui/material/Grid";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { Toaster } from "react-hot-toast";

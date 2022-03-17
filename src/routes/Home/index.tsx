@@ -1,12 +1,14 @@
-import {Button, Grid, Typography} from "@mui/material";
-import React, {useContext, useEffect, useState} from "react";
-import Logo from "./logo.png";
+import { Grid, Typography } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
 import peopleAroundTable from "./peopleAroundTable.gif";
-import {CosmWasmClient, SigningCosmWasmClient} from "@cosmjs/cosmwasm-stargate";
+import {
+    CosmWasmClient,
+    SigningCosmWasmClient,
+} from "@cosmjs/cosmwasm-stargate";
 import toast from "react-hot-toast";
 import ListResponseItem from "../../components/ListResponseItem";
 import singleContext from "../../SingleContext";
-import {useWallet} from "../../contexts/wallet";
+import { useWallet } from "../../contexts/wallet";
 import { TypingEffect } from "react-typing-text-effect";
 
 const Home = () => {
@@ -57,7 +59,7 @@ const Home = () => {
             context.updateCount(Number(queryResponse.count));
             setRecentsFlag(true);
         } catch (error: any) {
-            toast.error(error.message, {style: {maxWidth: "none"}});
+            toast.error(error.message, { style: { maxWidth: "none" } });
         }
     };
 
@@ -102,27 +104,28 @@ const Home = () => {
                     default:
                         break;
                 }
-                toast.success("You have voted: " + option, {style: {maxWidth: "none"}});
+                toast.success("You have voted: " + option, {
+                    style: { maxWidth: "none" },
+                });
             }
         } catch (error: any) {
             let errMessage: String = error.message;
-            if(errMessage.includes("ended")){
-                toast.error("The voting period has ended for this VoteBox.", { style: { maxWidth: 'none' } });
+            if (errMessage.includes("ended")) {
+                toast.error("The voting period has ended for this VoteBox.", {
+                    style: { maxWidth: "none" },
+                });
+            } else if (errMessage.includes("already")) {
+                toast.error("You may only vote once per VoteBox.", {
+                    style: { maxWidth: "none" },
+                });
+            } else {
+                toast.error(error.message, { style: { maxWidth: "none" } });
             }
-            else if(errMessage.includes("already")){
-                toast.error("You may only vote once per VoteBox.", { style: { maxWidth: 'none' } });
-            }
-            else{
-                toast.error(error.message, { style: { maxWidth: 'none' } });
-            }
-            
         }
     };
 
-
     const queryList = async (boxId: number) => {
         try {
-
             mockClient = await CosmWasmClient.connect(
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -134,14 +137,14 @@ const Home = () => {
                 // @ts-ignore
                 context.contractAdress,
                 {
-                    get_list: {start_after: boxId - 1},
+                    get_list: { start_after: boxId - 1 },
                 }
             );
             for (let i = 0; i < queryResponse.voteList.length; i++) {
-                setDeadlineNum(queryResponse.voteList[i].deadline.at_time)
+                setDeadlineNum(queryResponse.voteList[i].deadline.at_time);
                 let deadlineDate: String = new Date(
                     parseInt(queryResponse.voteList[i].deadline.at_time) /
-                    1000000
+                        1000000
                 ).toString();
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -194,11 +197,14 @@ const Home = () => {
                     ...oldArray,
                     queryResponse.voteList[i].description,
                 ]);
-                console.log("Description in index is : " + queryResponse.voteList[i].description);
+                console.log(
+                    "Description in index is : " +
+                        queryResponse.voteList[i].description
+                );
             }
             // return queryResponse
         } catch (error: any) {
-            toast.error(error.message, {style: {maxWidth: "none"}});
+            toast.error(error.message, { style: { maxWidth: "none" } });
         }
     };
 
@@ -206,7 +212,7 @@ const Home = () => {
     return (
         <Grid
             container
-            sx={{width: "100%"}}
+            sx={{ width: "100%" }}
             justifySelf="center"
             justifyItems="center"
         >
@@ -243,11 +249,16 @@ const Home = () => {
                     >
                         Welcome to VoteBox!
                     </Typography>
-                    <TypingEffect texts={["You know what the world thinks.", "It is time to speak up your mind!"]} />
+                    <TypingEffect
+                        texts={[
+                            "You know what the world thinks.",
+                            "It is time to speak up your mind!",
+                        ]}
+                    />
                 </Grid>
                 <Typography
                     variant="h5"
-                    sx={{color: "whitesmoke", textAlign: "center"}}
+                    sx={{ color: "whitesmoke", textAlign: "center" }}
                     paddingTop={10}
                 >
                     With VoteBox, you can create your own VoteBoxes and people

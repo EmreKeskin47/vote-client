@@ -56,7 +56,6 @@ const Reset = () => {
             if (listEnd % 10 !== 0) {
                 setLoadMoreBtn(false);
             }
-            console.log(queryResponse);
         } catch (error: any) {
             toast.error(error.message, { style: { maxWidth: "none" } });
         }
@@ -118,19 +117,6 @@ const Reset = () => {
                 Load VoteBoxes
             </Button>
 
-            {/* {
-                 id={idArray[index]}
-                 topic={topicArray[index]}
-                 yesCount={Number(yesCountArray[index])}
-                 noCount={Number(noCountArray[index])}
-                 owner={ownerArray[index]}
-                 deadline={deadlineArray[index]}
-                 deadlineNum={deadlineNum}
-                 abstainCount={Number(abstainArray[index])}
-                 nwvCount={Number(nwvArray[index])}
-                 function={vote}
-                 description={descriptionArray[index]} */}
-
             {voteboxList.length > 0 &&
                 voteboxList.map((item: any, index: number) => {
                     return (
@@ -144,11 +130,8 @@ const Reset = () => {
                             nwvCount={item.no_with_vote_count}
                             description={item.description}
                             owner={item.owner}
-                            deadline={
-                                item.deadline.at_time
-                                    ? item.deadline.at_time
-                                    : item.deadline.at_height
-                            }
+                            deadline={item.deadline.at_height}
+                            deadlineNum={item.deadline.at_time}
                             reset={resetVote}
                             delete={deleteVoteBox}
                         />

@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from "react";
-import {Grid, List} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Grid, List } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import toast from "react-hot-toast";
 import Tooltip from "@mui/material/Tooltip";
 import VotingChart from "./VotingChart";
 import VoteDialog from "./VoteDialog";
-import Badge from '@mui/material/Badge';
-import Paper from '@mui/material/Paper';
+import Badge from "@mui/material/Badge";
+import Paper from "@mui/material/Paper";
 
 // @ts-ignore
 const ListResponseItem = (props) => {
@@ -17,7 +17,7 @@ const ListResponseItem = (props) => {
     const [selectedValue, setSelectedValue] = React.useState(options[3]);
     const [boxState, setBoxState] = React.useState("");
     const [isFlipped, setIsFlipped] = React.useState(false);
-    const [description, setDescription] = React.useState("");
+    const [description, setDescription] = React.useState(props.description);
 
     const voteOptionClicked = (option: string) => {
         let selected: number = 1;
@@ -38,7 +38,7 @@ const ListResponseItem = (props) => {
                 break;
         }
         props.function(props.id, selected);
-    }
+    };
 
     useEffect(() => {
         const createOwnerText = () => {
@@ -67,7 +67,7 @@ const ListResponseItem = (props) => {
 
     const ownerClicked = () => {
         navigator.clipboard.writeText(props.owner);
-        toast.success("Copied to clipboard", {style: {maxWidth: "none"}});
+        toast.success("Copied to clipboard", { style: { maxWidth: "none" } });
     };
 
     const handleClickOpen = () => {
@@ -86,7 +86,7 @@ const ListResponseItem = (props) => {
         } else {
             setIsFlipped(false);
         }
-    }
+    };
 
     // @ts-ignore
     return (
@@ -105,31 +105,44 @@ const ListResponseItem = (props) => {
                 direction="row"
                 justifyContent="space-between"
                 p={1}
-                sx={{backgroundColor: "#1F2123"}}
+                sx={{ backgroundColor: "#1F2123" }}
             >
                 <Typography
                     variant="h6"
                     gutterBottom
                     component="div"
-                    sx={{color: "whitesmoke", paddingTop: 1}}
+                    sx={{ color: "whitesmoke", paddingTop: 1 }}
                     align="center"
                 >
                     {props.topic}
                 </Typography>
-                <Badge color={boxState === "Active" ? "success" : "error"} badgeContent={boxState}>
+                <Badge
+                    color={boxState === "Active" ? "success" : "error"}
+                    badgeContent={boxState}
+                >
                     <Typography
                         variant="subtitle1"
                         gutterBottom
                         component="div"
-                        sx={{color: "whitesmoke", paddingTop: 1, float: "right"}}
+                        sx={{
+                            color: "whitesmoke",
+                            paddingTop: 1,
+                            float: "right",
+                        }}
                         align="center"
                     >
                         {props.id}
                     </Typography>
                 </Badge>
             </Grid>
-            {!isFlipped &&
-                <Grid container item direction="row" sx={{padding: 5}} onClick={flip}>
+            {!isFlipped && (
+                <Grid
+                    container
+                    item
+                    direction="row"
+                    sx={{ padding: 5 }}
+                    onClick={flip}
+                >
                     <Grid item lg={6} md={6} xs={6}>
                         <VotingChart
                             yesCount={props.yesCount}
@@ -142,16 +155,20 @@ const ListResponseItem = (props) => {
                         item
                         container
                         direction="column"
-                        lg={6} md={6} xs={6}
+                        lg={6}
+                        md={6}
+                        xs={6}
                         p={3}
                     >
                         <Typography
                             variant="subtitle1"
                             gutterBottom
                             component="div"
-                            sx={{color: "gray"}}
+                            sx={{ color: "gray" }}
                         >
-                            <span style={{fontWeight: "bolder"}}>Deadline:</span>{" "}
+                            <span style={{ fontWeight: "bolder" }}>
+                                Deadline:
+                            </span>{" "}
                             {props.deadline}
                         </Typography>
                         <Tooltip title="copy owner address">
@@ -159,19 +176,22 @@ const ListResponseItem = (props) => {
                                 {ownerText}
                             </Button>
                         </Tooltip>
-                        <br/>
+                        <br />
                     </Grid>
                 </Grid>
-            }
-            {isFlipped &&
+            )}
+            {isFlipped && (
                 <Grid height={334} onClick={flip} justifyContent="center">
-                    <Paper elevation={24} style={{height: 320, overflow: 'auto'}}>
+                    <Paper
+                        elevation={24}
+                        style={{ height: 320, overflow: "auto" }}
+                    >
                         <List>
                             <Typography
                                 variant="subtitle1"
                                 gutterBottom
                                 component="div"
-                                sx={{color: "gray"}}
+                                sx={{ color: "gray" }}
                                 p={2}
                             >
                                 {description}
@@ -179,7 +199,7 @@ const ListResponseItem = (props) => {
                         </List>
                     </Paper>
                 </Grid>
-            }
+            )}
             <Button color="success" onClick={handleClickOpen}>
                 VOTE FOR THIS VOTEBOX
             </Button>

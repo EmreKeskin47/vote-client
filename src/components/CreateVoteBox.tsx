@@ -40,9 +40,8 @@ const CreateVoteBox = (props: {
             setTimeout(resetFlags, 3000);
         } else if (!topic) {
             setFlag3(true);
-            setTimeout(resetFlags, 3000); 
-        }
-        else {
+            setTimeout(resetFlags, 3000);
+        } else {
             props.function(Number(time), topic, description);
         }
     };
@@ -119,21 +118,11 @@ const CreateVoteBox = (props: {
                                     if (newDate != null) {
                                         let timeInNanoSeconds: Number =
                                             newDate.getTime() * 1000000;
-                                        console.log("Time in ns:");
-                                        console.log(timeInNanoSeconds);
-
                                         setTime(timeInNanoSeconds);
                                     }
                                 }}
                             />
                         </LocalizationProvider>
-                        {/* <TextField
-                        id="deadline-time"
-                        label="Deadline Time"
-                        variant="filled"
-                        onChange={handleChange}
-                        sx={{backgroundColor: "white"}}
-                         /> */}
                     </Typography>
 
                     <TextField
