@@ -49,6 +49,7 @@ const Home = () => {
             startCount -= 10;
             if (startCount < 1) startCount = 1;
             queryList(startCount);
+            console.log("Query List Start Count " + startCount);
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             context.updateCount(Number(queryResponse.count));
@@ -131,7 +132,7 @@ const Home = () => {
                 // @ts-ignore
                 context.contractAdress,
                 {
-                    get_list: {start_after: boxId},
+                    get_list: {start_after: boxId - 1},
                 }
             );
             for (let i = 0; i < queryResponse.voteList.length; i++) {
