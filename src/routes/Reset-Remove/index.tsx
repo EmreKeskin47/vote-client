@@ -1,7 +1,7 @@
+import React, { useContext, useState } from "react";
 import { makeCosmoshubPath } from "@cosmjs/amino";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import React, { useState } from "react";
 import { useWallet } from "../../contexts/wallet";
 import { Button, Grid } from "@mui/material";
 import toast from "react-hot-toast";
@@ -9,6 +9,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Votebox } from "../../models/Votebox";
 import ListResponseItem from "../../components/ListResponseItem";
+import singleContext from "../../SingleContext";
 
 ////////////////////////Wallet//////////////////////////////////
 const walletOptions = {
@@ -27,9 +28,7 @@ export const getSigner = async (mnemonic: string) => {
 
 const Reset = () => {
     const wallet = useWallet();
-    const CONTRACT_ADDRESS =
-        "juno1asxh2ydzpujch7l7hguzejfjlfadxjydnpqcf4vdve90x2frqh3s8f9hmx";
-
+    const context = useContext(singleContext);
     let client: SigningCosmWasmClient;
 
     const [listEnd, setListEnd] = useState(0);
@@ -42,7 +41,8 @@ const Reset = () => {
             client = wallet.getClient();
 
             const queryResponse = await client.queryContractSmart(
-                CONTRACT_ADDRESS,
+                // @ts-ignore
+                context.contractAdress,
                 {
                     get_list: { start_after: listEnd },
                 }
@@ -56,6 +56,7 @@ const Reset = () => {
             if (listEnd % 10 !== 0) {
                 setLoadMoreBtn(false);
             }
+            console.log(queryResponse);
         } catch (error: any) {
             toast.error(error.message, { style: { maxWidth: "none" } });
         }
@@ -66,7 +67,8 @@ const Reset = () => {
             client = wallet.getClient();
             const res = await client.execute(
                 wallet.address,
-                CONTRACT_ADDRESS,
+                // @ts-ignore
+                context.contractAdress,
                 {
                     vote_reset: {
                         id: id,
@@ -87,7 +89,8 @@ const Reset = () => {
             client = wallet.getClient();
             const res = await client.execute(
                 wallet.address,
-                CONTRACT_ADDRESS,
+                // @ts-ignore
+                context.contractAdress,
                 {
                     vote_remove: {
                         id: id,
@@ -114,6 +117,20 @@ const Reset = () => {
                 )}
                 Load VoteBoxes
             </Button>
+
+            {/* {
+                 id={idArray[index]}
+                 topic={topicArray[index]}
+                 yesCount={Number(yesCountArray[index])}
+                 noCount={Number(noCountArray[index])}
+                 owner={ownerArray[index]}
+                 deadline={deadlineArray[index]}
+                 deadlineNum={deadlineNum}
+                 abstainCount={Number(abstainArray[index])}
+                 nwvCount={Number(nwvArray[index])}
+                 function={vote}
+                 description={descriptionArray[index]} */}
+
             {voteboxList.length > 0 &&
                 voteboxList.map((item: any, index: number) => {
                     return (
@@ -123,6 +140,9 @@ const Reset = () => {
                             topic={item.topic}
                             yesCount={item.yesCount}
                             noCount={item.noCount}
+                            abstainCount={item.abstain_count}
+                            nwvCount={item.no_with_vote_count}
+                            description={item.description}
                             owner={item.owner}
                             deadline={
                                 item.deadline.at_time
@@ -135,7 +155,9 @@ const Reset = () => {
                     );
                 })}
             {voteboxList.length > 0 && loadMoreBtn && (
-                <Button color="secondary" onClick={queryList}>Load More</Button>
+                <Button color="secondary" onClick={queryList}>
+                    Load More
+                </Button>
             )}
         </Grid>
     );

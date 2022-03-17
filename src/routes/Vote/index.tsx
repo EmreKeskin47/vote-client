@@ -36,7 +36,11 @@ const Vote = () => {
     const wallet = useWallet();
     let client: SigningCosmWasmClient;
 
-    const createVB = async (time: number, topic: string, description: string) => {
+    const createVB = async (
+        time: number,
+        topic: string,
+        description: string
+    ) => {
         try {
             setFlag(true);
             console.log("createVB() -> time: ");
@@ -47,7 +51,9 @@ const Vote = () => {
             console.log("account: ");
             console.log(account);
 
-            let currentTimeInNanoSeconds = ((new Date().getTime())*1000000).toString();
+            let currentTimeInNanoSeconds = (
+                new Date().getTime() * 1000000
+            ).toString();
             // const executeResponse = await client.execute(
             //     wallet.address,
             //     "juno1x2fa4h4wpvh7mu3a99txsyshgprrwx0f73jngseuydcfhw4hanwsuetldp",
@@ -67,11 +73,11 @@ const Vote = () => {
                 context.contractAdress,
                 {
                     create_vote_box: {
-                        create_date:{currentTimeInNanoSeconds},
                         deadline: { at_time: time.toString() },
-                        description:{description},
                         owner: wallet.address,
                         topic: topic,
+                        description: description,
+                        create_date: currentTimeInNanoSeconds,
                     },
                 },
                 "auto"
@@ -82,7 +88,7 @@ const Vote = () => {
             } else {
                 setCreateVoteBoxResponse(
                     "VoteBox ID: " +
-                        executeResponse.logs[0].events[2].attributes[2].value +
+                        executeResponse.logs[0].events[2].attributes[5].value +
                         " | Your TxHash : " +
                         executeResponse.transactionHash
                 );
@@ -126,14 +132,16 @@ const Vote = () => {
             setFlag2(false);
         } catch (error: any) {
             let errMessage: String = error.message;
-            if(errMessage.includes("ended")){
-                toast.error("The voting period has ended for this VoteBox.", { style: { maxWidth: 'none' } });
-            }
-            else if(errMessage.includes("already")){
-                toast.error("You may only vote once per VoteBox.", { style: { maxWidth: 'none' } });
-            }
-            else{
-                toast.error(error.message, { style: { maxWidth: 'none' } });
+            if (errMessage.includes("ended")) {
+                toast.error("The voting period has ended for this VoteBox.", {
+                    style: { maxWidth: "none" },
+                });
+            } else if (errMessage.includes("already")) {
+                toast.error("You may only vote once per VoteBox.", {
+                    style: { maxWidth: "none" },
+                });
+            } else {
+                toast.error(error.message, { style: { maxWidth: "none" } });
             }
             // toast.error(
             //     "Something went wrong.\nYou have tried to vote for an expired contract.",
@@ -184,10 +192,11 @@ const Vote = () => {
             setQueryResponseFlag(true);
             setFlag3(false);
         } catch (error: any) {
-            if(error.message.includes("Vote not found")){
-                toast.error(("No VoteBox found with the specified ID."), { style: { maxWidth: "none" } });
-            }
-            else{
+            if (error.message.includes("Vote not found")) {
+                toast.error("No VoteBox found with the specified ID.", {
+                    style: { maxWidth: "none" },
+                });
+            } else {
                 toast.error(error.message, { style: { maxWidth: "none" } });
             }
         }
@@ -408,7 +417,9 @@ const Vote = () => {
                                     yesCount={yesCountArray[index]}
                                     noCount={noCountArray[index]}
                                     abstainCount={abstainCountArray[index]}
-                                    noWithVetoCount={noWithVetoCountArray[index]}
+                                    noWithVetoCount={
+                                        noWithVetoCountArray[index]
+                                    }
                                     owner={ownerArray[index]}
                                     deadline={deadlineArray[index]}
                                 />
