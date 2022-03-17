@@ -12,7 +12,7 @@ import Paper from '@mui/material/Paper';
 // @ts-ignore
 const ListResponseItem = (props) => {
     const options = ["yes", "no", "no with veto", "abstain"];
-    const [ownerText, setOwnerText] = useState("No owner has found.");
+    const [ownerText, setOwnerText] = useState("No owner was found.");
     const [open, setOpen] = React.useState(false);
     const [selectedValue, setSelectedValue] = React.useState(options[3]);
     const [boxState, setBoxState] = React.useState("");
@@ -58,7 +58,7 @@ const ListResponseItem = (props) => {
             setBoxState("Expired");
         }
         if (props.description === undefined) {
-            setDescription("No description has provided.");
+            setDescription("No description was provided.");
         }
         console.log("Type of the description is " + typeof description);
         console.log("Description is " + description);
