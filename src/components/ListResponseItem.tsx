@@ -18,6 +18,7 @@ const ListResponseItem = (props) => {
     const [boxState, setBoxState] = React.useState("");
     const [isFlipped, setIsFlipped] = React.useState(false);
     const [description, setDescription] = React.useState(props.description);
+    console.log(props);
 
     const voteOptionClicked = (option: string) => {
         let selected: number = 1;

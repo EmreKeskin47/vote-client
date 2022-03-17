@@ -10,12 +10,12 @@ import ListResponseItem from "../../components/ListResponseItem";
 import singleContext from "../../SingleContext";
 import { useWallet } from "../../contexts/wallet";
 import { TypingEffect } from "react-typing-text-effect";
-import {isMobile} from 'react-device-detect';
+import { isMobile } from "react-device-detect";
 import { Votebox } from "../../models/Votebox";
 
 const Home = () => {
     const [recentsFlag, setRecentsFlag] = useState(false);
-    
+
     const context = useContext(singleContext);
     const wallet = useWallet();
     let client: SigningCosmWasmClient;
@@ -116,9 +116,7 @@ const Home = () => {
         }
     };
 
-    
     const [voteboxList, setVoteboxList] = useState<Votebox[]>([]);
-    
 
     const queryList = async (boxId: number) => {
         try {
@@ -136,6 +134,7 @@ const Home = () => {
                     get_list: { start_after: boxId - 1 },
                 }
             );
+            console.log(queryResponse);
             if (queryResponse.voteList) {
                 queryResponse.voteList.map((votebox: Votebox) =>
                     setVoteboxList((prevState) => [...prevState, votebox])
@@ -187,7 +186,7 @@ const Home = () => {
                     >
                         Welcome to VoteBox!
                     </Typography>
-                    {isMobile &&
+                    {isMobile && (
                         <TypingEffect
                             texts={[
                                 "You know what",
@@ -196,15 +195,15 @@ const Home = () => {
                                 "speak up your mind!",
                             ]}
                         />
-                    }
-                    {!isMobile &&
+                    )}
+                    {!isMobile && (
                         <TypingEffect
                             texts={[
                                 "You know what the world thinks.",
                                 "It is time to speak up your mind!",
                             ]}
                         />
-                    }
+                    )}
                 </Grid>
                 <Typography
                     variant="h5"
@@ -256,8 +255,8 @@ const Home = () => {
                                     key={index}
                                     id={item.id}
                                     topic={item.topic}
-                                    yesCount={item.yesCount}
-                                    noCount={item.noCount}
+                                    yesCount={item.yes_count}
+                                    noCount={item.no_count}
                                     owner={item.owner}
                                     deadline={item.deadline.at_height}
                                     deadlineNum={item.deadline.at_time}
