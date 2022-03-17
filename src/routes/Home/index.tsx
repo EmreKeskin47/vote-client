@@ -1,6 +1,7 @@
 import {Button, Grid, Typography} from "@mui/material";
 import React, {useContext, useEffect, useState} from "react";
 import Logo from "./logo.png";
+import peopleAroundTable from "./peopleAroundTable.gif";
 import {CosmWasmClient, SigningCosmWasmClient} from "@cosmjs/cosmwasm-stargate";
 import toast from "react-hot-toast";
 import ListResponseItem from "../../components/ListResponseItem";
@@ -217,7 +218,7 @@ const Home = () => {
                 }}
             >
                 <img
-                    src={Logo}
+                    src={peopleAroundTable}
                     alt="logo"
                     width={400}
                     height={400}
@@ -229,23 +230,35 @@ const Home = () => {
             </Grid>
 
             <Grid>
-                <Typography
-                    variant="h3"
-                    sx={{
-                        color: "whitesmoke",
-                        paddingTop: "30px",
-                        textAlign: "center",
-                    }}
-                >
-                    Welcome to VoteBox!
-                </Typography>
-
+                <Grid direction="column" justifyContent="center">
+                    <Typography
+                        variant="h3"
+                        sx={{
+                            color: "whitesmoke",
+                            paddingTop: "30px",
+                            textAlign: "center",
+                        }}
+                    >
+                        Welcome to VoteBox!
+                    </Typography>
+                    <Typography
+                        variant="subtitle1"
+                        sx={{
+                            color: "whitesmoke",
+                            paddingTop: "10px",
+                            textAlign: "center",
+                            fontStyle: "italic",
+                        }}
+                    >
+                        You know what the world thinks
+                    </Typography>
+                </Grid>
                 <Typography
                     variant="h5"
                     sx={{color: "whitesmoke", textAlign: "center"}}
-                    marginTop={5}
+                    marginTop={8}
                 >
-                    With VoteBox, you can create your own vote boxes and people
+                    With VoteBox, you can create your own VoteBoxes and people
                     from all around the world can participate in the voting
                     process with total anonymity.
                 </Typography>
@@ -258,7 +271,7 @@ const Home = () => {
                     }}
                     marginTop={5}
                 >
-                    Let&apos;s start with your first VoteBox!
+                    Time to speak up your mind!
                 </Typography>
             </Grid>
             <Grid direction="column" justifyContent="center">
