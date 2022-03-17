@@ -10,6 +10,7 @@ import ListResponseItem from "../../components/ListResponseItem";
 import singleContext from "../../SingleContext";
 import { useWallet } from "../../contexts/wallet";
 import { TypingEffect } from "react-typing-text-effect";
+import {isMobile} from 'react-device-detect';
 
 const Home = () => {
     const [recentsFlag, setRecentsFlag] = useState(false);
@@ -249,12 +250,24 @@ const Home = () => {
                     >
                         Welcome to VoteBox!
                     </Typography>
-                    <TypingEffect
-                        texts={[
-                            "You know what the world thinks.",
-                            "It is time to speak up your mind!",
-                        ]}
-                    />
+                    {isMobile &&
+                        <TypingEffect
+                            texts={[
+                                "You know what",
+                                "the world thinks.",
+                                "Now it is time to",
+                                "speak up your mind!",
+                            ]}
+                        />
+                    }
+                    {!isMobile &&
+                        <TypingEffect
+                            texts={[
+                                "You know what the world thinks.",
+                                "It is time to speak up your mind!",
+                            ]}
+                        />
+                    }
                 </Grid>
                 <Typography
                     variant="h5"
