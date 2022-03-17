@@ -79,7 +79,7 @@ export function SidebarLayout(): JSX.Element {
                         onClick={() => setSelectedPage("home")}
                         style={{
                             backgroundColor:
-                                selectedPage === "home" ? "#9c27b0" : "#1F2123",
+                                selectedPage === "home" ? "#7C4FA6" : "#1F2123",
                         }}
                     >
                         <ListItemIcon>
@@ -97,7 +97,7 @@ export function SidebarLayout(): JSX.Element {
                         onClick={() => setSelectedPage("vote")}
                         style={{
                             backgroundColor:
-                                selectedPage === "vote" ? "#9c27b0" : "#1F2123",
+                                selectedPage === "vote" ? "#7C4FA6" : "#1F2123",
                         }}
                     >
                         <ListItemIcon>
