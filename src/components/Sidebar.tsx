@@ -23,6 +23,7 @@ import { Toaster } from "react-hot-toast";
 import Home from "../routes/Home";
 import Vote from "../routes/Vote";
 import Reset from "../routes/Reset-Remove";
+import VoteboxList from "../routes/VoteboxList";
 
 export const drawerWidth = 240;
 
@@ -31,7 +32,7 @@ export function SidebarLayout(): JSX.Element {
     const keplr = useKeplr();
 
     const [mobileOpen, setMobileOpen] = React.useState(false);
-    const [selectedPage, setSelectedPage] = React.useState("home");
+    const [selectedPage, setSelectedPage] = React.useState("");
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -124,6 +125,26 @@ export function SidebarLayout(): JSX.Element {
                         </ListItemIcon>
                         <ListItemText
                             primary={"Reset/Remove "}
+                            sx={{ color: "white" }}
+                        />
+                    </ListItem>
+                </Link>
+                <Link to="/votebox-list">
+                    <ListItem
+                        button
+                        onClick={() => setSelectedPage("votebox-list")}
+                        style={{
+                            backgroundColor:
+                                selectedPage === "votebox-list"
+                                    ? "#9c27b0"
+                                    : "#1F2123",
+                        }}
+                    >
+                        <ListItemIcon>
+                            <HowToVoteIcon sx={{ color: "white" }} />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary={"Votebox List "}
                             sx={{ color: "white" }}
                         />
                     </ListItem>
@@ -238,6 +259,11 @@ export function SidebarLayout(): JSX.Element {
                                 exact
                                 path="/reset-remove"
                                 component={Reset}
+                            />
+                            <Route
+                                exact
+                                path="/votebox-list"
+                                component={VoteboxList}
                             />
                         </Switch>
                     </Box>
