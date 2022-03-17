@@ -28,11 +28,11 @@ import Reset from "../routes/Reset-Remove";
 export const drawerWidth = 240;
 
 export function SidebarLayout(): JSX.Element {
-    const context = useContext(singleContext);
     const wallet = useWallet();
     const keplr = useKeplr();
 
     const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [selectedPage, setSelectedPage] = React.useState("home");
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -74,27 +74,59 @@ export function SidebarLayout(): JSX.Element {
                 </ListItem>
                 <Grid sx={{ padding: 1 }}></Grid>
                 <Link to="/">
-                    <ListItem>
+                    <ListItem
+                        button
+                        onClick={() => setSelectedPage("home")}
+                        style={{
+                            backgroundColor:
+                                selectedPage === "home" ? "#9c27b0" : "#1F2123",
+                        }}
+                    >
                         <ListItemIcon>
                             <HomeIcon sx={{ color: "white" }} />
                         </ListItemIcon>
-                        <ListItemText primary={"Home"} />
+                        <ListItemText
+                            primary={"Home"}
+                            sx={{ color: "white" }}
+                        />
                     </ListItem>
                 </Link>
                 <Link to="/vote">
-                    <ListItem>
+                    <ListItem
+                        button
+                        onClick={() => setSelectedPage("vote")}
+                        style={{
+                            backgroundColor:
+                                selectedPage === "vote" ? "#9c27b0" : "#1F2123",
+                        }}
+                    >
                         <ListItemIcon>
                             <HowToVoteIcon sx={{ color: "white" }} />
                         </ListItemIcon>
-                        <ListItemText primary={"Vote"} />
+                        <ListItemText
+                            primary={"Vote"}
+                            sx={{ color: "white" }}
+                        />
                     </ListItem>
                 </Link>
                 <Link to="/reset-remove">
-                    <ListItem>
+                    <ListItem
+                        button
+                        onClick={() => setSelectedPage("reset-remove")}
+                        style={{
+                            backgroundColor:
+                                selectedPage === "reset-remove"
+                                    ? "#9c27b0"
+                                    : "#1F2123",
+                        }}
+                    >
                         <ListItemIcon>
                             <HowToVoteIcon sx={{ color: "white" }} />
                         </ListItemIcon>
-                        <ListItemText primary={"Reset/Remove "} />
+                        <ListItemText
+                            primary={"Reset/Remove "}
+                            sx={{ color: "white" }}
+                        />
                     </ListItem>
                 </Link>
             </List>
@@ -106,15 +138,9 @@ export function SidebarLayout(): JSX.Element {
             <Box
                 sx={{
                     display: "flex",
-                    backgroundColor: "#1F2123 !important",
                 }}
             >
-                <Box
-                    sx={{
-                        display: "flex",
-                        backgroundColor: "#1F2123 !important",
-                    }}
-                >
+                <Box>
                     <CssBaseline />
                     <AppBar
                         position="fixed"
