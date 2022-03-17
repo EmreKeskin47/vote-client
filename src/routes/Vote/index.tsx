@@ -22,15 +22,14 @@ const Vote = () => {
 
     const getYesRatio = (item: Votebox) => {
         let yes = Number(item.yes_count);
-        let total =
-            Number(item.yes_count) +
-            Number(item.no_count) +
-            Number(item.no_with_veto_count) +
-            Number(item.abstain_count);
-        if (!total || total === 0) {
+        let no = Number(item.no_count) + Number(item.no_with_veto_count);
+
+        if (!no || no === 0) {
             return "No Vote ";
+        } else if (yes > no) {
+            return "Passed";
         } else {
-            return "Yes Ratio: " + (yes / total) * 100 + "%";
+            return "Rejected";
         }
     };
 
