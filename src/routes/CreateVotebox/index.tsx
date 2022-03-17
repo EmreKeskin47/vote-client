@@ -55,18 +55,7 @@ const CreateVotebox = () => {
             let currentTimeInNanoSeconds = (
                 new Date().getTime() * 1000000
             ).toString();
-            // const executeResponse = await client.execute(
-            //     wallet.address,
-            //     "juno1x2fa4h4wpvh7mu3a99txsyshgprrwx0f73jngseuydcfhw4hanwsuetldp",
-            //     {
-            //         create_vote_box: {
-            //             deadline: { at_time: time.toString() },
-            //             owner: wallet.address,
-            //             topic: topic,
-            //         },
-            //     },
-            //     "auto"
-            // );
+            
             const executeResponse = await client.execute(
                 wallet.address,
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -280,8 +269,10 @@ const CreateVotebox = () => {
                 "auto"
             );
             if (res !== undefined) {
+                toast.success("Reset successful", {
+                    style: { maxWidth: "none" },
+                });
                 setResetVoteBoxResponse(res.transactionHash);
-                alert("Reset Successfully");
             }
         } catch (err: any) {
             toast.error(err.message, { style: { maxWidth: "none" } });
@@ -302,10 +293,12 @@ const CreateVotebox = () => {
                 },
                 "auto"
             );
-            console.log("delete response", res);
+            
             if (res !== undefined) {
+                toast.success("VoteBox deleted.", {
+                    style: { maxWidth: "none" },
+                });
                 setDeleteVoteBoxResponse(res.transactionHash);
-                alert("Deleted successfully ");
             }
         } catch (err: any) {
             toast.error(err.message, { style: { maxWidth: "none" } });
