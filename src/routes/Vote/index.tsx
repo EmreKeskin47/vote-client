@@ -15,6 +15,7 @@ import ListResponseItem from "../../components/ListResponseItem";
 import toast from "react-hot-toast";
 import CustomAlert from "../../components/CustomAlert";
 import singleContext from "../../SingleContext";
+import { Votebox } from "../../models/Votebox";
 
 ////////////////////////Wallet//////////////////////////////////
 const walletOptions = {
@@ -202,29 +203,14 @@ const Vote = () => {
         }
     };
 
-    const [idArray, setIdArray] = useState([]);
-    const [yesCountArray, setYesCountArray] = useState([]);
-    const [noCountArray, setNoCountArray] = useState([]);
-    const [abstainCountArray, setAbstainCountArray] = useState([]);
-    const [noWithVetoCountArray, setNoWithVetoCountArray] = useState([]);
-    const [ownerArray, setOwnerArray] = useState([]);
-    const [deadlineArray, setDeadlineArray] = useState([]);
-    const [topicArray, setTopicArray] = useState([]);
-
+    const [voteboxList, setVoteboxList] = useState<Votebox[]>([]);
+    
     let mockClient: CosmWasmClient;
     //Query the VoteBoxes owned by the wallet address
     const queryMyList = async () => {
         try {
-            setIdArray([]);
-            setYesCountArray([]);
-            setNoCountArray([]);
-            setAbstainCountArray([]);
-            setNoWithVetoCountArray([]);
-            setOwnerArray([]);
-            setDeadlineArray([]);
-            setTopicArray([]);
-            // setQueryMyListFlag(true);
-            // client = wallet.getClient()
+            setVoteboxList([]);
+           
             mockClient = await CosmWasmClient.connect(
                 "https://rpc.uni.juno.deuslabs.fi"
             );
@@ -238,60 +224,11 @@ const Vote = () => {
                     get_voteboxes_by_owner: { owner: wallet.address },
                 }
             );
-            for (let i = 0; i < queryResponse.voteList.length; i++) {
-                let deadlineDate: String = new Date(
-                    parseInt(queryResponse.voteList[i].deadline.at_time) /
-                        1000000
-                ).toString();
-
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setIdArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].id,
-                ]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setYesCountArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].yes_count,
-                ]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setNoCountArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].no_count,
-                ]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setAbstainCountArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].abstain_count,
-                ]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setNoWithVetoCountArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].no_with_veto_count,
-                ]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setOwnerArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].owner,
-                ]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setDeadlineArray((oldArray) => [...oldArray, deadlineDate]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setTopicArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].topic,
-                ]);
-                // setQueryMyListFlag(false)
+            if (queryResponse.voteList) {
+                queryResponse.voteList.map((votebox: Votebox) =>
+                    setVoteboxList((prevState) => [...prevState, votebox])
+                );
             }
-            // return queryResponse
         } catch (error: any) {
             toast.error(error.message, { style: { maxWidth: "none" } });
         }
@@ -301,12 +238,13 @@ const Vote = () => {
     const [flag, setFlag] = useState(false);
     const [flag2, setFlag2] = useState(false);
     const [flag3, setFlag3] = useState(true);
-    const [queryMyListFlag, setQueryMyListFlag] = useState(true);
     const [queryResponseFlag, setQueryResponseFlag] = useState(false);
     const [response, setResponse] = useState("");
     const [createVoteBoxResponseFlag, setCreateVoteBoxResponseFlag] =
         useState(false);
     const [createVoteBoxResponse, setCreateVoteBoxResponse] = useState("");
+    const [resetVoteBoxResponse, setResetVoteBoxResponse] = useState("");
+    const [deleteVoteBoxResponse, setDeleteVoteBoxResponse] = useState("");
     const [voteResponse, setVoteResponse] = useState("");
     const [voteResponseFlag, setVoteResponseFlag] = useState(false);
 
@@ -317,6 +255,9 @@ const Vote = () => {
         wallet.address,
         createVoteBoxResponse,
         voteResponse,
+        resetVoteBoxResponse,
+        deleteVoteBoxResponse,
+
     ]);
 
     const resetFlags = (type: string) => {
@@ -328,9 +269,52 @@ const Vote = () => {
             setQueryResponseFlag(false);
         }
     };
-    // const resetQueryMyListFlag= () =>{
-    //     setQueryMyListFlag(true);
-    // }
+    const resetVote = async (id: string) => {
+        try {
+            client = wallet.getClient();
+            const res = await client.execute(
+                wallet.address,
+                // @ts-ignore
+                context.contractAdress,
+                {
+                    vote_reset: {
+                        id: id,
+                    },
+                },
+                "auto"
+            );
+            if (res !== undefined) {
+                setResetVoteBoxResponse(res.transactionHash);
+                alert("Reset Successfully");
+            }
+        } catch (err: any) {
+            toast.error(err.message, { style: { maxWidth: "none" } });
+        }
+    };
+
+    const deleteVoteBox = async (id: string) => {
+        try {
+            client = wallet.getClient();
+            const res = await client.execute(
+                wallet.address,
+                // @ts-ignore
+                context.contractAdress,
+                {
+                    vote_remove: {
+                        id: id,
+                    },
+                },
+                "auto"
+            );
+            console.log("delete response", res);
+            if (res !== undefined) {
+                setDeleteVoteBoxResponse(res.transactionHash);
+                alert("Deleted successfully ");
+            }
+        } catch (err: any) {
+            toast.error(err.message, { style: { maxWidth: "none" } });
+        }
+    };
 
     return (
         <Grid container>
@@ -405,23 +389,25 @@ const Vote = () => {
             )}
             <br />
             {/*@ts-ignore*/}
-            {wallet.initialized && queryMyListFlag && (
+            {wallet.initialized && voteboxList.length > 0 && (
                 <Grid container direction="row" spacing={2} p={3}>
-                    {idArray.map((item: any, index: number) => {
-                        return (
+                    {voteboxList.map((item: any, index: number) => {
+                    return (
                             <Grid key={index} item xs={12} md={6} lg={6}>
                                 <ListResponseItem
-                                    key={index}
-                                    id={idArray[index]}
-                                    topic={topicArray[index]}
-                                    yesCount={yesCountArray[index]}
-                                    noCount={noCountArray[index]}
-                                    abstainCount={abstainCountArray[index]}
-                                    noWithVetoCount={
-                                        noWithVetoCountArray[index]
-                                    }
-                                    owner={ownerArray[index]}
-                                    deadline={deadlineArray[index]}
+                                   key={index}
+                                   id={item.id}
+                                   topic={item.topic}
+                                   yesCount={item.yesCount}
+                                   noCount={item.noCount}
+                                   abstainCount={item.abstain_count}
+                                   nwvCount={item.no_with_vote_count}
+                                   description={item.description}
+                                   owner={item.owner}
+                                   deadline={item.deadline.at_height}
+                                   deadlineNum={item.deadline.at_time}
+                                   reset={resetVote}
+                                   delete={deleteVoteBox}
                                 />
                             </Grid>
                         );
