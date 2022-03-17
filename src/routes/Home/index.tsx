@@ -11,6 +11,7 @@ import singleContext from "../../SingleContext";
 import { useWallet } from "../../contexts/wallet";
 import { TypingEffect } from "react-typing-text-effect";
 import {isMobile} from 'react-device-detect';
+import { Votebox } from "../../models/Votebox";
 
 const Home = () => {
     const [recentsFlag, setRecentsFlag] = useState(false);
@@ -125,6 +126,10 @@ const Home = () => {
         }
     };
 
+    const [listEnd, setListEnd] = useState(0);
+    const [voteboxList, setVoteboxList] = useState<Votebox[]>([]);
+    const [loadMoreBtn, setLoadMoreBtn] = useState(false);
+
     const queryList = async (boxId: number) => {
         try {
             mockClient = await CosmWasmClient.connect(
@@ -141,69 +146,11 @@ const Home = () => {
                     get_list: { start_after: boxId - 1 },
                 }
             );
-            for (let i = 0; i < queryResponse.voteList.length; i++) {
-                setDeadlineNum(queryResponse.voteList[i].deadline.at_time);
-                let deadlineDate: String = new Date(
-                    parseInt(queryResponse.voteList[i].deadline.at_time) /
-                        1000000
-                ).toString();
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setIdArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].id,
-                ]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setYesCountArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].yes_count,
-                ]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setNoCountArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].no_count,
-                ]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setOwnerArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].owner,
-                ]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setDeadlineArray((oldArray) => [...oldArray, deadlineDate]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setTopicArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].topic,
-                ]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setAbstainArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].abstain_count,
-                ]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setNwvArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].vote_with_veto_count,
-                ]);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setDescriptionArray((oldArray) => [
-                    ...oldArray,
-                    queryResponse.voteList[i].description,
-                ]);
-                console.log(
-                    "Description in index is : " +
-                        queryResponse.voteList[i].description
+            if (queryResponse.voteList) {
+                queryResponse.voteList.map((votebox: Votebox) =>
+                    setVoteboxList((prevState) => [...prevState, votebox])
                 );
             }
-            // return queryResponse
         } catch (error: any) {
             toast.error(error.message, { style: { maxWidth: "none" } });
         }
@@ -310,24 +257,24 @@ const Home = () => {
                 </Typography>
             </Grid>
 
-            {recentsFlag && (
+            {recentsFlag && voteboxList.length > 0 && (
                 <Grid container direction="row" spacing={2} p={3}>
-                    {idArray.map((item: any, index: number) => {
+                    {voteboxList.map((item: any, index: number) => {
                         return (
                             <Grid key={index} item xs={12} md={6} lg={6}>
                                 <ListResponseItem
                                     key={index}
-                                    id={idArray[index]}
-                                    topic={topicArray[index]}
-                                    yesCount={Number(yesCountArray[index])}
-                                    noCount={Number(noCountArray[index])}
-                                    owner={ownerArray[index]}
-                                    deadline={deadlineArray[index]}
-                                    deadlineNum={deadlineNum}
-                                    abstainCount={Number(abstainArray[index])}
-                                    nwvCount={Number(nwvArray[index])}
+                                    id={item.id}
+                                    topic={item.topic}
+                                    yesCount={item.yesCount}
+                                    noCount={item.noCount}
+                                    owner={item.owner}
+                                    deadline={item.deadline.at_height}
+                                    deadlineNum={item.deadline.at_time}
+                                    abstainCount={item.abstain_count}
+                                    nwvCount={item.no_with_vote_count}
                                     function={vote}
-                                    description={descriptionArray[index]}
+                                    description={item.description}
                                 />
                             </Grid>
                         );

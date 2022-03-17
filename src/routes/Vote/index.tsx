@@ -377,12 +377,12 @@ const Vote = () => {
                     function={() => resetFlags("query")}
                 />
             )}
-            {wallet.initialized && (
+            {wallet.initialized && voteboxList.length > 0 &&(
                 <Typography
-                    variant="overline"
+                    variant="h4"
                     gutterBottom
                     component="div"
-                    sx={{ color: "gray" }}
+                    sx={{ color: "whitesmoke" }}
                 >
                     Your VoteBoxes:
                 </Typography>

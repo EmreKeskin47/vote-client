@@ -87,7 +87,7 @@ const ListResponseItem = (props) => {
             setIsFlipped(false);
         }
     };
-
+    let deadlineDate = new Date(parseInt(props.deadlineNum) / 1000000).toString();
     // @ts-ignore
     return (
         <Grid
@@ -169,7 +169,7 @@ const ListResponseItem = (props) => {
                             <span style={{ fontWeight: "bolder" }}>
                                 Deadline:
                             </span>{" "}
-                            {props.deadline}
+                            {deadlineDate}
                         </Typography>
                         <Tooltip title="copy owner address">
                             <Button onClick={ownerClicked} color="success">
