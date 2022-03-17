@@ -130,10 +130,14 @@ const CreateVotebox = () => {
                 toast.error("You may only vote once per VoteBox.", {
                     style: { maxWidth: "none" },
                 });
+            } else if(error.message.includes("Vote not found")) {
+                toast.error("No VoteBox found with the specified ID.", {
+                    style: { maxWidth: "none" },
+                });
             } else {
                 toast.error(error.message, { style: { maxWidth: "none" } });
             }
-
+            
             setFlag2(false);
         }
     };
