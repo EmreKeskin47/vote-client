@@ -199,7 +199,7 @@ const CreateVotebox = () => {
     //Query the VoteBoxes owned by the wallet address
     const queryMyList = async () => {
         try {
-            setVoteboxList([]);
+            
 
             mockClient = await CosmWasmClient.connect(
                 "https://rpc.uni.juno.deuslabs.fi"
@@ -215,6 +215,7 @@ const CreateVotebox = () => {
                 }
             );
             if (queryResponse.voteList) {
+                setVoteboxList([]);
                 queryResponse.voteList.map((votebox: Votebox) =>
                     setVoteboxList((prevState) => [...prevState, votebox])
                 );
