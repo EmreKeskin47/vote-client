@@ -57,23 +57,23 @@ const VotingChart = ({yesCount, noCount, nwvCount, abstainCount}) => {
         <Grid item container direction="row" justifyContent="flex-start" sx={{position: "absolute"}}>
             <Tooltip title={"yes: " + item.yes + "%"}>
                 {/*@ts-ignore*/}
-                <Grid item sx={{height: "20px", width: item.yes / 2 + "%", backgroundColor: context.colors.yes, float: "left"}}/>
+                <Grid item sx={{height: "30px", width: item.yes / 2 + "%", backgroundColor: context.colors.yes, float: "left"}}/>
             </Tooltip>
             <Tooltip title={"no: " + item.no + "%"}>
                 {/*@ts-ignore*/}
-                <Grid item sx={{height: "20px", width: item.no / 2 + "%", backgroundColor: context.colors.no, float: "left"}}/>
+                <Grid item sx={{height: "30px", width: item.no / 2 + "%", backgroundColor: context.colors.no, float: "left"}}/>
             </Tooltip>
             <Tooltip title={"no with veto: " + item.nwv + "%"}>
                 {/*@ts-ignore*/}
-                <Grid item sx={{height: "20px", width: item.nwv / 2 + "%", backgroundColor: context.colors.nwv, float: "left"}}/>
+                <Grid item sx={{height: "30px", width: item.nwv / 2 + "%", backgroundColor: context.colors.nwv, float: "left"}}/>
             </Tooltip>
             <Tooltip title={"abstain: " + item.abstain + "%"}>
                 {/*@ts-ignore*/}
-                <Grid item sx={{height: "20px", width: item.abstain / 2 + "%", backgroundColor: context.colors.abstain, float: "left"}}/>
+                <Grid item sx={{height: "30px", width: item.abstain / 2 + "%", backgroundColor: context.colors.abstain, float: "left"}}/>
             </Tooltip>
             <Grid item container direction="row" justifyContent="flex-end" width="90%">
                 <Grid item sx={{
-                    marginTop: -3,
+                    marginTop: -4,
                 }}>
                     <Typography
                         variant="overline"

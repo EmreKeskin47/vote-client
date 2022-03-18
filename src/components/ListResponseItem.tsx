@@ -258,13 +258,13 @@ const ListResponseItem = (props) => {
                                 </Button>
                             </Tooltip>
                         </Grid>
-                        <Grid item container direction="row" justifyContent="flex-start" sx={{paddingTop: 3}}>
+                        <Grid item container direction="row" justifyContent="flex-start" sx={{paddingTop: 3, width: "65%"}}>
                             <Grid item container direction="row" justifyContent="flex-start" sx={{width: "22%"}}>
                                 <Tooltip title={props.yesCount}>
                                     <Grid item container
                                           sx={{
-                                              width: "20px",
-                                              height: "20px",
+                                              width: "15px",
+                                              height: "15px",
                                               // @ts-ignore
                                               backgroundColor: context.colors.yes,
                                               marginRight: 1,
@@ -275,7 +275,7 @@ const ListResponseItem = (props) => {
                                     variant="overline"
                                     gutterBottom
                                     component="div"
-                                    sx={{color: "gray"}}
+                                    sx={{color: "gray", marginTop: -1}}
                                 >
                                     Yes
                                 </Typography>
@@ -284,8 +284,8 @@ const ListResponseItem = (props) => {
                                 <Tooltip title={props.noCount}>
                                     <Grid item container
                                           sx={{
-                                              width: "20px",
-                                              height: "20px",
+                                              width: "15px",
+                                              height: "15px",
                                               //@ts-ignore
                                               backgroundColor: context.colors.no,
                                               marginRight: 1,
@@ -296,7 +296,7 @@ const ListResponseItem = (props) => {
                                     variant="overline"
                                     gutterBottom
                                     component="div"
-                                    sx={{color: "gray"}}
+                                    sx={{color: "gray", marginTop: -1}}
                                 >
                                     No
                                 </Typography>
@@ -305,8 +305,8 @@ const ListResponseItem = (props) => {
                                 <Tooltip title={props.nwvCount}>
                                     <Grid item container
                                           sx={{
-                                              width: "20px",
-                                              height: "20px",
+                                              width: "15px",
+                                              height: "15px",
                                               //@ts-ignore
                                               backgroundColor: context.colors.nwv,
                                               marginRight: 1,
@@ -317,7 +317,7 @@ const ListResponseItem = (props) => {
                                     variant="overline"
                                     gutterBottom
                                     component="div"
-                                    sx={{color: "gray"}}
+                                    sx={{color: "gray", marginTop: -1}}
                                 >
                                     Veto
                                 </Typography>
@@ -326,8 +326,8 @@ const ListResponseItem = (props) => {
                                 <Tooltip title={props.abstainCount}>
                                     <Grid item container
                                           sx={{
-                                              width: "20px",
-                                              height: "20px",
+                                              width: "15px",
+                                              height: "15px",
                                               //@ts-ignore
                                               backgroundColor: context.colors.abstain,
                                               marginRight: 1,
@@ -338,7 +338,7 @@ const ListResponseItem = (props) => {
                                     variant="overline"
                                     gutterBottom
                                     component="div"
-                                    sx={{color: "gray"}}
+                                    sx={{color: "gray", marginTop: -1}}
                                 >
                                     Abstain
                                 </Typography>
