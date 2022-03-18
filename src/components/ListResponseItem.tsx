@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState, useRef} from "react";
 import {Grid, List} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -25,6 +25,7 @@ const ListResponseItem = (props) => {
     const [voteFlag, setVoteFlag] = useState(false);
 
     const wallet = useWallet();
+    console.log("wallet address: " + wallet.address);
     let client: SigningCosmWasmClient;
 
     const context = useContext(singleContext);
@@ -173,6 +174,7 @@ const ListResponseItem = (props) => {
                 borderRadius: "7px 7px 7px 7px",
                 backgroundColor: "whitesmoke",
                 margin: 2,
+                position: "relative",
             }}
         >
             <Grid
@@ -180,13 +182,14 @@ const ListResponseItem = (props) => {
                 direction="row"
                 justifyContent="space-between"
                 p={1}
-                sx={{backgroundColor: "#1F2123"}}
+                //@ts-ignore
+                sx={{backgroundColor: context.colors.backgroundColor}}
             >
                 <Typography
                     variant="h6"
                     gutterBottom
                     component="div"
-                    sx={{color: "whitesmoke", paddingTop: 1}}
+                    sx={{color: "whitesmoke"}}
                     align="center"
                 >
                     {props.topic}
@@ -214,18 +217,10 @@ const ListResponseItem = (props) => {
                 <Grid
                     container
                     item
-                    direction="row"
-                    sx={{padding: 5}}
+                    direction="column"
+                    sx={{padding: 3}}
                     onClick={flip}
                 >
-                    <Grid item lg={6} md={6} xs={6}>
-                        <VotingChart
-                            yesCount={props.yesCount}
-                            noCount={props.noCount}
-                            nwvCount={props.nwvCount}
-                            abstainCount={props.abstainCount}
-                        />
-                    </Grid>
                     <Grid
                         item
                         container
@@ -233,7 +228,7 @@ const ListResponseItem = (props) => {
                         lg={6}
                         md={6}
                         xs={6}
-                        p={3}
+                        p={1}
                     >
                         <Typography
                             variant="subtitle1"
@@ -244,22 +239,127 @@ const ListResponseItem = (props) => {
                             <span style={{fontWeight: "bolder"}}>
                                 Deadline:
                             </span>{" "}
-                            {deadlineDate}
+                            {deadlineDate.slice(0, 33)}
                         </Typography>
-                        <Tooltip title="copy owner address">
-                            <Button onClick={ownerClicked} color="success">
-                                {ownerText}
-                            </Button>
-                        </Tooltip>
-                        <br/>
+                        <Grid item container direction="row" justifyContent="flex-start">
+                            <Typography
+                                variant="subtitle1"
+                                gutterBottom
+                                component="div"
+                                sx={{color: "gray"}}
+                            >
+                            <span style={{fontWeight: "bolder"}}>
+                                Owner Address:
+                            </span>{" "}
+                            </Typography>
+                            <Tooltip title="copy owner address">
+                                <Button onClick={ownerClicked} color="success" sx={{width: "30%", paddingLeft: 5}}>
+                                    {ownerText}
+                                </Button>
+                            </Tooltip>
+                        </Grid>
+                        <Grid item container direction="row" justifyContent="flex-start" sx={{paddingTop: 3}}>
+                            <Grid item container direction="row" justifyContent="flex-start" sx={{width: "22%"}}>
+                                <Tooltip title={props.yesCount}>
+                                    <Grid item container
+                                          sx={{
+                                              width: "20px",
+                                              height: "20px",
+                                              // @ts-ignore
+                                              backgroundColor: context.colors.yes,
+                                              marginRight: 1,
+                                          }}
+                                    />
+                                </Tooltip>
+                                <Typography
+                                    variant="overline"
+                                    gutterBottom
+                                    component="div"
+                                    sx={{color: "gray"}}
+                                >
+                                    Yes
+                                </Typography>
+                            </Grid>
+                            <Grid item container direction="row" justifyContent="flex-start" sx={{width: "22%"}}>
+                                <Tooltip title={props.noCount}>
+                                    <Grid item container
+                                          sx={{
+                                              width: "20px",
+                                              height: "20px",
+                                              //@ts-ignore
+                                              backgroundColor: context.colors.no,
+                                              marginRight: 1,
+                                          }}
+                                    />
+                                </Tooltip>
+                                <Typography
+                                    variant="overline"
+                                    gutterBottom
+                                    component="div"
+                                    sx={{color: "gray"}}
+                                >
+                                    No
+                                </Typography>
+                            </Grid>
+                            <Grid item container direction="row" justifyContent="flex-start" sx={{width: "22%"}}>
+                                <Tooltip title={props.nwvCount}>
+                                    <Grid item container
+                                          sx={{
+                                              width: "20px",
+                                              height: "20px",
+                                              //@ts-ignore
+                                              backgroundColor: context.colors.nwv,
+                                              marginRight: 1,
+                                          }}
+                                    />
+                                </Tooltip>
+                                <Typography
+                                    variant="overline"
+                                    gutterBottom
+                                    component="div"
+                                    sx={{color: "gray"}}
+                                >
+                                    Veto
+                                </Typography>
+                            </Grid>
+                            <Grid item container direction="row" justifyContent="flex-start" sx={{width: "30%"}}>
+                                <Tooltip title={props.abstainCount}>
+                                    <Grid item container
+                                          sx={{
+                                              width: "20px",
+                                              height: "20px",
+                                              //@ts-ignore
+                                              backgroundColor: context.colors.abstain,
+                                              marginRight: 1,
+                                          }}
+                                    />
+                                </Tooltip>
+                                <Typography
+                                    variant="overline"
+                                    gutterBottom
+                                    component="div"
+                                    sx={{color: "gray"}}
+                                >
+                                    Abstain
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item lg={6} md={6} xs={6}>
+                        <VotingChart
+                            yesCount={props.yesCount}
+                            noCount={props.noCount}
+                            nwvCount={props.nwvCount}
+                            abstainCount={props.abstainCount}
+                        />
                     </Grid>
                 </Grid>
             )}
             {isFlipped && (
-                <Grid height={334} onClick={flip} justifyContent="center">
+                <Grid height={250} onClick={flip} justifyContent="center">
                     <Paper
                         elevation={24}
-                        style={{height: 320, overflow: "auto"}}
+                        style={{height: 250, overflow: "auto"}}
                     >
                         <List>
                             <Typography
@@ -280,7 +380,7 @@ const ListResponseItem = (props) => {
                     <CircularProgress color="secondary"/>
                 </Grid>
                 :
-                <Button color="success" onClick={handleClickOpen}>
+                <Button color="success" onClick={handleClickOpen} sx={{marginTop: 3}}>
                     VOTE FOR THIS VOTEBOX
                 </Button>
             }

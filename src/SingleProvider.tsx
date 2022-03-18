@@ -10,6 +10,13 @@ const SingleProvider = (props: { children: boolean | React.ReactChild | React.Re
             data: count,
             contractAdress: "juno1ftrqqu4x7wr92wg0n7ydey36y3hzef0vg4we8kx6r3lxus3c7jqqws5dza",
             testUrl: "https://rpc.uni.juno.deuslabs.fi",
+            colors: {
+                yes: "#5ED58B",
+                no: "#EE6766",
+                nwv: "#6DA6E8",
+                abstain: "#9FA4AD",
+                backgroundColor: "#1F2123",
+            },
             updateCountByOne: () => {
                 setCount(count + 1);
             },
