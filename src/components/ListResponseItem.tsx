@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Grid, List } from "@mui/material";
+import React, {useContext, useEffect, useState} from "react";
+import {Grid, List} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import toast from "react-hot-toast";
@@ -8,6 +8,10 @@ import VotingChart from "./VotingChart";
 import VoteDialog from "./VoteDialog";
 import Badge from "@mui/material/Badge";
 import Paper from "@mui/material/Paper";
+import {useWallet} from "../contexts/wallet";
+import {SigningCosmWasmClient} from "@cosmjs/cosmwasm-stargate";
+import CircularProgress from '@mui/material/CircularProgress';
+import singleContext from "../SingleContext";
 
 // @ts-ignore
 const ListResponseItem = (props) => {
@@ -18,7 +22,75 @@ const ListResponseItem = (props) => {
     const [boxState, setBoxState] = React.useState("");
     const [isFlipped, setIsFlipped] = React.useState(false);
     const [description, setDescription] = React.useState(props.description);
-    console.log(props);
+    const [voteFlag, setVoteFlag] = useState(false);
+
+    const wallet = useWallet();
+    let client: SigningCosmWasmClient;
+
+    const context = useContext(singleContext);
+
+    const vote = async (voteId: string, voteType: Number) => {
+        setVoteFlag(true);
+        try {
+            client = wallet.getClient();
+            const account = wallet.address; //(await signer.getAccounts())[0];
+            console.log("account: ");
+            console.log(account);
+
+            const executeResponse = await client.execute(
+                wallet.address,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                context.contractAdress,
+                {
+                    vote: {
+                        id: voteId,
+                        vote_type: voteType,
+                    },
+                },
+                "auto"
+            );
+            let option = "";
+            console.log(executeResponse);
+            if (executeResponse === undefined) {
+                alert("Something went wrong");
+            } else {
+                switch (voteType) {
+                    case 0:
+                        option = "no";
+                        break;
+                    case 1:
+                        option = "abstain";
+                        break;
+                    case 2:
+                        option = "yes";
+                        break;
+                    case 3:
+                        option = "no with vote";
+                        break;
+                    default:
+                        break;
+                }
+                toast.success("You have voted: " + option, {
+                    style: {maxWidth: "none"},
+                });
+            }
+        } catch (error: any) {
+            let errMessage: String = error.message;
+            if (errMessage.includes("ended")) {
+                toast.error("The voting period has ended for this VoteBox.", {
+                    style: {maxWidth: "none"},
+                });
+            } else if (errMessage.includes("already")) {
+                toast.error("You may only vote once per VoteBox.", {
+                    style: {maxWidth: "none"},
+                });
+            } else {
+                toast.error(error.message, {style: {maxWidth: "none"}});
+            }
+        }
+        setVoteFlag(false);
+    };
 
     const voteOptionClicked = (option: string) => {
         let selected: number = 1;
@@ -38,7 +110,7 @@ const ListResponseItem = (props) => {
             default:
                 break;
         }
-        props.function(props.id, selected);
+        vote(props.id, selected);
     };
 
     useEffect(() => {
@@ -66,7 +138,7 @@ const ListResponseItem = (props) => {
 
     const ownerClicked = () => {
         navigator.clipboard.writeText(props.owner);
-        toast.success("Copied to clipboard", { style: { maxWidth: "none" } });
+        toast.success("Copied to clipboard", {style: {maxWidth: "none"}});
     };
 
     const handleClickOpen = () => {
@@ -106,13 +178,13 @@ const ListResponseItem = (props) => {
                 direction="row"
                 justifyContent="space-between"
                 p={1}
-                sx={{ backgroundColor: "#1F2123" }}
+                sx={{backgroundColor: "#1F2123"}}
             >
                 <Typography
                     variant="h6"
                     gutterBottom
                     component="div"
-                    sx={{ color: "whitesmoke", paddingTop: 1 }}
+                    sx={{color: "whitesmoke", paddingTop: 1}}
                     align="center"
                 >
                     {props.topic}
@@ -141,7 +213,7 @@ const ListResponseItem = (props) => {
                     container
                     item
                     direction="row"
-                    sx={{ padding: 5 }}
+                    sx={{padding: 5}}
                     onClick={flip}
                 >
                     <Grid item lg={6} md={6} xs={6}>
@@ -165,9 +237,9 @@ const ListResponseItem = (props) => {
                             variant="subtitle1"
                             gutterBottom
                             component="div"
-                            sx={{ color: "gray" }}
+                            sx={{color: "gray"}}
                         >
-                            <span style={{ fontWeight: "bolder" }}>
+                            <span style={{fontWeight: "bolder"}}>
                                 Deadline:
                             </span>{" "}
                             {deadlineDate}
@@ -177,7 +249,7 @@ const ListResponseItem = (props) => {
                                 {ownerText}
                             </Button>
                         </Tooltip>
-                        <br />
+                        <br/>
                     </Grid>
                 </Grid>
             )}
@@ -185,14 +257,14 @@ const ListResponseItem = (props) => {
                 <Grid height={334} onClick={flip} justifyContent="center">
                     <Paper
                         elevation={24}
-                        style={{ height: 320, overflow: "auto" }}
+                        style={{height: 320, overflow: "auto"}}
                     >
                         <List>
                             <Typography
                                 variant="subtitle1"
                                 gutterBottom
                                 component="div"
-                                sx={{ color: "gray" }}
+                                sx={{color: "gray"}}
                                 p={2}
                             >
                                 {description}
@@ -201,9 +273,15 @@ const ListResponseItem = (props) => {
                     </Paper>
                 </Grid>
             )}
-            <Button color="success" onClick={handleClickOpen}>
-                VOTE FOR THIS VOTEBOX
-            </Button>
+            {voteFlag ?
+                <Grid direction="row" container justifyContent="center">
+                    <CircularProgress color="secondary"/>
+                </Grid>
+                :
+                <Button color="success" onClick={handleClickOpen}>
+                    VOTE FOR THIS VOTEBOX
+                </Button>
+            }
             <VoteDialog
                 selectedValue={selectedValue}
                 open={open}

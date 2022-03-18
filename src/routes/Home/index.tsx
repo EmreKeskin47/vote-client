@@ -1,24 +1,18 @@
-import { Grid, Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import {Grid, Typography} from "@mui/material";
+import React, {useContext, useEffect, useState} from "react";
 import peopleAroundTable from "./peopleAroundTable.gif";
-import {
-    CosmWasmClient,
-    SigningCosmWasmClient,
-} from "@cosmjs/cosmwasm-stargate";
+import {CosmWasmClient} from "@cosmjs/cosmwasm-stargate";
 import toast from "react-hot-toast";
 import ListResponseItem from "../../components/ListResponseItem";
 import singleContext from "../../SingleContext";
-import { useWallet } from "../../contexts/wallet";
-import { TypingEffect } from "react-typing-text-effect";
-import { isMobile } from "react-device-detect";
-import { Votebox } from "../../models/Votebox";
+import {TypingEffect} from "react-typing-text-effect";
+import {isMobile} from "react-device-detect";
+import {Votebox} from "../../models/Votebox";
 
 const Home = () => {
     const [recentsFlag, setRecentsFlag] = useState(false);
 
     const context = useContext(singleContext);
-    const wallet = useWallet();
-    let client: SigningCosmWasmClient;
 
     useEffect(() => {
         getVBCount();
@@ -51,70 +45,10 @@ const Home = () => {
             context.updateCount(Number(queryResponse.count));
             setRecentsFlag(true);
         } catch (error: any) {
-            toast.error(error.message, { style: { maxWidth: "none" } });
+            toast.error(error.message, {style: {maxWidth: "none"}});
         }
     };
 
-    const vote = async (voteId: string, voteType: Number) => {
-        try {
-            client = wallet.getClient();
-            const account = wallet.address; //(await signer.getAccounts())[0];
-            console.log("account: ");
-            console.log(account);
-
-            const executeResponse = await client.execute(
-                wallet.address,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                context.contractAdress,
-                {
-                    vote: {
-                        id: voteId,
-                        vote_type: voteType,
-                    },
-                },
-                "auto"
-            );
-            let option = "";
-            console.log(executeResponse);
-            if (executeResponse === undefined) {
-                alert("Something went wrong");
-            } else {
-                switch (voteType) {
-                    case 0:
-                        option = "no";
-                        break;
-                    case 1:
-                        option = "abstain";
-                        break;
-                    case 2:
-                        option = "yes";
-                        break;
-                    case 3:
-                        option = "no with vote";
-                        break;
-                    default:
-                        break;
-                }
-                toast.success("You have voted: " + option, {
-                    style: { maxWidth: "none" },
-                });
-            }
-        } catch (error: any) {
-            let errMessage: String = error.message;
-            if (errMessage.includes("ended")) {
-                toast.error("The voting period has ended for this VoteBox.", {
-                    style: { maxWidth: "none" },
-                });
-            } else if (errMessage.includes("already")) {
-                toast.error("You may only vote once per VoteBox.", {
-                    style: { maxWidth: "none" },
-                });
-            } else {
-                toast.error(error.message, { style: { maxWidth: "none" } });
-            }
-        }
-    };
 
     const [voteboxList, setVoteboxList] = useState<Votebox[]>([]);
 
@@ -131,7 +65,7 @@ const Home = () => {
                 // @ts-ignore
                 context.contractAdress,
                 {
-                    get_list: { start_after: boxId - 1 },
+                    get_list: {start_after: boxId - 1},
                 }
             );
             console.log(queryResponse);
@@ -141,7 +75,7 @@ const Home = () => {
                 );
             }
         } catch (error: any) {
-            toast.error(error.message, { style: { maxWidth: "none" } });
+            toast.error(error.message, {style: {maxWidth: "none"}});
         }
     };
 
@@ -149,7 +83,7 @@ const Home = () => {
     return (
         <Grid
             container
-            sx={{ width: "100%" }}
+            sx={{width: "100%"}}
             justifySelf="center"
             justifyItems="center"
         >
@@ -207,7 +141,7 @@ const Home = () => {
                 </Grid>
                 <Typography
                     variant="h5"
-                    sx={{ color: "whitesmoke", textAlign: "center" }}
+                    sx={{color: "whitesmoke", textAlign: "center"}}
                     paddingTop={10}
                 >
                     With VoteBox, you can create your own VoteBoxes and people
@@ -262,7 +196,6 @@ const Home = () => {
                                     deadlineNum={item.deadline.at_time}
                                     abstainCount={item.abstain_count}
                                     nwvCount={item.no_with_vote_count}
-                                    function={vote}
                                     description={item.description}
                                 />
                             </Grid>
