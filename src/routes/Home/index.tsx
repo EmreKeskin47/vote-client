@@ -139,7 +139,11 @@ const Home = () => {
                 queryResponse.voteList.map((votebox: Votebox) =>
                     setVoteboxList((prevState) => [...prevState, votebox])
                 );
+                if(voteboxList.length == 0){
+                toast.error("No VoteBoxes so far.", { position:"top-right", style: { maxWidth: "none"} });
+                }
             }
+            
         } catch (error: any) {
             toast.error(error.message, { style: { maxWidth: "none" } });
         }
@@ -225,6 +229,7 @@ const Home = () => {
                     Time to speak up your mind!
                 </Typography>
             </Grid>
+            {(voteboxList.length > 0) && (
             <Grid direction="column" justifyContent="center">
                 <Typography
                     variant="h4"
@@ -244,7 +249,7 @@ const Home = () => {
                 >
                     Click on the VoteBoxes for description
                 </Typography>
-            </Grid>
+            </Grid>)}
 
             {recentsFlag && voteboxList.length > 0 && (
                 <Grid container direction="row" spacing={2} p={3}>
