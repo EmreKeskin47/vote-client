@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import CustomAlert from "../../components/CustomAlert";
 import singleContext from "../../SingleContext";
 import { Votebox } from "../../models/Votebox";
+import debounce from "lodash.debounce";
 
 ////////////////////////Wallet//////////////////////////////////
 const walletOptions = {
@@ -200,7 +201,7 @@ const CreateVotebox = () => {
     const queryMyList = async () => {
         try {
             
-
+            console.log("Wallet: " + wallet.address);
             mockClient = await CosmWasmClient.connect(
                 "https://rpc.uni.juno.deuslabs.fi"
             );

@@ -23,6 +23,7 @@ import { Toaster } from "react-hot-toast";
 import Home from "../routes/Home";
 import CreateVotebox from "../routes/CreateVotebox";
 import VoteboxList from "../routes/Vote";
+import debounce from "lodash.debounce";
 
 export const drawerWidth = 240;
 
@@ -40,12 +41,15 @@ export function SidebarLayout(): JSX.Element {
         ? wallet.name || getShortAddress(wallet.address)
         : "Connect Wallet";
 
+    const debouncedConnect = useCallback(debounce(() => keplr.connect(true), 1000),[keplr]);
+
     useEffect(() => {
         // Used for listening keplr account changes
         window.addEventListener("keplr_keystorechange", () => {
-            keplr.connect(true);
+            debouncedConnect();
+            //keplr.connect(true);
         });
-    }, [keplr]);
+    }, []);
 
     const connectWallet = useCallback(() => keplr.connect(), [keplr]);
 
