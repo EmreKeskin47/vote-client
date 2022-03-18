@@ -7,8 +7,37 @@ import singleContext from "../SingleContext";
 
 // @ts-ignore
 const VotingChart = ({yesCount, noCount, nwvCount, abstainCount}) => {
+
+    const getConditionNumeric = (item: boolean) => {
+        let res = yesCount - noCount - nwvCount;
+        if (res > 0) {
+            if (item) {
+                //@ts-ignore
+                return context.color.yes;
+            } else {
+                return "positive";
+            }
+        } else if (res === 0) {
+            if (item) {
+                //@ts-ignore
+                return context.color.abstain;
+            } else {
+                return "neutral";
+            }
+        } else {
+            if (item) {
+                //@ts-ignore
+                return context.color.no;
+            } else {
+                return "no";
+            }
+        }
+    }
+
     const context = React.useContext(singleContext);
     const total = Number(yesCount) + Number(noCount) + Number(nwvCount) + Number(abstainCount);
+    const [condition, setCondition] = React.useState(() => getConditionNumeric(false));
+
     const getPercentage = (num: number) => {
         if (isNaN((num * 100) / total) || num === undefined) {
             return 0;
@@ -42,6 +71,20 @@ const VotingChart = ({yesCount, noCount, nwvCount, abstainCount}) => {
                 {/*@ts-ignore*/}
                 <Grid item sx={{height: "20px", width: item.abstain / 2 + "%", backgroundColor: context.colors.abstain, float: "left"}}/>
             </Tooltip>
+            <Grid item container direction="row" justifyContent="flex-end" width="90%">
+                <Grid item sx={{
+                    marginTop: -3,
+                }}>
+                    <Typography
+                        variant="overline"
+                        gutterBottom
+                        component="div"
+                        sx={{color: "purple", float: "right", paddingLeft: 1, paddingRight: 1, border: "2px solid", borderRadius: 2}}
+                    >
+                        {condition}
+                    </Typography>
+                </Grid>
+            </Grid>
         </Grid>
     );
 };
