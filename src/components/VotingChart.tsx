@@ -55,19 +55,19 @@ const VotingChart = ({yesCount, noCount, nwvCount, abstainCount}) => {
 
     return (
         <Grid item container direction="row" justifyContent="flex-start" sx={{position: "absolute"}}>
-            <Tooltip title={"yes: " + item.yes + "%"}>
+            <Tooltip title={"Yes: " + item.yes + "%"}>
                 {/*@ts-ignore*/}
                 <Grid item sx={{height: "30px", width: item.yes / 2 + "%", backgroundColor: context.colors.yes, float: "left"}}/>
             </Tooltip>
-            <Tooltip title={"no: " + item.no + "%"}>
+            <Tooltip title={"No: " + item.no + "%"}>
                 {/*@ts-ignore*/}
                 <Grid item sx={{height: "30px", width: item.no / 2 + "%", backgroundColor: context.colors.no, float: "left"}}/>
             </Tooltip>
-            <Tooltip title={"no with veto: " + item.nwv + "%"}>
+            <Tooltip title={"No with veto: " + item.nwv + "%"}>
                 {/*@ts-ignore*/}
                 <Grid item sx={{height: "30px", width: item.nwv / 2 + "%", backgroundColor: context.colors.nwv, float: "left"}}/>
             </Tooltip>
-            <Tooltip title={"abstain: " + item.abstain + "%"}>
+            <Tooltip title={"Abstain: " + item.abstain + "%"}>
                 {/*@ts-ignore*/}
                 <Grid item sx={{height: "30px", width: item.abstain / 2 + "%", backgroundColor: context.colors.abstain, float: "left"}}/>
             </Tooltip>
