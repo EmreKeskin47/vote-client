@@ -218,9 +218,6 @@ const CreateVotebox = () => {
                 queryResponse.voteList.map((votebox: Votebox) =>
                     setVoteboxList((prevState) => [...prevState, votebox])
                 );
-                if(voteboxList.length == 0 && wallet.initialized){
-                    toast.error("You haven't created any VoteBoxes yet.", { icon:'🥸', position:"top-right", style: { maxWidth: "none"} });
-                }
             }
         } catch (error: any) {
             toast.error(error.message, { style: { maxWidth: "none" } });

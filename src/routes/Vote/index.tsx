@@ -50,9 +50,6 @@ const Vote = () => {
                 queryResponse.voteList.map((votebox: Votebox) =>
                     setVoteboxList((prevState) => [...prevState, votebox])
                 );
-                if(voteboxList.length == 0){
-                    toast.error("No VoteBoxes so far.", { position:"top-right", style: { maxWidth: "none"} });
-                }
             }
             setListEnd(listEnd + queryResponse.voteList.length);
             if (listEnd % 10 !== 0) {
