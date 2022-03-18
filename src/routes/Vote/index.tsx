@@ -55,6 +55,9 @@ const Vote = () => {
             if (listEnd % 10 !== 0) {
                 setLoadMoreBtn(false);
             }
+            if(queryResponse.voteList.length == 0){
+                toast.error("No VoteBoxes so far.", { position:"top-right", style: { maxWidth: "none"} });
+            }
         } catch (error: any) {
             toast.error(error.message, { style: { maxWidth: "none" } });
         }
