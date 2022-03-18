@@ -110,7 +110,9 @@ const ListResponseItem = (props) => {
             default:
                 break;
         }
-        vote(props.id, selected);
+        vote(props.id, selected).then(() => {
+            props.function()
+        });
     };
 
     useEffect(() => {

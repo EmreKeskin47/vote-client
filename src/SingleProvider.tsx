@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import singleContext from './SingleContext';
 
-
 const SingleProvider = (props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }) => {
 
     const [count, setCount] = useState(0);

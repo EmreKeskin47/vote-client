@@ -11,6 +11,7 @@ import {Votebox} from "../../models/Votebox";
 
 const Home = () => {
     const [recentsFlag, setRecentsFlag] = useState(false);
+    const [voteboxList, setVoteboxList] = useState<Votebox[]>([]);
 
     const context = useContext(singleContext);
 
@@ -39,7 +40,6 @@ const Home = () => {
             startCount -= 10;
             if (startCount < 1) startCount = 1;
             queryList(startCount);
-            console.log("Query List Start Count " + startCount);
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             context.updateCount(Number(queryResponse.count));
@@ -49,10 +49,8 @@ const Home = () => {
         }
     };
 
-
-    const [voteboxList, setVoteboxList] = useState<Votebox[]>([]);
-
     const queryList = async (boxId: number) => {
+        setVoteboxList([]);
         try {
             mockClient = await CosmWasmClient.connect(
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -195,8 +193,9 @@ const Home = () => {
                                     deadline={item.deadline.at_height}
                                     deadlineNum={item.deadline.at_time}
                                     abstainCount={item.abstain_count}
-                                    nwvCount={item.no_with_vote_count}
+                                    nwvCount={item.no_with_veto_count}
                                     description={item.description}
+                                    function={getVBCount}
                                 />
                             </Grid>
                         );
