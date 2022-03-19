@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button, Grid, TextField } from "@mui/material";
 import toast from "react-hot-toast";
 import { Votebox } from "../../models/Votebox";
 import singleContext from "../../SingleContext";
@@ -11,6 +11,8 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
+import ListResponseItem from "../../components/ListResponseItem";
+import SearchByTopic from "../../components/SearchByTopic";
 
 const Vote = () => {
     const context = useContext(singleContext);
@@ -19,7 +21,8 @@ const Vote = () => {
     const [listEnd, setListEnd] = useState(0);
     const [voteboxList, setVoteboxList] = useState<Votebox[]>([]);
     const [loadMoreBtn, setLoadMoreBtn] = useState(false);
-
+    const [voteboxListByTopic, setVoteboxListByTopic] = useState<Votebox[]>([]);
+    
     const getYesRatio = (item: Votebox) => {
         let yes = Number(item.yes_count);
         let no = Number(item.no_count) + Number(item.no_with_veto_count);
@@ -30,6 +33,34 @@ const Vote = () => {
             return "Passed";
         } else {
             return "Rejected";
+        }
+    };
+
+    const queryListByTopic = async (boxTopic: String) => {
+       try {
+            //@ts-ignore
+            mockClient = await CosmWasmClient.connect(context.testUrl);
+
+            const queryResponse = await mockClient.queryContractSmart(
+                // @ts-ignore
+                context.contractAdress,
+                {
+                    get_voteboxes_by_topic: { topic: boxTopic },
+                }
+            );
+            
+            if (queryResponse.voteList) {
+                setVoteboxListByTopic([]);
+                queryResponse.voteList.map((votebox: Votebox) =>
+                    setVoteboxListByTopic((prevState) => [...prevState, votebox])
+                );
+            }
+           console.log(queryResponse.voteList);
+            if(queryResponse.voteList.length == 0){
+                toast.error("No VoteBoxes found with the topic specified.", { position:"top-right", style: { maxWidth: "none"} });
+            }
+        } catch (error: any) {
+            toast.error(error.message, { style: { maxWidth: "none" } });
         }
     };
 
@@ -69,6 +100,47 @@ const Vote = () => {
 
     return (
         <Grid container>
+            
+            <Grid
+            sx={{
+                border: "2px solid gray",
+                borderRadius: "7px 7px 7px 7px",
+                backgroundColor: "#1F2123",
+                padding: 3,
+                margin: 3,
+                height: "35%",
+                width: "100%",
+            }}
+            >
+            <SearchByTopic function={queryListByTopic}/>
+
+            {voteboxListByTopic.length > 0 && (
+                <Grid container direction="row" spacing={2} p={3}>
+                    {voteboxListByTopic.map((item: any, index: number) => {
+                        return (
+                            <Grid key={index} item xs={12} md={6} lg={6}>
+                                <ListResponseItem
+                                    key={index}
+                                    id={item.id}
+                                    topic={item.topic}
+                                    yesCount={item.yes_count}
+                                    noCount={item.no_count}
+                                    owner={item.owner}
+                                    deadline={item.deadline.at_height}
+                                    deadlineNum={item.deadline.at_time}
+                                    abstainCount={item.abstain_count}
+                                    nwvCount={item.no_with_veto_count}
+                                    description={item.description}
+                                    function={queryListByTopic}
+                                />
+                            </Grid>
+                        );
+                    })}
+                </Grid>
+            )}
+            </Grid>
+            
+
             <List
                 sx={{
                     width: "100%",
