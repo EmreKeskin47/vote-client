@@ -37,18 +37,18 @@ const SearchByTopic = (props: {
             <Grid
                 container
                 direction="row"
-                justifyContent="space-between"
+                justifyContent="center"
                 sx={{ width: "100%" }}
             >
                 <Grid
                     container
-                    direction="row"
+                    direction="column"
                     sx={{ width: "100%" }}
-                    spacing={2}
+                    spacing={1}
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <Grid item sm={12} md={8} justifyItems="center">
+                    <Grid item sm={12} md={8} direction="column" justifyItems="center">
                         <TextField
                             id="votebox-topic"
                             label="VoteBox Topic"
@@ -56,14 +56,14 @@ const SearchByTopic = (props: {
                             onChange={handleChange}
                             sx={{ backgroundColor: "white" }}
                         />
-                    </Grid>
-
-                    <Grid item sm={12} md={8} justifyItems="space-between">
+                    
                         <Button
                             sx={{
                                 border: "1px solid",
                                 borderRadius: "5px",
                                 color: "whitesmoke",
+                                margin: 1,
+                                paddingLeft: 1,
                             }}
                             onClick={search}
                         >

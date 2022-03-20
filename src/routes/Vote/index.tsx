@@ -45,7 +45,7 @@ const Vote = () => {
                 // @ts-ignore
                 context.contractAdress,
                 {
-                    get_voteboxes_by_topic: { topic: boxTopic },
+                    get_voteboxes_by_topic: { topic: boxTopic.toLowerCase() },
                 }
             );
             
@@ -102,13 +102,13 @@ const Vote = () => {
         <Grid container>
             
             <Grid
+            
             sx={{
                 border: "2px solid gray",
                 borderRadius: "7px 7px 7px 7px",
                 backgroundColor: "#1F2123",
-                padding: 3,
-                margin: 3,
-                height: "35%",
+                padding: 1,
+                margin: 1,
                 width: "100%",
             }}
             >
