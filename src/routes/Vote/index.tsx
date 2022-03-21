@@ -13,6 +13,7 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import ListResponseItem from "../../components/ListResponseItem";
 import SearchByTopic from "../../components/SearchByTopic";
+import { FlashOnRounded } from "@mui/icons-material";
 
 const Vote = () => {
     const context = useContext(singleContext);
@@ -21,7 +22,7 @@ const Vote = () => {
     const [listEnd, setListEnd] = useState(0);
     const [voteboxList, setVoteboxList] = useState<Votebox[]>([]);
     const [loadMoreBtn, setLoadMoreBtn] = useState(false);
-    const [voteboxListByTopic, setVoteboxListByTopic] = useState<Votebox[]>([]);
+    const [voteboxListByTopicOrId, setVoteboxListByTopicOrId] = useState<Votebox[]>([]);
     
     const getYesRatio = (item: Votebox) => {
         let yes = Number(item.yes_count);
@@ -36,31 +37,59 @@ const Vote = () => {
         }
     };
 
-    const queryListByTopic = async (boxTopic: String) => {
+    const queryListByTopicOrId = async (boxTopicOrId: String) => {
        try {
             //@ts-ignore
             mockClient = await CosmWasmClient.connect(context.testUrl);
 
-            const queryResponse = await mockClient.queryContractSmart(
+            const queryByTopicResponse = await mockClient.queryContractSmart(
                 // @ts-ignore
                 context.contractAdress,
                 {
-                    get_voteboxes_by_topic: { topic: boxTopic.toLowerCase() },
+                    get_voteboxes_by_topic: { topic: boxTopicOrId.toLowerCase() },
                 }
             );
             
-            if (queryResponse.voteList) {
-                setVoteboxListByTopic([]);
-                queryResponse.voteList.map((votebox: Votebox) =>
-                    setVoteboxListByTopic((prevState) => [...prevState, votebox])
+            if (queryByTopicResponse.voteList) {
+                    setVoteboxListByTopicOrId([]);
+                queryByTopicResponse.voteList.map((votebox: Votebox) =>
+                    setVoteboxListByTopicOrId((prevState) => [...prevState, votebox])
                 );
             }
-           console.log(queryResponse.voteList);
-            if(queryResponse.voteList.length == 0){
-                toast.error("No VoteBoxes found with the topic specified.", { position:"top-right", style: { maxWidth: "none"} });
+            
+            let queryByIdResponse;
+            if(!isNaN(Number(boxTopicOrId)) && Number(boxTopicOrId) > 0 ){
+                queryByIdResponse = await mockClient.queryContractSmart(
+                    // @ts-ignore
+                    context.contractAdress,
+                    {
+                        query_vote: { id: boxTopicOrId},
+                    }
+                );              
+                
+                if (Number(queryByIdResponse.id)>0) {                           
+                    let queryResult = new Votebox(
+                        queryByIdResponse.id, queryByIdResponse.yes_count, queryByIdResponse.no_count,
+                        queryByIdResponse.abstain_count, queryByIdResponse.no_with_veto_count,
+                        queryByIdResponse.deadline, queryByIdResponse.owner, queryByIdResponse.topic,
+                        queryByIdResponse.description, queryByIdResponse.create_date, queryByIdResponse.total_amount,
+                        queryByIdResponse.native_denom, queryByIdResponse.voters, queryByIdResponse.voter_count);
+                    
+                    setVoteboxListByTopicOrId((prevState) => [...prevState, queryResult]) 
+                }     
+            } 
+            if(queryByTopicResponse.voteList.length == 0 && !queryByIdResponse){
+                toast.error("No VoteBoxes found with the specified ID or topic.", { position:"top-right", style: { maxWidth: "none"} });
             }
+            
         } catch (error: any) {
-            toast.error(error.message, { style: { maxWidth: "none" } });
+            if (error.message.includes("Vote not found")) {
+                toast.error("No VoteBoxes found with the specified ID or topic.", {
+                    style: { maxWidth: "none" },
+                });
+            } else {
+                toast.error(error.message, { style: { maxWidth: "none" } });
+            }
         }
     };
 
@@ -112,11 +141,11 @@ const Vote = () => {
                 width: "100%",
             }}
             >
-            <SearchByTopic function={queryListByTopic}/>
+            <SearchByTopic function={queryListByTopicOrId}/>
 
-            {voteboxListByTopic.length > 0 && (
+            {voteboxListByTopicOrId.length > 0 && (
                 <Grid container direction="row" spacing={2} p={3}>
-                    {voteboxListByTopic.map((item: any, index: number) => {
+                    {voteboxListByTopicOrId.map((item: any, index: number) => {
                         return (
                             <Grid key={index} item xs={12} md={6} lg={6}>
                                 <ListResponseItem
@@ -131,7 +160,7 @@ const Vote = () => {
                                     abstainCount={item.abstain_count}
                                     nwvCount={item.no_with_veto_count}
                                     description={item.description}
-                                    function={queryListByTopic}
+                                    function={queryListByTopicOrId}
                                 />
                             </Grid>
                         );

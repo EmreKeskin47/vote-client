@@ -51,7 +51,7 @@ const SearchByTopic = (props: {
                     <Grid item sm={12} md={8} direction="column" justifyItems="center">
                         <TextField
                             id="votebox-topic"
-                            label="VoteBox Topic"
+                            label="VoteBox ID or Topic"
                             variant="filled"
                             onChange={handleChange}
                             sx={{ backgroundColor: "white" }}
@@ -76,7 +76,7 @@ const SearchByTopic = (props: {
             {flag && (
                 <CustomAlert
                     severity="error"
-                    text="Please specify a topic to search for."
+                    text="Please specify an ID or a topic to search for."
                     function={resetFlags}
                 />
             )}            
