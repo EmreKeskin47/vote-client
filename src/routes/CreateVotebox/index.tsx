@@ -79,7 +79,7 @@ const CreateVotebox = () => {
             } else {
                 setCreateVoteBoxResponse(
                     "VoteBox ID: " +
-                        executeResponse.logs[0].events[2].attributes[5].value +
+                        executeResponse.logs[0].events[2].attributes[2].value +
                         " | Your TxHash : " +
                         executeResponse.transactionHash
                 );
@@ -88,7 +88,13 @@ const CreateVotebox = () => {
             }
             setFlag(false);
         } catch (error: any) {
-            toast.error(error.message, { style: { maxWidth: "none" } });
+            if (error.message.includes("topic already exists")) {
+                toast.error("A VoteBox with the same topic already exists.", {
+                    style: { maxWidth: "none" },
+                });
+            } else {
+                toast.error(error.message, { style: { maxWidth: "none" } });
+            }
         }
     };
 
