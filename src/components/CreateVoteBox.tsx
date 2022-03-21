@@ -139,7 +139,7 @@ const CreateVoteBox = (props: {
                         variant="filled"
                         multiline
                         onChange={handleChange2}
-                        sx={{ marginBottom:1, width:"30%", height:"20%", backgroundColor: "white" }}
+                        sx={{borderRadius:2, marginBottom:1, width:"30%", height:"20%", backgroundColor: "white" }}
                         value={topic}
                     />
                     <TextField
@@ -149,7 +149,7 @@ const CreateVoteBox = (props: {
                         multiline
                         rows={4}
                         onChange={handleChange}
-                        sx={{width:"50%", height:"20%",backgroundColor: "white" }}
+                        sx={{borderRadius:2, width:"50%", height:"20%",backgroundColor: "white" }}
                     />
                     
                     
