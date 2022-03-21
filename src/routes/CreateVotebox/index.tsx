@@ -256,18 +256,18 @@ const CreateVotebox = () => {
                                     key={index}
                                     id={item.id}
                                     topic={item.topic}
-                                    yesCount={item.yesCount}
-                                    noCount={item.noCount}
-                                    abstainCount={item.abstain_count}
-                                    nwvCount={item.no_with_vote_count}
-                                    description={item.description}
+                                    yesCount={item.yes_count}
+                                    noCount={item.no_count}
                                     owner={item.owner}
                                     dateCreated={item.create_date}
                                     deadline={item.deadline.at_height}
                                     deadlineNum={item.deadline.at_time}
+                                    abstainCount={item.abstain_count}
+                                    nwvCount={item.no_with_veto_count}
+                                    description={item.description}
                                     function={queryMyList}
                                     reset={resetVote}
-                                    delete={deleteVoteBox}
+                                    delete={deleteVoteBox}                                                                
                                 />
                             </Grid>
                         );

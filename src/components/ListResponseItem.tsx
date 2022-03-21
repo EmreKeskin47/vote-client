@@ -266,7 +266,7 @@ const ListResponseItem = (props) => {
                                 Owner Address:
                             </span>{" "}
                             </Typography>
-                            <Tooltip title="copy owner address">
+                            <Tooltip title="Copy Owner Address">
                                 <Button onClick={ownerClicked} color="success" sx={{width: "30%", paddingLeft: 5}}>
                                     {ownerText}
                                 </Button>
@@ -274,7 +274,7 @@ const ListResponseItem = (props) => {
                         </Grid>
                         <Grid item container direction="row" justifyContent="flex-start" sx={{paddingTop: 3, width: "65%"}}>
                             <Grid item container direction="row" justifyContent="flex-start" sx={{width: "22%"}}>
-                                <Tooltip title={props.yesCount}>
+                                <Tooltip title={props.yesCount + " vote(s)"}>
                                     <Grid item container
                                           sx={{
                                               width: "15px",
@@ -295,7 +295,7 @@ const ListResponseItem = (props) => {
                                 </Typography>
                             </Grid>
                             <Grid item container direction="row" justifyContent="flex-start" sx={{width: "22%"}}>
-                                <Tooltip title={props.noCount}>
+                                <Tooltip title={props.noCount + " vote(s)"}>
                                     <Grid item container
                                           sx={{
                                               width: "15px",
@@ -316,7 +316,7 @@ const ListResponseItem = (props) => {
                                 </Typography>
                             </Grid>
                             <Grid item container direction="row" justifyContent="flex-start" sx={{width: "22%"}}>
-                                <Tooltip title={props.nwvCount}>
+                                <Tooltip title={props.nwvCount + " vote(s)"}>
                                     <Grid item container
                                           sx={{
                                               width: "15px",
@@ -337,7 +337,7 @@ const ListResponseItem = (props) => {
                                 </Typography>
                             </Grid>
                             <Grid item container direction="row" justifyContent="flex-start" sx={{width: "30%"}}>
-                                <Tooltip title={props.abstainCount}>
+                                <Tooltip title={props.abstainCount + " vote(s)"}>
                                     <Grid item container
                                           sx={{
                                               width: "15px",
