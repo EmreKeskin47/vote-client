@@ -129,7 +129,7 @@ export function SidebarLayout(): JSX.Element {
                             <AddBoxIcon sx={{ color: "white" }}/>
                         </ListItemIcon>
                         <ListItemText
-                            primary={"Create Votebox"}
+                            primary={"Create VoteBox"}
                             sx={{ color: "white" }}
                         />
                     </ListItem>
