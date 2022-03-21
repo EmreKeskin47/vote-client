@@ -155,6 +155,7 @@ const Vote = () => {
                                     yesCount={item.yes_count}
                                     noCount={item.no_count}
                                     owner={item.owner}
+                                    dateCreated={item.create_date}
                                     deadline={item.deadline.at_height}
                                     deadlineNum={item.deadline.at_time}
                                     abstainCount={item.abstain_count}
