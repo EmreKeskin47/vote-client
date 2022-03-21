@@ -8,7 +8,7 @@ const SingleProvider = (props: { children: boolean | React.ReactChild | React.Re
     return (
         <singleContext.Provider value={{
             data: count,
-            contractAdress: "juno1jgz7vjv3ns4l4a2xuajgz676fx2l6aeuvd65724mzwsmd5utx9qszpxfkz",
+            contractAdress: "juno1kuwrzahftmgnzt4dl7jmkw8kug5yy75a4n6qpvljk2nmqpc9dy4q7puz3a",
             testUrl: "https://rpc.uni.juno.deuslabs.fi",
             colors: {
                 yes: "#5ED58B",
