@@ -164,6 +164,9 @@ const ListResponseItem = (props) => {
     let deadlineDate = new Date(
         parseInt(props.deadlineNum) / 1000000
     ).toString();
+    let creationDate = new Date(
+        parseInt(props.dateCreated) / 1000000
+    ).toString();
     // @ts-ignore
     return (
         <Grid
@@ -230,6 +233,17 @@ const ListResponseItem = (props) => {
                         xs={6}
                         p={1}
                     >
+                        <Typography
+                            variant="subtitle1"
+                            gutterBottom
+                            component="div"
+                            sx={{color: "gray"}}
+                        >
+                            <span style={{fontWeight: "bolder"}}>
+                                Date Created:
+                            </span>{" "}
+                            {creationDate.slice(0, 15)}
+                        </Typography>
                         <Typography
                             variant="subtitle1"
                             gutterBottom

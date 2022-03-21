@@ -198,6 +198,7 @@ const Home = () => {
                                     abstainCount={item.abstain_count}
                                     nwvCount={item.no_with_veto_count}
                                     description={item.description}
+                                    dateCreated={item.create_date}
                                     function={getVBCount}
                                 />
                             </Grid>
