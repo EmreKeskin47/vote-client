@@ -262,6 +262,7 @@ const CreateVotebox = () => {
                                     dateCreated={item.create_date}
                                     deadline={item.deadline.at_height}
                                     deadlineNum={item.deadline.at_time}
+                                    function={queryMyList}
                                     reset={resetVote}
                                     delete={deleteVoteBox}
                                 />
