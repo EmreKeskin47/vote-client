@@ -242,7 +242,7 @@ const ListResponseItem = (props) => {
                             <span style={{fontWeight: "bolder"}}>
                                 Date Created:
                             </span>{" "}
-                            {creationDate.slice(0, 15)}
+                            {creationDate.slice(0, 33)}
                         </Typography>
                         <Typography
                             variant="subtitle1"

@@ -7,6 +7,7 @@ import CustomAlert from "./CustomAlert";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateTimePicker from "@mui/lab/DateTimePicker";
+import toast from "react-hot-toast";
 
 const CreateVoteBox = (props: {
     function: (arg0: number, topic: string, description: string) => void;
@@ -28,7 +29,11 @@ const CreateVoteBox = (props: {
     const handleChange2 = (event: {
         target: { value: React.SetStateAction<string> };
     }) => {
-        setTopic(event.target.value);
+        if (topic.length < 35) {
+            setTopic(event.target.value);
+        } else {
+            toast.error("Your topic cannot be longer than 35 characters", {style: {maxWidth: "none"}});
+        }
     };
 
     const createVoteBox = () => {
@@ -131,6 +136,7 @@ const CreateVoteBox = (props: {
                         variant="filled"
                         onChange={handleChange2}
                         sx={{ backgroundColor: "white" }}
+                        value={topic}
                     />
                     <TextField
                         id="description"
