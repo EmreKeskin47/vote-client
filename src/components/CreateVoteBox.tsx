@@ -32,6 +32,7 @@ const CreateVoteBox = (props: {
         if (topic.length < 35) {
             setTopic(event.target.value);
         } else {
+            setTopic(event.target.value.toString().substring(0,34));
             toast.error("Your topic cannot be longer than 35 characters", {style: {maxWidth: "none"}});
         }
     };
@@ -84,71 +85,84 @@ const CreateVoteBox = (props: {
                 component="div"
                 sx={{ color: "whitesmoke" }}
             >
-                Enter the deadline time for the votebox and click on the create
+                Enter the deadline time for the votebox and click on the Create
                 VoteBox button
             </Typography>
             <br />
             <Grid
                 container
-                direction="row"
+                direction="column"
                 sx={{ width: "100%" }}
                 spacing={2}
                 alignItems="center"
-                justifyContent="center"
+                justifyContent="left"
             >
+                
                 <Grid
                     item
                     container
                     justifyContent="space-evenly"
+                    direction="column"
                     sm={12}
                     md={8}
-                    justifyItems="center"
+                    justifyItems="left"
                 >
                     <Typography
                         variant="subtitle1"
                         gutterBottom
                         component="div"
-                        sx={{ backgroundColor: "white", borderRadius: 1.5 }}
+                        sx={{ width:"25%",backgroundColor: "white", borderRadius: 1.5 }}
                     >
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <DateTimePicker
-                                minDateTime={new Date()}
-                                renderInput={(props) => (
-                                    <TextField {...props} />
-                                )}
-                                label="Deadline Time"
-                                value={date}
-                                onChange={(newDate) => {
-                                    setDate(newDate);
-                                    if (newDate != null) {
-                                        let timeInNanoSeconds: Number =
-                                            newDate.getTime() * 1000000;
-                                        setTime(timeInNanoSeconds);
-                                    }
-                                }}
-                            />
-                        </LocalizationProvider>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DateTimePicker
+                            minDateTime={new Date()}
+                            renderInput={(props) => (
+                                <TextField {...props} />
+                            )}
+                            label="Deadline Time"
+                            value={date}
+                            onChange={(newDate) => {
+                                setDate(newDate);
+                                if (newDate != null) {
+                                    let timeInNanoSeconds: Number =
+                                        newDate.getTime() * 1000000;
+                                    setTime(timeInNanoSeconds);
+                                }
+                            }}
+                        />
+                    </LocalizationProvider>
                     </Typography>
 
                     <TextField
                         id="topic"
                         label="Topic"
                         variant="filled"
+                        multiline
                         onChange={handleChange2}
-                        sx={{ backgroundColor: "white" }}
+                        sx={{ marginBottom:1, width:"30%", height:"20%", backgroundColor: "white" }}
                         value={topic}
                     />
                     <TextField
                         id="description"
                         label="Description"
                         variant="filled"
+                        multiline
+                        rows={4}
                         onChange={handleChange}
-                        sx={{ backgroundColor: "white" }}
+                        sx={{width:"50%", height:"20%",backgroundColor: "white" }}
                     />
+                    
+                    
                 </Grid>
-
-                <Grid item sm={12} md={4}>
-                    <Button
+                
+                <Grid item
+                    container
+                    justifyContent="left"
+                    direction="row"
+                    sm={12}
+                    md={8}
+                    justifyItems="left">
+                <Button
                         sx={{
                             padding: "10px",
                             border: "1px solid",
@@ -159,6 +173,7 @@ const CreateVoteBox = (props: {
                     >
                         Create VoteBox
                     </Button>
+                    
                 </Grid>
             </Grid>
             <br />

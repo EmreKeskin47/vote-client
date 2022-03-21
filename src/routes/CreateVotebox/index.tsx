@@ -89,11 +89,13 @@ const CreateVotebox = () => {
             setFlag(false);
         } catch (error: any) {
             if (error.message.includes("topic already exists")) {
+                setFlag(false);
                 toast.error("A VoteBox with the same topic already exists.", {
                     style: { maxWidth: "none" },
                 });
             } else {
-                toast.error(error.message, { style: { maxWidth: "none" } });
+               setFlag(false);
+               toast.error(error.message, { style: { maxWidth: "none" } });
             }
         }
     };
@@ -220,7 +222,8 @@ const CreateVotebox = () => {
                     function={() => resetFlags("create")}
                 />
             )}
-            {flag && (
+             <Grid>
+            {flag && wallet.initialized && (
                 <Typography
                     variant="overline"
                     gutterBottom
@@ -231,7 +234,6 @@ const CreateVotebox = () => {
                 </Typography>
             )}
             <br />
-            
             {wallet.initialized && voteboxList.length > 0 && (
                 <Typography
                     variant="h4"
@@ -242,6 +244,7 @@ const CreateVotebox = () => {
                     Your VoteBoxes:
                 </Typography>
             )}
+            </Grid>
             <br />
             {/*@ts-ignore*/}
             {wallet.initialized && voteboxList.length > 0 && (
