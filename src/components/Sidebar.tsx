@@ -23,6 +23,7 @@ import { Toaster } from "react-hot-toast";
 import Home from "../routes/Home";
 import CreateVotebox from "../routes/CreateVotebox";
 import VoteboxList from "../routes/Vote";
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import debounce from "lodash.debounce";
 
 export const drawerWidth = 240;
@@ -125,7 +126,7 @@ export function SidebarLayout(): JSX.Element {
                         }}
                     >
                         <ListItemIcon>
-                            <HowToVoteIcon sx={{ color: "white" }} />
+                            <AddBoxIcon sx={{ color: "white" }}/>
                         </ListItemIcon>
                         <ListItemText
                             primary={"Create Votebox"}
