@@ -380,7 +380,7 @@ const ListResponseItem = (props) => {
                     <CircularProgress color="secondary"/>
                 </Grid>
                 :
-                <Button color="success" onClick={handleClickOpen} sx={{marginTop: 3}}>
+                <Button disabled={boxState === "Expired"} color="success" onClick={handleClickOpen} sx={{marginTop: 3}}>
                     VOTE FOR THIS VOTEBOX
                 </Button>
             }
