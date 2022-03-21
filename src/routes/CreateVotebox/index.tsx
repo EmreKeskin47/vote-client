@@ -92,108 +92,6 @@ const CreateVotebox = () => {
         }
     };
 
-    const vote = async (voteId: string, voteType: Number, decision: string) => {
-        try {
-            setFlag2(true);
-            client = wallet.getClient();
-            const account = wallet.address; //(await signer.getAccounts())[0];
-            console.log("account: ");
-            console.log(account);
-
-            const executeResponse = await client.execute(
-                wallet.address,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                context.contractAdress,
-                {
-                    vote: {
-                        id: voteId,
-                        vote_type: voteType,
-                    },
-                },
-                "auto"
-            );
-            console.log(executeResponse);
-            if (executeResponse === undefined) {
-                alert("Something went wrong");
-            } else {
-                setVoteResponse("You have voted " + decision);
-                setVoteResponseFlag(true);
-            }
-            setFlag2(false);
-        } catch (error: any) {
-            let errMessage: String = error.message;
-            if (errMessage.includes("ended")) {
-                toast.error("The voting period has ended for this VoteBox.", {
-                    style: { maxWidth: "none" },
-                });
-            } else if (errMessage.includes("already")) {
-                toast.error("You may only vote once per VoteBox.", {
-                    style: { maxWidth: "none" },
-                });
-            } else if(error.message.includes("Vote not found")) {
-                toast.error("No VoteBox found with the specified ID.", {
-                    style: { maxWidth: "none" },
-                });
-            } else {
-                toast.error(error.message, { style: { maxWidth: "none" } });
-            }
-            
-            setFlag2(false);
-        }
-    };
-
-    const query = async (boxId: string) => {
-        try {
-            setFlag3(true);
-            client = wallet.getClient();
-
-            const account = wallet.address; //(await signer.getAccounts())[0];
-            console.log("account: ");
-            console.log(account);
-
-            const id = Number(boxId) + 1;
-
-            const queryResponse = await client.queryContractSmart(
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                context.contractAdress,
-                {
-                    query_vote: { id: id.toString() },
-                }
-            );
-            console.log(queryResponse);
-            setResponse(
-                "ID : " +
-                    queryResponse.id +
-                    "\nOwner : " +
-                    queryResponse.owner +
-                    "\nTopic : " +
-                    queryResponse.topic +
-                    "\nYes Count : " +
-                    queryResponse.yes_count +
-                    "\nNo Count : " +
-                    queryResponse.no_count +
-                    "\nAbstain Count : " +
-                    queryResponse.abstain_count +
-                    "\nNo with Veto Count : " +
-                    queryResponse.no_with_veto_count +
-                    "\nDeadline Time : " +
-                    new Date(parseInt(queryResponse.deadline.at_time) / 1000000)
-            );
-            setQueryResponseFlag(true);
-            setFlag3(false);
-        } catch (error: any) {
-            if (error.message.includes("Vote not found")) {
-                toast.error("No VoteBox found with the specified ID.", {
-                    style: { maxWidth: "none" },
-                });
-            } else {
-                toast.error(error.message, { style: { maxWidth: "none" } });
-            }
-        }
-    };
-
     const [voteboxList, setVoteboxList] = useState<Votebox[]>([]);
 
     let mockClient: CosmWasmClient;
@@ -231,17 +129,11 @@ const CreateVotebox = () => {
 
     //////////////////////////////// UI ////////////////////////////
     const [flag, setFlag] = useState(false);
-    const [flag2, setFlag2] = useState(false);
-    const [flag3, setFlag3] = useState(true);
-    const [queryResponseFlag, setQueryResponseFlag] = useState(false);
-    const [response, setResponse] = useState("");
     const [createVoteBoxResponseFlag, setCreateVoteBoxResponseFlag] =
         useState(false);
     const [createVoteBoxResponse, setCreateVoteBoxResponse] = useState("");
     const [resetVoteBoxResponse, setResetVoteBoxResponse] = useState("");
     const [deleteVoteBoxResponse, setDeleteVoteBoxResponse] = useState("");
-    const [voteResponse, setVoteResponse] = useState("");
-    const [voteResponseFlag, setVoteResponseFlag] = useState(false);
 
     useEffect(() => {
         queryMyList();
@@ -249,7 +141,6 @@ const CreateVotebox = () => {
         wallet.initialized,
         wallet.address,
         createVoteBoxResponse,
-        voteResponse,
         resetVoteBoxResponse,
         deleteVoteBoxResponse,
     ]);
@@ -257,11 +148,7 @@ const CreateVotebox = () => {
     const resetFlags = (type: string) => {
         if (type === "create") {
             setCreateVoteBoxResponseFlag(false);
-        } else if (type === "vote") {
-            setVoteResponseFlag(false);
-        } else if (type === "query") {
-            setQueryResponseFlag(false);
-        }
+        } 
     };
     const resetVote = async (id: string) => {
         try {
@@ -338,43 +225,7 @@ const CreateVotebox = () => {
                 </Typography>
             )}
             <br />
-            <Voting function={vote} />
-            {voteResponseFlag && (
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                <CustomAlert
-                    severity="success"
-                    text={voteResponse}
-                    function={() => resetFlags("vote")}
-                />
-            )}
-            {flag2 && (
-                <Typography
-                    variant="overline"
-                    gutterBottom
-                    component="div"
-                    sx={{ color: "gray" }}
-                >
-                    Voting...
-                </Typography>
-            )}
-            <br />
-            <QueryBox
-                function={query}
-                heading="Query VoteBox"
-                subHeading="Enter the id of the box"
-                idText="VoteBox ID"
-                buttonText="Query VoteBox"
-            />
-            {queryResponseFlag && (
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                <CustomAlert
-                    severity="success"
-                    text={response}
-                    function={() => resetFlags("query")}
-                />
-            )}
+            
             {wallet.initialized && voteboxList.length > 0 && (
                 <Typography
                     variant="h4"
@@ -402,6 +253,7 @@ const CreateVotebox = () => {
                                     nwvCount={item.no_with_vote_count}
                                     description={item.description}
                                     owner={item.owner}
+                                    dateCreated={item.create_date}
                                     deadline={item.deadline.at_height}
                                     deadlineNum={item.deadline.at_time}
                                     reset={resetVote}
