@@ -185,7 +185,7 @@ const Vote = () => {
                             <Box key={index} sx={{color: "white" }}>
                                 <ListItem
                                     alignItems="center"
-                                    sx={{width:"%100", justifyContent: "space-between"}}
+                                    sx={{justifyContent: "space-between"}}
                                 >
                                     <ListItemAvatar>
                                         <Avatar
@@ -229,11 +229,13 @@ const Vote = () => {
                                         />
                                         <Grid container item direction={"column"}
                                               justifyContent={"space-evenly"}
-                                              sx={{position:"absolute", paddingLeft:"50%"}}>
+                                              sx={{position:"absolute", paddingLeft:"50%"}}
+                                              marginX="20%">
                                           
                                           
-                                            <Grid item lg={4} md={4} xs={4} sx={{position:"relative", width:"40%"}}
-                                            justifyContent="center"> 
+                                            <Grid item lg={6} md={4} xs={4} sx={{position:"relative", width:"50%"}}
+                                            justifyContent="center"
+                                            marginX="-10%"> 
                                                 <VotingChart
                                                     yesCount={item.yes_count}
                                                     noCount={item.no_count}
