@@ -218,7 +218,7 @@ const Vote = () => {
                                                             display: "inline",
                                                             color: "white",
                                                             wrap: "break-word",
-                                                            height: (item.description.length > 400) ? "150px" : "",
+                                                            height: (item.description.length > 300) ? "125px" : "50px",
                                                             overflow: "auto",
                                                             marginRight: 5,
                                                         }}
@@ -250,6 +250,7 @@ const Vote = () => {
                                                     nwvCount={item.no_with_veto_count}
                                                     abstainCount={item.abstain_count}
                                                 />
+                                                
                                             </Grid>
 
                                             <Grid item sx={{width: "35%"}}>
