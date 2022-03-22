@@ -211,8 +211,11 @@ const Vote = () => {
                                                 
                                                 <Typography
                                                     sx={{
+                                                        width: "80%",
                                                         display: "inline",
                                                         color: "white",
+                                                        wrap: "break-word",
+                                                        
                                                     }}
                                                     component={"span"}
                                                     variant="body1"
