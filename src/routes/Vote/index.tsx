@@ -240,35 +240,16 @@ const Vote = () => {
 
 
                                             <Grid item lg={6} md={4} xs={4} 
-                                                  sx={{position: "relative", width: "50%",}}
-                                                 
+                                                  sx={{position: "relative", width: "50%",
+                                                  marginTop: ((item.yes_count + item.no_count + item.no_with_veto_count + item.abstain_count) == 0) ?  "5%" : 0}}
                                                   justifyContent="center"
                                                   marginX="-10%">
-                                                {((item.yes_count + item.no_count + item.no_with_veto_count + item.abstain_count) != 0) ? 
-                                                (<VotingChart
+                                                <VotingChart
                                                     yesCount={item.yes_count}
                                                     noCount={item.no_count}
                                                     nwvCount={item.no_with_veto_count}
                                                     abstainCount={item.abstain_count}
-                                                />): 
-                                                <Typography
-                                                sx={{
-                                                    display: "inline",
-                                                    color: "white",
-                                                    marginRight: 5,
-                                                    float: "right",
-                                                    border: "2px solid",
-                                                    borderRadius: 2,
-                                                    paddingLeft: 1,
-                                                    paddingRight: 1,
-                                                }}
-                                                component={"div"}
-                                                variant="body1"
-                                                marginY={1}
-                                                
-                                            >
-                                                No votes so far
-                                            </Typography>}
+                                                />
                                             </Grid>
 
                                             <Grid item sx={{width: "35%"}}>
