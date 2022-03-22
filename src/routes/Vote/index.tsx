@@ -213,6 +213,7 @@ const Vote = () => {
                                                 >
                                                     <Typography
                                                         sx={{
+                                                            zIndex: 1,
                                                             width: "90%",
                                                             display: "inline",
                                                             color: "white",
