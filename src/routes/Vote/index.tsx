@@ -205,7 +205,6 @@ const Vote = () => {
                                     <Grid container direction="row" justifyContent="space-between">
                                         <ListItemText
                                             primary={item.topic}
-                                            sx={{height: "150px", overflow: "auto"}}
                                             secondary={
                                                 <Grid
                                                     container
@@ -214,14 +213,18 @@ const Vote = () => {
                                                 >
                                                     <Typography
                                                         sx={{
-                                                            width: "80%",
+                                                            width: "90%",
                                                             display: "inline",
                                                             color: "white",
                                                             wrap: "break-word",
+                                                            height: (item.description.length > 400) ? "150px" : "",
+                                                            overflow: "auto",
+                                                            marginRight: 5,
                                                         }}
-                                                        component={"span"}
+                                                        component={"div"}
                                                         variant="body1"
                                                         marginY={1}
+                                                        
                                                     >
                                                         {item.description}
                                                     </Typography>
@@ -235,7 +238,9 @@ const Vote = () => {
                                               marginX="20%">
 
 
-                                            <Grid item lg={6} md={4} xs={4} sx={{position: "relative", width: "50%"}}
+                                            <Grid item lg={6} md={4} xs={4} 
+                                                  sx={{position: "relative", width: "50%",
+                                                  marginTop: ((item.yes_count + item.no_count + item.no_with_veto_count + item.abstain_count) == 0) ?  "5%" : 0}}
                                                   justifyContent="center"
                                                   marginX="-10%">
                                                 <VotingChart
