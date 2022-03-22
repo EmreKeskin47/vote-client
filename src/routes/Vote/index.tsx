@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import ListResponseItem from "../../components/ListResponseItem";
 import SearchByTopic from "../../components/SearchByTopic";
 import { FlashOnRounded } from "@mui/icons-material";
+import VotingChart from "../../components/VotingChart";
 
 const Vote = () => {
     const context = useContext(singleContext);
@@ -29,10 +30,12 @@ const Vote = () => {
         let no = Number(item.no_count) + Number(item.no_with_veto_count);
 
         if (!no || no === 0) {
-            return "No Vote ";
+            return "No votes yet ";
         } else if (yes > no) {
             return "Passed";
-        } else {
+        } else if (yes == no) {
+            return "Neutral";
+        }else {
             return "Rejected";
         }
     };
@@ -179,10 +182,10 @@ const Vote = () => {
                 {voteboxList.length > 0 &&
                     voteboxList.map((item: any, index: number) => {
                         return (
-                            <Box key={index} sx={{ color: "white" }}>
+                            <Box key={index} sx={{color: "white" }}>
                                 <ListItem
                                     alignItems="center"
-                                    sx={{ justifyContent: "space-between" }}
+                                    sx={{width:"%100", justifyContent: "space-between"}}
                                 >
                                     <ListItemAvatar>
                                         <Avatar
@@ -195,13 +198,17 @@ const Vote = () => {
                                             }}
                                         />
                                     </ListItemAvatar>
+                                    
+                                    <Grid container direction="row" justifyContent="space-between">
                                     <ListItemText
                                         primary={item.topic}
                                         secondary={
                                             <Grid
                                                 container
                                                 direction={"column"}
+                                                lg={8} md={8} xs={8}
                                             >
+                                                
                                                 <Typography
                                                     sx={{
                                                         display: "inline",
@@ -213,58 +220,61 @@ const Vote = () => {
                                                 >
                                                     {item.description}
                                                 </Typography>
+                                                
+                                            </Grid>
+                                        }
+                                        />
+                                        <Grid container item direction={"column"}
+                                              justifyContent={"space-evenly"}
+                                              sx={{position:"absolute", paddingLeft:"50%"}}>
+                                          
+                                          
+                                            <Grid item lg={4} md={4} xs={4} sx={{position:"relative", width:"40%"}}
+                                            justifyContent="center"> 
+                                                <VotingChart
+                                                    yesCount={item.yes_count}
+                                                    noCount={item.no_count}
+                                                    nwvCount={item.no_with_veto_count}
+                                                    abstainCount={item.abstain_count}    
+                                                />
+                                             </Grid>
+
+                                            <Grid item sx={{width:"35%"}}>
                                                 <Typography
-                                                    variant="subtitle1"
-                                                    component={"span"}
-                                                    sx={{ color: "white" }}
-                                                    marginY={1}
+                                                variant="body2"
+                                                component={"p"}
+                                                sx={{ direction:"row", color: "white", float:"right" }}
+                                                marginY={5}
                                                 >
-                                                    {"created on " +
+                                                {"Creation Date: " +
+                                                    new Date(
+                                                        item.create_date /
+                                                            1000000
+                                                    ).toLocaleDateString()}
+                                                </Typography>
+                                            </Grid>
+
+                                            <Grid item sx={{width:"35%"}}>
+                                                <Typography
+                                                    variant="body2"
+                                                    sx={{
+                                                        color: "white",
+                                                        float: "right"
+                                                    }}
+                                                    component={"p"}
+                                                    marginY={-4}
+                                                    
+                                                >
+                                                    {"Deadline: " +
                                                         new Date(
-                                                            item.create_date /
+                                                            item.deadline.at_time /
                                                                 1000000
                                                         ).toLocaleDateString()}
                                                 </Typography>
                                             </Grid>
-                                        }
-                                    />
-
-                                    <Grid item marginRight={10}>
-                                        <Typography
-                                            sx={{
-                                                display: "inline",
-                                                color: "white",
-                                            }}
-                                            component={"p"}
-                                            variant="body1"
-                                            marginY={1}
-                                        >
-                                            {getYesRatio(item) + ""}
-                                        </Typography>
-                                        <Typography
-                                            variant="body2"
-                                            sx={{
-                                                color: "white",
-                                            }}
-                                            component={"p"}
-                                            marginY={1}
-                                        >
-                                            {"Deadline: " +
-                                                new Date(
-                                                    item.deadline.at_time /
-                                                        1000000
-                                                ).toLocaleDateString()}
-                                        </Typography>
-                                        <Typography
-                                            variant="subtitle2"
-                                            component={"p"}
-                                            sx={{ color: "white" }}
-                                            marginY={1}
-                                        >
-                                            {"total deposit " +
-                                                item.total_amount}
-                                        </Typography>
                                     </Grid>
+                                    </Grid>
+                    
                                 </ListItem>
                                 <Divider
                                     variant="inset"

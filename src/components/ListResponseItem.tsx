@@ -58,16 +58,16 @@ const ListResponseItem = (props) => {
             } else {
                 switch (voteType) {
                     case 0:
-                        option = "no";
+                        option = "No";
                         break;
                     case 1:
-                        option = "abstain";
+                        option = "Abstain";
                         break;
                     case 2:
-                        option = "yes";
+                        option = "Yes";
                         break;
                     case 3:
-                        option = "no with vote";
+                        option = "No with vote";
                         break;
                     default:
                         break;
